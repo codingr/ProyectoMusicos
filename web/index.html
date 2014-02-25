@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+    <head>
+        <title>TODO supply a title</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <!--
+            create table musicos (
+                idmusico int,
+                fechanacimiento Date,
+                fechadefuncion Date,
+                
+            )
+        -->
+        <style type="text/css">
+            #mnu
+            {
+                border-width:thick;
+                border-style:solid;
+            }
+            span
+            {
+                //border-style:groove;
+                //border-width:2px;    
+                margin:2px;
+            }
+            button:hover{
+                font-weight: 800;
+                //cursor: crosshair;
+            }
+            button span{                    
+                //margin:2px;
+
+            }
+            a{
+
+            }
+        </style>
+
+
+        <script type="text/javascript">
+            //Cargar las letras en las que pulsar para ver la lista de músicos
+            //que empiezan por ese nombre
+            function cargarAlfabeto() {
+                var letras = document.getElementById("letras");
+                var abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+                for (var i = 0; i < 23; i++) {
+                    var letra = document.createElement("SPAN");
+                    var a = document.createElement("A");
+                    var letraactual = abecedario.substr(i, 1);
+                    a.id = "enlace" + letraactual;
+                    a.href="#";
+                    a.onclick=function()
+                                    {
+                                      cargarXMLMusicos(letraactual);
+                                     };
+                    //"/ConsultaMusicos?accion=listarmusicos&musicos=" + abecedario.substr(i, 1);
+                    a.textContent = abecedario.substr(i, 1);
+                    //var contenido = document.createTextNode(abecedario.substr(i, 1));
+                    letra.appendChild(a);
+                    //investigar si hay una forma mejor
+                    letras.appendChild(letra);
+
+                }
+
+            }
+            function cargarXMLMusicos(letra) {
+                var xmlreq = new XMLHttpRequest();
+                xmlreq.onreadystatechange = function() {
+                    if (xmlreq.readyState == 4 && xmlreq.status == 200) {
+                        procesarXMLMusicos(xmlreq);
+                    }
+                };
+                xmlreq.open("GET", "/ConsultaMusicos?accion=listarmusicos&musicos=" + letra, true);
+                //return false;
+            }
+            function procesarXMLMusicos(xmlr) {
+                var xml = xmlr.responseXML;
+                var musicos = xml.getElementsByTagName("nombre");
+                var lista = document.getElementById("lista");
+                if (musicos.length > 0) {
+                    var ul=document.createElement("UL");
+                    for (var i = 0; i < musicos.length; i++) {
+                        var li = document.createElement("LI");
+                        var tn=document.createTextNode(musicos[i]);
+                        li.appendChild(tn);
+                        ul.appendChild(li);
+                    }
+                    lista.appendChild(ul);
+                }
+
+            }
+            function inicializar() {
+                cargarAlfabeto();
+            }
+        </script>
+    </head>
+    <body onload="inicializar()">
+
+        <div id="letras"></div>
+        <div id="lista"></div>
+    </body>
+</html>
