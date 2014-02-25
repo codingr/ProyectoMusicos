@@ -6,12 +6,18 @@
 
 package servlets;
 
+import beans.Musico;
+import ejb.InstrumentosFachada;
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.jsp.PageContext;
 
 /**
  *
@@ -19,6 +25,8 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "ConsultaMusicos", urlPatterns = {"/ConsultaMusicos"})
 public class ConsultaMusicos extends HttpServlet {
+    @EJB
+    private InstrumentosFachada instrumentosFachada;
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -32,12 +40,13 @@ public class ConsultaMusicos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
+        PrintWriter out=response.getWriter();
         String accion=request.getParameter("accion");
         
         String destino="";
         if (accion.equalsIgnoreCase("listarmusicos")){
-            String musicos=request.getParameter("musicos");
-            cargarXMLMusicos(musicos);
+            String letra=request.getParameter("musicos");
+            cargarXMLMusicos(letra,out);
             
         }else {
             
@@ -97,9 +106,20 @@ public class ConsultaMusicos extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void cargarXMLMusicos(String musicos) {
+    private void cargarXMLMusicos(String letra,PrintWriter out) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         
+        out.print("<?xml version=\"1.0\" ?>");
+        out.println("<musicos>");
+        List<Musico> musicos = instrumentosFachada.getMusicos(letra);
+        for (int i = 0; i < musicos.size(); i++) {
+            out.println("<musico id='" + musicos.get(i).getIdmusico()
+                    + "'>");
+            out.println("<nombre>" + musicos.get(i).getNombre() + "</nombre>");
+            out.println("</musico>");
+        }
+
+        out.println("</musicos>");
     }
 
 }
