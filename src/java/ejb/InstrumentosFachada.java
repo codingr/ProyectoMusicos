@@ -31,8 +31,8 @@ public class InstrumentosFachada {
     public List<Musico> getMusicos(String letra){
         List<Musico> musicos;
         Query q=em.createQuery("select m from Musico m where "
-                + "substring(nombre,0)=:letra");
-        
+                + "substring(m.nombre,0)=:letra");
+        q.setParameter("letra", letra);
         
         musicos=q.getResultList();        
         return musicos;
