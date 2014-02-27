@@ -6,6 +6,9 @@
 
 package ejb;
 
+import beans.Comentario;
+import beans.Grupo;
+import beans.Instrumento;
 import beans.Musico;
 import java.util.List;
 import javax.ejb.Stateless;
@@ -38,4 +41,28 @@ public class InstrumentosFachada {
         return musicos;
     }
     
+    
+    public void añadirMusico(Musico musico){
+        em.persist(musico);      
+    }
+    
+    public void añadirInstrumento(Instrumento instrumento){
+        
+    }
+    public void añadirGrupo(Grupo grupo){
+        
+    }
+    
+    public void añadirComentario(Comentario comentario){
+        
+    }
+    
+    public void actualizarMusico (Musico musico){
+        Query q=em.createQuery(
+"UPDATE Musico m set nombre=:nombre, apellido1=:apellido1, apellido2=:apellido2 where idmusico=:musico");
+        q.setParameter("nombre",musico.getNombre() );
+        q.setParameter("apellido1",musico.getApellido1() );
+        q.setParameter("apellido2",musico.getApellido2() );
+        
+    }
 }

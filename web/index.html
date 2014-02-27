@@ -44,23 +44,31 @@ and open the template in the editor.
                 var abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
                 for (var i = 0; i < 23; i++) {
                     var letra = document.createElement("SPAN");
-                    var a = document.createElement("A");
+                    //var a = document.createElement("A");
                     var letraactual = abecedario.substr(i, 1);
-                    a.id = "enlace" + letraactual;
-                    a.href="#";
-                    a.onclick=function()
+                    //a.id = 
+                    //a.href="#";
+                    letra.onclick=function()
                                     {
                                       cargarXMLMusicos(letraactual);
                                      };
                     //"/ConsultaMusicos?accion=listarmusicos&musicos=" + abecedario.substr(i, 1);
-                    a.textContent = abecedario.substr(i, 1);
+                    letra.textContent = abecedario.substr(i, 1);
+                    letra.id="enlace" + letraactual;
+                    letra.style.textDecoration="underline";
+                    letra.className="letramusico";
                     //var contenido = document.createTextNode(abecedario.substr(i, 1));
-                    letra.appendChild(a);
+                    //letra.appendChild(a);
                     //investigar si hay una forma mejor
                     letras.appendChild(letra);
 
                 }
-
+                var todos=document.createElement("SPAN");
+                todos.textContent="TODOS";
+                todos.id="enlaceTodos";
+                todos.style.textDecoration="underline";
+                todos.className="letramusico";
+                letras.appendChild(todos);
             }
             function cargarXMLMusicos(letra) {
                 var xmlreq = new XMLHttpRequest();

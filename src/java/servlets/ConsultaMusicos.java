@@ -43,7 +43,7 @@ public class ConsultaMusicos extends HttpServlet {
         PrintWriter out=response.getWriter();
         String accion=request.getParameter("accion");
         
-        String destino="";
+        //String destino="";
         if (accion.equalsIgnoreCase("listarmusicos")){
             String letra=request.getParameter("musicos");
             cargarXMLMusicos(letra,out);
@@ -52,7 +52,7 @@ public class ConsultaMusicos extends HttpServlet {
             
         }        
         
-        request.getRequestDispatcher(destino).forward(request, response);
+        //request.getRequestDispatcher(destino).forward(request, response);
         //try (PrintWriter out = response.getWriter()) {
             /* TODO output your page here. You may use following sample code. */
             /*out.println("<!DOCTYPE html>");
