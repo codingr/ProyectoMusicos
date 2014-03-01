@@ -38,8 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Musico.findAll", query = "SELECT m FROM Musico m"),
     @NamedQuery(name = "Musico.findByIdmusico", query = "SELECT m FROM Musico m WHERE m.idmusico = :idmusico"),
     @NamedQuery(name = "Musico.findByNombre", query = "SELECT m FROM Musico m WHERE m.nombre = :nombre"),
-    @NamedQuery(name = "Musico.findByApellido1", query = "SELECT m FROM Musico m WHERE m.apellido1 = :apellido1"),
-    @NamedQuery(name = "Musico.findByApellido2", query = "SELECT m FROM Musico m WHERE m.apellido2 = :apellido2"),
+    @NamedQuery(name = "Musico.findByApellido", query = "SELECT m FROM Musico m WHERE m.apellido = :apellido"),
+    @NamedQuery(name = "Musico.findByAlias", query = "SELECT m FROM Musico m WHERE m.alias = :alias"),
     @NamedQuery(name = "Musico.findByUrlfoto", query = "SELECT m FROM Musico m WHERE m.urlfoto = :urlfoto"),
     @NamedQuery(name = "Musico.findByFechanacimiento", query = "SELECT m FROM Musico m WHERE m.fechanacimiento = :fechanacimiento"),
     @NamedQuery(name = "Musico.findByFechadefuncion", query = "SELECT m FROM Musico m WHERE m.fechadefuncion = :fechadefuncion")})
@@ -54,11 +54,11 @@ public class Musico implements Serializable {
     @Column(name = "nombre")
     private String nombre;
     @Size(max = 30)
-    @Column(name = "apellido1")
-    private String apellido1;
+    @Column(name = "apellido")
+    private String apellido;
     @Size(max = 30)
-    @Column(name = "apellido2")
-    private String apellido2;
+    @Column(name = "alias")
+    private String alias;
     @Size(max = 30)
     @Column(name = "urlfoto")
     private String urlfoto;
@@ -98,20 +98,20 @@ public class Musico implements Serializable {
         this.nombre = nombre;
     }
 
-    public String getApellido1() {
-        return apellido1;
+    public String getApellido() {
+        return apellido;
     }
 
-    public void setApellido1(String apellido1) {
-        this.apellido1 = apellido1;
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
     }
 
-    public String getApellido2() {
-        return apellido2;
+    public String getAlias() {
+        return alias;
     }
 
-    public void setApellido2(String apellido2) {
-        this.apellido2 = apellido2;
+    public void setAlias(String alias) {
+        this.alias = alias;
     }
 
     public String getUrlfoto() {

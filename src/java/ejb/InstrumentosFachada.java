@@ -34,7 +34,7 @@ public class InstrumentosFachada {
     public List<Musico> getMusicos(String letra){
         List<Musico> musicos;
         Query q=em.createQuery("select m from Musico m where "
-                + "substring(m.nombre,0)=:letra");
+                + "substring(m.nombre,0)=:letra order by m.nombre");
         q.setParameter("letra", letra);
         
         musicos=q.getResultList();        
@@ -61,8 +61,8 @@ public class InstrumentosFachada {
         Query q=em.createQuery(
 "UPDATE Musico m set nombre=:nombre, apellido1=:apellido1, apellido2=:apellido2 where idmusico=:musico");
         q.setParameter("nombre",musico.getNombre() );
-        q.setParameter("apellido1",musico.getApellido1() );
-        q.setParameter("apellido2",musico.getApellido2() );
+        q.setParameter("apellido",musico.getApellido() );
+        q.setParameter("alias",musico.getAlias());
         
     }
 }
