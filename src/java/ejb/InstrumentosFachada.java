@@ -59,10 +59,14 @@ public class InstrumentosFachada {
     
     public void actualizarMusico (Musico musico){
         Query q=em.createQuery(
-"UPDATE Musico m set nombre=:nombre, apellido1=:apellido1, apellido2=:apellido2 where idmusico=:musico");
+"UPDATE Musico m set nombre=:nombre, apellido=:apellido, alias=:alias, fechadefuncion=:fechadefuncion,"
+        + "fechanacimiento=:fechanacimiento "
+        + "where idmusico=:musico");
         q.setParameter("nombre",musico.getNombre() );
         q.setParameter("apellido",musico.getApellido() );
-        q.setParameter("alias",musico.getAlias());
-        
+        q.setParameter("alias",musico.getAlias());        
+        q.setParameter("fechadefuncion", musico.getFechadefuncion());
+        q.setParameter("fechanacimiento", musico.getFechanacimiento());
+        q.setParameter("urlfoto", musico.getUrlfoto());
     }
 }
