@@ -9,31 +9,59 @@ and open the template in the editor.
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
-        
+
         <style type="text/css">
             #mnu
             {
-                border-width:thick;
-                border-style:solid;
+               width: 160px;
             }
-            span
-            {
-                //border-style:groove;
-                //border-width:2px;    
-                margin:2px;
+            #mnu ul{
+                list-style-type: none;
+                margin: 0px;
+                padding: 0px;
+                border-top-width: 1px;
+                border-right-width: 1px;
+                border-left-width: 1px;
+                border-top-style: solid;
+                border-right-style: solid;
+                border-left-style: solid;
+                border-top-color: #CCC;
+                border-right-color: #CCC;
+                border-left-color: #CCC;
+            }
+            #mnu a{
+                font-family: Arial,Helvetica,sans-serif;
+                color:#000;
+                text-decoration: none;
+                font-size: 0.9em;
+                display: block;
+                padding: 6px;
+                border-bottom-width: 1px;
+                border-bottom-style: solid;
+                border-bottom-color: #CCC;
+                background-color: #EAEAEA;
+            }
+            
+            #mnu a:hover{
+                color: #FFF;
+                background-color: #666;
+                border-right-width: 5px;
+                border-right-style: solid;
+                border-right-color: #36F;
+            }
+            
+            
+            .letramusico{
+                font-family: fantasy;
+                margin: 10px;
             }
             .letramusico:hover{
-                font-weight: 800;
+                font-weight: 900;
+                font-size: larger;
                 //text-decoration: underline;
-                cursor: url(images/nota.png),none;
+                cursor: url(images/Little_music_note.jpg),crosshair;
             }
-            button span{                    
-                //margin:2px;
 
-            }
-            a{
-
-            }
         </style>
 
 
@@ -49,26 +77,22 @@ and open the template in the editor.
                     var letraactual = abecedario.substr(i, 1);
                     //a.id = 
                     //a.href="#";
-                    letra.onclick=function()
-                                    {
-                                      cargarXMLMusicos(letraactual);
-                                     };
-                    //"/ConsultaMusicos?accion=listarmusicos&musicos=" + abecedario.substr(i, 1);
+                    letra.onclick = function()
+                    {
+                        cargarXMLMusicos(letraactual);
+                    };
                     letra.textContent = abecedario.substr(i, 1);
-                    letra.id="enlace" + letraactual;
-                    letra.style.textDecoration="underline";
-                    letra.className="letramusico";
-                    //var contenido = document.createTextNode(abecedario.substr(i, 1));
-                    //letra.appendChild(a);
-                    //investigar si hay una forma mejor
+                    letra.id = "enlace" + letraactual;
+                    letra.style.textDecoration = "underline";
+                    letra.className = "letramusico";
                     letras.appendChild(letra);
 
                 }
-                var todos=document.createElement("SPAN");
-                todos.textContent="TODOS";
-                todos.id="enlaceTodos";
-                todos.style.textDecoration="underline";
-                todos.className="letramusico";
+                var todos = document.createElement("SPAN");
+                todos.textContent = "TODOS";
+                todos.id = "enlaceTodos";
+                todos.style.textDecoration = "underline";
+                todos.className = "letramusico";
                 letras.appendChild(todos);
             }
             function cargarXMLMusicos(letra) {
@@ -86,10 +110,10 @@ and open the template in the editor.
                 var musicos = xml.getElementsByTagName("nombre");
                 var lista = document.getElementById("lista");
                 if (musicos.length > 0) {
-                    var ul=document.createElement("UL");
+                    var ul = document.createElement("UL");
                     for (var i = 0; i < musicos.length; i++) {
                         var li = document.createElement("LI");
-                        var tn=document.createTextNode(musicos[i]);
+                        var tn = document.createTextNode(musicos[i]);
                         li.appendChild(tn);
                         ul.appendChild(li);
                     }
@@ -106,5 +130,12 @@ and open the template in the editor.
 
         <div id="letras"></div>
         <div id="lista"></div>
+        <div id="mnu">
+            <ul>
+                <li>Buscar por músico</li>
+                <li>Buscar por instrumento</li>
+                <li id="login">Hacer login</li>
+            </ul>
+        </div>
     </body>
 </html>
