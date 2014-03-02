@@ -13,7 +13,8 @@ and open the template in the editor.
         <style type="text/css">
             #mnu
             {
-               width: 160px;
+               float: left;
+               width: 16%;
             }
             #mnu ul{
                 list-style-type: none;
@@ -29,7 +30,7 @@ and open the template in the editor.
                 border-right-color: #CCC;
                 border-left-color: #CCC;
             }
-            #mnu a{
+            #mnu li{
                 font-family: Arial,Helvetica,sans-serif;
                 color:#000;
                 text-decoration: none;
@@ -42,18 +43,22 @@ and open the template in the editor.
                 background-color: #EAEAEA;
             }
             
-            #mnu a:hover{
+            #mnu li:hover{
                 color: #FFF;
                 background-color: #666;
                 border-right-width: 5px;
                 border-right-style: solid;
                 border-right-color: #36F;
+                cursor: url(images/Little_music_note.jpg),crosshair;
             }
-            
+            #letras{
+                border-style: ridge;
+                border-width: 10px;
+            }
             
             .letramusico{
                 font-family: fantasy;
-                margin: 10px;
+                margin: 5px;
             }
             .letramusico:hover{
                 font-weight: 900;
@@ -61,52 +66,105 @@ and open the template in the editor.
                 //text-decoration: underline;
                 cursor: url(images/Little_music_note.jpg),crosshair;
             }
-
+            #letras{
+                float: left;
+            }
+            
+            
+            
+            #letras ul{
+                list-style-type: none;
+                margin: 0px;
+                padding:0px;
+                border-left-width: 1px;
+                border-left-style: solid;
+                border-left-color: #CCC;
+            }
+            
+            #letras li{
+                display: inline;
+                
+                font-family: Arial,Helvetica,sans-serif;
+                color:#000;
+                text-decoration: underline;
+                font-size: 0.9em;
+                display: block;
+                padding: 6px;
+                float: left;
+                border-bottom-width: 1px;
+                border-bottom-style: solid;
+                border-bottom-color: #CCC;
+                background-color: #EAEAEA;
+                border-top-width: 1px;
+                border-top-style: solid;
+                border-top-color: #CCC;
+                border-right-width: 1px;
+                border-right-style: solid;
+                border-right-color: #CCC;
+            }
+            
+            #letras li:hover{
+                color: #FFF;
+                background-color: #666;
+            }
+            
+            
         </style>
 
 
         <script type="text/javascript">
+            var xmlreq=new XMLHttpRequest();
+            xmlreq.onreadystatechange = function() {
+                    if (xmlreq.readyState == 4 && xmlreq.status == 200) {
+                        procesarXMLMusicos();
+                    }
+                };
             //Cargar las letras en las que pulsar para ver la lista de músicos
             //que empiezan por ese nombre
             function cargarAlfabeto() {
-                var letras = document.getElementById("letras");
-                var abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-                for (var i = 0; i < 23; i++) {
-                    var letra = document.createElement("SPAN");
-                    //var a = document.createElement("A");
+                var letras = document.createElement("DIV");
+                
+                var abecedario = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+                var ul=document.createElement("UL");
+                for (var i = 0; i < 27; i++) {
+                    var letra = document.createElement("LI");
                     var letraactual = abecedario.substr(i, 1);
-                    //a.id = 
-                    //a.href="#";
                     letra.onclick = function()
                     {
                         cargarXMLMusicos(letraactual);
                     };
                     letra.textContent = abecedario.substr(i, 1);
                     letra.id = "enlace" + letraactual;
-                    letra.style.textDecoration = "underline";
                     letra.className = "letramusico";
-                    letras.appendChild(letra);
+                    //MIRAR SI EL ONCLICK SE PUEDE ASIGNAR A LETRAS
+                    //letra.onclick=function(){cargarXMLMusicos(letra.value);};
+                    ul.appendChild(letra);
 
                 }
-                var todos = document.createElement("SPAN");
+                var todos = document.createElement("LI");
                 todos.textContent = "TODOS";
                 todos.id = "enlaceTodos";
                 todos.style.textDecoration = "underline";
                 todos.className = "letramusico";
-                letras.appendChild(todos);
+                ul.appendChild(todos);
+                letras.appendChild(ul);
+                letras.id="letras";
+                
+                document.body.appendChild(letras);
             }
             function cargarXMLMusicos(letra) {
-                var xmlreq = new XMLHttpRequest();
-                xmlreq.onreadystatechange = function() {
+                //xmlreq = new XMLHttpRequest();
+                /*xmlreq.onreadystatechange = function() {
                     if (xmlreq.readyState == 4 && xmlreq.status == 200) {
-                        procesarXMLMusicos(xmlreq);
+                        procesarXMLMusicos();
                     }
-                };
-                xmlreq.open("GET", "/ConsultaMusicos?accion=listarmusicos&musicos=" + letra, true);
+                };*/
+                xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos&musicos=" + letra, true);
+                xmlreq.send();
                 //return false;
             }
-            function procesarXMLMusicos(xmlr) {
-                var xml = xmlr.responseXML;
+            function procesarXMLMusicos() {
+                var xml = xmlreq.responseXML;
                 var musicos = xml.getElementsByTagName("nombre");
                 var lista = document.getElementById("lista");
                 if (musicos.length > 0) {
@@ -127,15 +185,15 @@ and open the template in the editor.
         </script>
     </head>
     <body onload="inicializar()">
-
-        <div id="letras"></div>
-        <div id="lista"></div>
         <div id="mnu">
-            <ul>
+            <ul id="cosilla">
                 <li>Buscar por músico</li>
                 <li>Buscar por instrumento</li>
                 <li id="login">Hacer login</li>
             </ul>
         </div>
+        
+        <div id="lista"></div>
+        
     </body>
 </html>

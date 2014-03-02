@@ -13,6 +13,7 @@ import beans.Musico;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 
@@ -34,10 +35,13 @@ public class InstrumentosFachada {
     public List<Musico> getMusicos(String letra){
         List<Musico> musicos;
         Query q=em.createQuery("select m from Musico m where "
-                + "substring(m.nombre,0)=:letra order by m.nombre");
+                + "substring(m.nombre,1,1)=:letra order by m.nombre");
         q.setParameter("letra", letra);
-        
+        try{
         musicos=q.getResultList();        
+        }catch (NoResultException ex){
+            musicos=null;
+        }
         return musicos;
     }
     
