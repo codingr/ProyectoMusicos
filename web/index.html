@@ -113,12 +113,7 @@ and open the template in the editor.
 
 
         <script type="text/javascript">
-            var xmlreq=new XMLHttpRequest();
-            xmlreq.onreadystatechange = function() {
-                    if (xmlreq.readyState == 4 && xmlreq.status == 200) {
-                        procesarXMLMusicos();
-                    }
-                };
+            
             //Cargar las letras en las que pulsar para ver la lista de músicos
             //que empiezan por ese nombre
             function cargarAlfabeto() {
@@ -126,6 +121,7 @@ and open the template in the editor.
                 
                 var abecedario = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
                 var ul=document.createElement("UL");
+                
                 for (var i = 0; i < 27; i++) {
                     var letra = document.createElement("LI");
                     var letraactual = abecedario.substr(i, 1);
@@ -133,7 +129,7 @@ and open the template in the editor.
                     {
                         cargarXMLMusicos(letraactual);
                     };
-                    letra.textContent = abecedario.substr(i, 1);
+                    letra.textContent = letraactual;
                     letra.id = "enlace" + letraactual;
                     letra.className = "letramusico";
                     //MIRAR SI EL ONCLICK SE PUEDE ASIGNAR A LETRAS
@@ -141,11 +137,16 @@ and open the template in the editor.
                     ul.appendChild(letra);
 
                 }
+                //var todos = document.createElement("LI");
                 var todos = document.createElement("LI");
                 todos.textContent = "TODOS";
                 todos.id = "enlaceTodos";
-                todos.style.textDecoration = "underline";
+                //.style.textDecoration = "underline";
                 todos.className = "letramusico";
+                todos.onclick = function()
+                    {
+                        cargarXMLMusicos();
+                    };
                 ul.appendChild(todos);
                 letras.appendChild(ul);
                 letras.id="letras";
@@ -159,12 +160,22 @@ and open the template in the editor.
                         procesarXMLMusicos();
                     }
                 };*/
+                var xmlreq=new XMLHttpRequest();
+                xmlreq.onreadystatechange = function() {
+                    if (xmlreq.readyState == 4 && xmlreq.status == 200) {
+                        procesarXMLMusicos(xmlreq);
+                    }
+                };
+                if (arguments.length>0){
                 xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos&musicos=" + letra, true);
+                }else{
+                    xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos", true);
+                }
                 xmlreq.send();
                 //return false;
             }
-            function procesarXMLMusicos() {
-                var xml = xmlreq.responseXML;
+            function procesarXMLMusicos(xmlr) {
+                var xml = xmlr.responseXML;
                 var musicos = xml.getElementsByTagName("nombre");
                 var lista = document.getElementById("lista");
                 if (musicos.length > 0) {
