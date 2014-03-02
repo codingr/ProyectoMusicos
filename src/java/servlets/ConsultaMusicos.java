@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.jsp.PageContext;
+import utils.Globales;
 
 /**
  *
@@ -43,13 +44,18 @@ public class ConsultaMusicos extends HttpServlet {
         PrintWriter out=response.getWriter();
         String accion=request.getParameter("accion");
         
-        //String destino="";
+        String destino="";
         if (accion.equalsIgnoreCase("listarmusicos")){
             String letra=request.getParameter("musicos");
             cargarXMLMusicos(letra,out);
             
-        }else {
-            
+        }else if (accion.equalsIgnoreCase("vermusico")){
+            String strid=request.getParameter("idmusico");
+            int id=Integer.parseInt(strid);
+            destino="vermusico.jsp";
+            request.setAttribute("musico", instrumentosFachada.buscarMusico(id));
+            request.setAttribute("urlfotosmusicos", Globales.URLFOTOMUSICO); 
+            request.getRequestDispatcher(destino).forward(request, response);
         }        
         
         //request.getRequestDispatcher(destino).forward(request, response);

@@ -45,6 +45,13 @@ public class InstrumentosFachada {
         return musicos;
     }
     
+    public Musico buscarMusico(int id){
+        Musico musico;
+        Query q=em.createNamedQuery("Musico.findByIdmusico");
+        q.setParameter("idmusico",id);
+        musico=(Musico) q.getSingleResult();
+        return musico;
+    }
     
     public void añadirMusico(Musico musico){
         em.persist(musico);      

@@ -11,7 +11,8 @@ package utils;
  * @author User
  */
 public class Globales {
-    public static final String URLFOTOMUSICO="c:/ProyectoFinalDawPrueba1/Imagenes/Musicos";
-    public static final String URLFOTOINSTRUMENTO="c:/ProyectoFinalDawPrueba1/Imagenes/Instrumentos";
+    //Las rutas deben ser relativas
+    public static final String URLFOTOMUSICO="images/Musicos";
+    public static final String URLFOTOINSTRUMENTO="images/Instrumentos";
     
 }
