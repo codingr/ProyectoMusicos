@@ -10,15 +10,16 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -67,8 +68,16 @@ public class Musico implements Serializable {
     @Column(name = "fechadefuncion")
     @Temporal(TemporalType.DATE)
     private Date fechadefuncion;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idE")
-    private List<Comentario> comentarioList;
+    @JoinTable(name = "equipamiento", joinColumns = {
+        @JoinColumn(name = "idMusico", referencedColumnName = "idE")}, inverseJoinColumns = {
+        @JoinColumn(name = "idInstrumento", referencedColumnName = "idE")})
+    @ManyToMany
+    private List<Instrumento> instrumentoList;
+    @JoinTable(name = "miembros", joinColumns = {
+        @JoinColumn(name = "idE", referencedColumnName = "idE")}, inverseJoinColumns = {
+        @JoinColumn(name = "idGrupo", referencedColumnName = "idgrupo")})
+    @ManyToMany
+    private List<Grupo> grupoList;
 
     public Musico() {
     }
@@ -134,12 +143,21 @@ public class Musico implements Serializable {
     }
 
     @XmlTransient
-    public List<Comentario> getComentarioList() {
-        return comentarioList;
+    public List<Instrumento> getInstrumentoList() {
+        return instrumentoList;
     }
 
-    public void setComentarioList(List<Comentario> comentarioList) {
-        this.comentarioList = comentarioList;
+    public void setInstrumentoList(List<Instrumento> instrumentoList) {
+        this.instrumentoList = instrumentoList;
+    }
+
+    @XmlTransient
+    public List<Grupo> getGrupoList() {
+        return grupoList;
+    }
+
+    public void setGrupoList(List<Grupo> grupoList) {
+        this.grupoList = grupoList;
     }
 
     @Override

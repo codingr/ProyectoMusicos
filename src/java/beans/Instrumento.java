@@ -7,17 +7,22 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -48,6 +53,13 @@ public class Instrumento implements Serializable {
     @Size(max = 30)
     @Column(name = "urlfoto")
     private String urlfoto;
+    @ManyToMany(mappedBy = "instrumentoList")
+    private List<Musico> musicoList;
+    @JoinTable(name = "detalles", joinColumns = {
+        @JoinColumn(name = "idE", referencedColumnName = "idE")}, inverseJoinColumns = {
+        @JoinColumn(name = "idCaracteristica", referencedColumnName = "idcaracteristica")})
+    @ManyToMany
+    private List<Caracteristica> caracteristicaList;
 
     public Instrumento() {
     }
@@ -86,6 +98,24 @@ public class Instrumento implements Serializable {
 
     public void setUrlfoto(String urlfoto) {
         this.urlfoto = urlfoto;
+    }
+
+    @XmlTransient
+    public List<Musico> getMusicoList() {
+        return musicoList;
+    }
+
+    public void setMusicoList(List<Musico> musicoList) {
+        this.musicoList = musicoList;
+    }
+
+    @XmlTransient
+    public List<Caracteristica> getCaracteristicaList() {
+        return caracteristicaList;
+    }
+
+    public void setCaracteristicaList(List<Caracteristica> caracteristicaList) {
+        this.caracteristicaList = caracteristicaList;
     }
 
     @Override

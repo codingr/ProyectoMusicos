@@ -17,7 +17,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.jsp.PageContext;
 import utils.Globales;
 
 /**
@@ -45,7 +44,7 @@ public class ConsultaMusicos extends HttpServlet {
         PrintWriter out=response.getWriter();
         String accion=request.getParameter("accion");
         
-        String destino="";
+        String destino;
         if (accion==null){
             destino="index.jsp";
             request.getRequestDispatcher(destino).forward(request, response);
@@ -61,21 +60,7 @@ public class ConsultaMusicos extends HttpServlet {
             request.setAttribute("musico", instrumentosFachada.buscarMusico(id));
             request.setAttribute("urlfotosmusicos", Globales.URLFOTOMUSICO); 
             request.getRequestDispatcher(destino).forward(request, response);
-        }        
-        
-        //request.getRequestDispatcher(destino).forward(request, response);
-        //try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            /*out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ConsultaMusicos</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ConsultaMusicos at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-        }*/
+        }                
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

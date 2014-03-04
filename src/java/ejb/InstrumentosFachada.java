@@ -47,8 +47,8 @@ public class InstrumentosFachada {
     
     public Musico buscarMusico(int id){
         Musico musico;
-        Query q=em.createNamedQuery("Musico.findByIdmusico");
-        q.setParameter("idmusico",id);
+        Query q=em.createNamedQuery("Musico.findByIdE");
+        q.setParameter("idE",id);
         musico=(Musico) q.getSingleResult();
         return musico;
     }
@@ -70,9 +70,9 @@ public class InstrumentosFachada {
     
     public void actualizarMusico (Musico musico){
         Query q=em.createQuery(
-"UPDATE Musico m set nombre=:nombre, apellido=:apellido, alias=:alias, fechadefuncion=:fechadefuncion,"
-        + "fechanacimiento=:fechanacimiento "
-        + "where idmusico=:musico");
+"UPDATE Musico m set m.nombre=:nombre, m.apellido=:apellido, m.alias=:alias, m.fechadefuncion=:fechadefuncion,"
+        + "m.fechanacimiento=:fechanacimiento "
+        + "where idE=:idE");
         q.setParameter("nombre",musico.getNombre() );
         q.setParameter("apellido",musico.getApellido() );
         q.setParameter("alias",musico.getAlias());        

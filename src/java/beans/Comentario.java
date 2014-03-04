@@ -50,7 +50,7 @@ public class Comentario implements Serializable {
     private Integer nogusta;
     @JoinColumn(name = "idE", referencedColumnName = "idE")
     @ManyToOne(optional = false)
-    private Musico idE;
+    private Elemento idE;
 
     public Comentario() {
     }
@@ -91,11 +91,11 @@ public class Comentario implements Serializable {
         this.nogusta = nogusta;
     }
 
-    public Musico getIdE() {
+    public Elemento getIdE() {
         return idE;
     }
 
-    public void setIdE(Musico idE) {
+    public void setIdE(Elemento idE) {
         this.idE = idE;
     }
 

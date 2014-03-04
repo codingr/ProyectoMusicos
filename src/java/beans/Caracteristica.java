@@ -7,17 +7,20 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -40,6 +43,8 @@ public class Caracteristica implements Serializable {
     @Size(max = 30)
     @Column(name = "texto")
     private String texto;
+    @ManyToMany(mappedBy = "caracteristicaList")
+    private List<Instrumento> instrumentoList;
 
     public Caracteristica() {
     }
@@ -62,6 +67,15 @@ public class Caracteristica implements Serializable {
 
     public void setTexto(String texto) {
         this.texto = texto;
+    }
+
+    @XmlTransient
+    public List<Instrumento> getInstrumentoList() {
+        return instrumentoList;
+    }
+
+    public void setInstrumentoList(List<Instrumento> instrumentoList) {
+        this.instrumentoList = instrumentoList;
     }
 
     @Override

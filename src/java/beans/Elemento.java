@@ -7,15 +7,19 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -37,6 +41,8 @@ public class Elemento implements Serializable {
     private Integer idE;
     @Column(name = "tipo")
     private Boolean tipo;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idE")
+    private List<Comentario> comentarioList;
 
     public Elemento() {
     }
@@ -59,6 +65,15 @@ public class Elemento implements Serializable {
 
     public void setTipo(Boolean tipo) {
         this.tipo = tipo;
+    }
+
+    @XmlTransient
+    public List<Comentario> getComentarioList() {
+        return comentarioList;
+    }
+
+    public void setComentarioList(List<Comentario> comentarioList) {
+        this.comentarioList = comentarioList;
     }
 
     @Override
