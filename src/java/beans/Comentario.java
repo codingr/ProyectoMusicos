@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author User
+ * @author alumno
  */
 @Entity
 @Table(name = "comentarios")
@@ -48,9 +48,9 @@ public class Comentario implements Serializable {
     private Integer gusta;
     @Column(name = "nogusta")
     private Integer nogusta;
-    @JoinColumn(name = "idmusico", referencedColumnName = "idmusico")
+    @JoinColumn(name = "idE", referencedColumnName = "idE")
     @ManyToOne(optional = false)
-    private Musico idmusico;
+    private Musico idE;
 
     public Comentario() {
     }
@@ -91,12 +91,12 @@ public class Comentario implements Serializable {
         this.nogusta = nogusta;
     }
 
-    public Musico getIdmusico() {
-        return idmusico;
+    public Musico getIdE() {
+        return idE;
     }
 
-    public void setIdmusico(Musico idmusico) {
-        this.idmusico = idmusico;
+    public void setIdE(Musico idE) {
+        this.idE = idE;
     }
 
     @Override

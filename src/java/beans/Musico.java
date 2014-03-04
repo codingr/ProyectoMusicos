@@ -16,7 +16,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -29,14 +28,14 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author User
+ * @author alumno
  */
 @Entity
 @Table(name = "musicos")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Musico.findAll", query = "SELECT m FROM Musico m"),
-    @NamedQuery(name = "Musico.findByIdmusico", query = "SELECT m FROM Musico m WHERE m.idmusico = :idmusico"),
+    @NamedQuery(name = "Musico.findByIdE", query = "SELECT m FROM Musico m WHERE m.idE = :idE"),
     @NamedQuery(name = "Musico.findByNombre", query = "SELECT m FROM Musico m WHERE m.nombre = :nombre"),
     @NamedQuery(name = "Musico.findByApellido", query = "SELECT m FROM Musico m WHERE m.apellido = :apellido"),
     @NamedQuery(name = "Musico.findByAlias", query = "SELECT m FROM Musico m WHERE m.alias = :alias"),
@@ -48,8 +47,8 @@ public class Musico implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idmusico")
-    private Integer idmusico;
+    @Column(name = "idE")
+    private Integer idE;
     @Size(max = 30)
     @Column(name = "nombre")
     private String nombre;
@@ -68,26 +67,22 @@ public class Musico implements Serializable {
     @Column(name = "fechadefuncion")
     @Temporal(TemporalType.DATE)
     private Date fechadefuncion;
-    @ManyToMany(mappedBy = "musicoList")
-    private List<Instrumento> instrumentoList;
-    @ManyToMany(mappedBy = "musicoList")
-    private List<Grupo> grupoList;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idmusico")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idE")
     private List<Comentario> comentarioList;
 
     public Musico() {
     }
 
-    public Musico(Integer idmusico) {
-        this.idmusico = idmusico;
+    public Musico(Integer idE) {
+        this.idE = idE;
     }
 
-    public Integer getIdmusico() {
-        return idmusico;
+    public Integer getIdE() {
+        return idE;
     }
 
-    public void setIdmusico(Integer idmusico) {
-        this.idmusico = idmusico;
+    public void setIdE(Integer idE) {
+        this.idE = idE;
     }
 
     public String getNombre() {
@@ -139,24 +134,6 @@ public class Musico implements Serializable {
     }
 
     @XmlTransient
-    public List<Instrumento> getInstrumentoList() {
-        return instrumentoList;
-    }
-
-    public void setInstrumentoList(List<Instrumento> instrumentoList) {
-        this.instrumentoList = instrumentoList;
-    }
-
-    @XmlTransient
-    public List<Grupo> getGrupoList() {
-        return grupoList;
-    }
-
-    public void setGrupoList(List<Grupo> grupoList) {
-        this.grupoList = grupoList;
-    }
-
-    @XmlTransient
     public List<Comentario> getComentarioList() {
         return comentarioList;
     }
@@ -168,7 +145,7 @@ public class Musico implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idmusico != null ? idmusico.hashCode() : 0);
+        hash += (idE != null ? idE.hashCode() : 0);
         return hash;
     }
 
@@ -179,7 +156,7 @@ public class Musico implements Serializable {
             return false;
         }
         Musico other = (Musico) object;
-        if ((this.idmusico == null && other.idmusico != null) || (this.idmusico != null && !this.idmusico.equals(other.idmusico))) {
+        if ((this.idE == null && other.idE != null) || (this.idE != null && !this.idE.equals(other.idE))) {
             return false;
         }
         return true;
@@ -187,7 +164,7 @@ public class Musico implements Serializable {
 
     @Override
     public String toString() {
-        return "beans.Musico[ idmusico=" + idmusico + " ]";
+        return "beans.Musico[ idE=" + idE + " ]";
     }
     
 }

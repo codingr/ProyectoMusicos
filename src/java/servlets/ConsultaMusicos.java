@@ -29,6 +29,7 @@ public class ConsultaMusicos extends HttpServlet {
     @EJB
     private InstrumentosFachada instrumentosFachada;
 
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -123,7 +124,7 @@ public class ConsultaMusicos extends HttpServlet {
         out.println("<musicos>");
         List<Musico> musicos = instrumentosFachada.getMusicos(letra);
         for (int i = 0; i < musicos.size(); i++) {
-            out.println("<musico id='" + musicos.get(i).getIdmusico()
+            out.println("<musico id='" + musicos.get(i).getIdE()
                     + "'>");
             out.println("<nombre>" + musicos.get(i).getNombre() + "</nombre>");
             out.println("</musico>");
