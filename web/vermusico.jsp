@@ -33,7 +33,7 @@
                 <td>${musico.fechadefuncion}</td>
             </tr>
             </c:if>
-            <c:forEach items="${musico.idE.instrumentoList}" var="instrumento">
+            <c:forEach items="${musico.instrumentoList}" var="instrumento">
                 <c:set var="contador" value="contador+1"/>
             <tr>
                 <td>Instrumento ${contador}</td>
