@@ -45,7 +45,11 @@ public class ConsultaMusicos extends HttpServlet {
         String accion=request.getParameter("accion");
         
         String destino="";
-        if (accion.equalsIgnoreCase("listarmusicos")){
+        if (accion==null){
+            destino="index.jsp";
+            request.getRequestDispatcher(destino).forward(request, response);
+        }
+        else if (accion.equalsIgnoreCase("listarmusicos")){
             String letra=request.getParameter("musicos");
             cargarXMLMusicos(letra,out);
             

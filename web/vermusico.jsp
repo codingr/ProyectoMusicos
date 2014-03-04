@@ -14,6 +14,9 @@
         <style type="text/css">
             img{
                 float:right;
+                max-height: 50%;                    
+                max-width: 50%;
+                    
             }
         </style>
     </head>
