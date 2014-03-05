@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package ejb;
 
 import beans.Comentario;
@@ -26,7 +25,7 @@ public class InstrumentosFachada {
 
     @PersistenceContext(unitName = "ProyectoFinalPU")
     private EntityManager em;
-    
+
     public void persist(Object object) {
         em.persist(object);
     }
@@ -40,33 +39,47 @@ public class InstrumentosFachada {
      */
     public List<Musico> getMusicos(String letra) {
         List<Musico> musicos;
-        Query q = em.createQuery("select m from Musico m where "
-                + "substring(m.nombre,1,1)=:letra order by m.nombre");
-        q.setParameter("letra", letra);
+        Query q;
+        if (letra == null) {
+            q = em.createNamedQuery("Musico.findAll");
+        } else {
+            q = em.createQuery("select m from Musico m where "
+                    + "substring(m.nombre,1,1)=:letra order by m.nombre");
+            q.setParameter("letra", letra);
+        }
+
         try {
-            musicos = q.getResultList();            
+            musicos = q.getResultList();
         } catch (NoResultException ex) {
             musicos = null;
         }
         return musicos;
     }
-
+/**
+ * 
+ * @param letra
+ * @return 
+ */
     public List<Instrumento> getInstrumentos(String letra) {
         List<Instrumento> instrumentos;
-        Query q = em.createQuery("select m from Instrumento m where "
-                + "substring(m.marca,1,1)=:letra order by m.marca");
-        q.setParameter("letra", letra);
+        Query q;
+        if (letra == null) {
+            q = em.createNamedQuery("Instrumento.findAll");
+
+        } else {
+            q = em.createQuery("select m from Instrumento m where "
+                    + "substring(m.marca,1,1)=:letra order by m.marca");
+            q.setParameter("letra", letra);
+        }
+
         try {
-            instrumentos = q.getResultList();            
+            instrumentos = q.getResultList();
         } catch (NoResultException ex) {
             instrumentos = null;
         }
         return instrumentos;
     }
-    
-    
-    
-    
+
     /**
      *
      * @param id
@@ -80,23 +93,22 @@ public class InstrumentosFachada {
         return musico;
     }
 
-    public Instrumento buscarInstrumento(int id){
+    public Instrumento buscarInstrumento(int id) {
         Instrumento instrumento;
-        Query q=em.createNamedQuery("Instrumento.findByIdE");
+        Query q = em.createNamedQuery("Instrumento.findByIdE");
         q.setParameter("idE", id);
-        instrumento=(Instrumento) q.getSingleResult();
+        instrumento = (Instrumento) q.getSingleResult();
         return instrumento;
     }
-    
-    
+
     /**
      *
      * @param musico
      */
     public void añadirMusico(Musico musico) {
-        em.persist(musico);        
+        em.persist(musico);
     }
-    
+
     public void añadirInstrumento(Instrumento instrumento) {
         em.persist(instrumento);
     }
@@ -104,11 +116,11 @@ public class InstrumentosFachada {
     public void añadirGrupo(Grupo grupo) {
         em.persist(grupo);
     }
-    
+
     public void añadirComentario(Comentario comentario) {
         em.persist(comentario);
     }
-    
+
     public void actualizarMusico(Musico musico) {
         Query q = em.createQuery(
                 "UPDATE Musico m set m.nombre=:nombre, m.apellido=:apellido, m.alias=:alias, m.fechadefuncion=:fechadefuncion,"
@@ -116,7 +128,7 @@ public class InstrumentosFachada {
                 + "where idE=:idE");
         q.setParameter("nombre", musico.getNombre());
         q.setParameter("apellido", musico.getApellido());
-        q.setParameter("alias", musico.getAlias());        
+        q.setParameter("alias", musico.getAlias());
         q.setParameter("fechadefuncion", musico.getFechadefuncion());
         q.setParameter("fechanacimiento", musico.getFechanacimiento());
         q.setParameter("urlfoto", musico.getUrlfoto());

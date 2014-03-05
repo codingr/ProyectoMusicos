@@ -108,9 +108,12 @@
 
         </style>
         <script type="text/javascript">
+            var BUSCARMUSICO=1;
+            var BUSCARINSTRUMENTO=0;
+            var buscar;
             //Cargar las letras en las que pulsar para ver la lista de músicos
             //que empiezan por ese nombre
-            function cargarAlfabeto(elementoquellama) {
+            function cargarAlfabeto(evt) {
 
                 if (document.getElementById("letras") == null)
                 {
@@ -121,16 +124,17 @@
                     for (var i = 0; i < 27; i++) {
                         var letra = document.createElement("LI");
                         var letraactual = abecedario.substr(i, 1);
-                        //problema a la hora de 
+                        //TRAS PULSAR EN UNA OPCIÓN DISTINTA
+                        //DEL MENÚ SE MANTIENE EL VALOR DE ELEMENTOQUELLAMA
                         letra.onclick = function()
-                         {
-                             if (elementoquellama.id=="buscarmusico"){
-                            cargarXMLMusicos(this);
-                             }else{
-                                 cargarXMLInstrumentos(this);
-                             }
-                            
-                         };
+                        {
+                            if (buscar == BUSCARMUSICO) {
+                                cargarXMLMusicos(this);
+                            } else {
+                                cargarXMLInstrumentos(this);
+                            }
+
+                        };
                         letra.textContent = letraactual;
                         letra.id = "enlace" + letraactual;
                         letra.className = "letraalfabeto";
@@ -139,15 +143,19 @@
                     var todos = document.createElement("LI");
                     todos.textContent = "TODOS";
                     todos.id = "enlaceTodos";
-                    //.style.textDecoration = "underline";
                     todos.className = "letraalfabeto";
                     todos.onclick = function()
                     {
-                        cargarXMLMusicos(this);
+                        if (buscar == BUSCARMUSICO) {
+                            cargarXMLMusicos(this);
+                        } else {
+                            cargarXMLInstrumentos(this);
+                        }
                     };
                     ul.appendChild(todos);
                     letras.appendChild(ul);
                     letras.id = "letras";
+                    //letras.elementoquellama=evt.currentTarget;
                     document.body.appendChild(letras);
                 }
             }
@@ -188,17 +196,7 @@
                     h3.textContent = "No se han encontrado instrumentos cuya marca empiece por esa letra";
                     lista.appendChild(h3);
                 }
-
             }
-
-
-
-
-
-
-
-
-
 
             function cargarXMLMusicos(elemento) {
                 var xmlreq = new XMLHttpRequest();
@@ -237,22 +235,40 @@
                     h3.textContent = "No se han encontrado músicos cuyo nombre empiece por esa letra";
                     lista.appendChild(h3);
                 }
-
             }
             function inicializar() {
 
-                document.getElementById("buscarmusico").onclick = 
-                        function(){cargarAlfabeto(this);};
-                document.getElementById("buscarinstrumento").onclick = 
-                        function(){cargarAlfabeto(this);};
-                document.getElementById("login").onclick=
-                        function (){setTimeout(irLogin(),20000);};
-            }                   
+                document.getElementById("buscarmusico").onclick =
+                        function() {
+                            ocultarLista();
+                            buscar=BUSCARMUSICO;
+                            cargarAlfabeto();
+                            
+                        };
+                document.getElementById("buscarinstrumento").onclick =
+                        function() {
+                            ocultarLista();
+                            buscar=BUSCARINSTRUMENTO;
+                            cargarAlfabeto();
+                            
+                        };
+                document.getElementById("login").onclick =
+                        function() {
+                            setTimeout(irLogin(), 20000);
+                        };
+            }
+            function ocultarLista(){
+                
+                if (document.getElementById("lista")){
+                    var lista=document.getElementById("lista");
+                    lista.innerHTML="";
+                }                
+            }
 
-            function irLogin() 
+            function irLogin()
             {
-                location.href="login.aspx";//PREGUNTAR A MARTA
-            } 
+                location.href = "login.aspx";//PREGUNTAR A MARTA
+            }
         </script>
 
 

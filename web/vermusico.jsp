@@ -43,7 +43,9 @@
             
         </table>
         <img src="${urlfotosmusicos}/${musico.urlfoto}" alt="Foto de músico" />
-        
+        <form action="ConsultaMusicos">
+            <input type="submit" value="Volver al inicio" name="inicio" />
+        </form>
         
     </body>
 </html>

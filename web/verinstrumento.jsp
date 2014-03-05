@@ -16,13 +16,13 @@
                 float:right;
                 max-height: 50%;                    
                 max-width: 50%;
-                    
+
             }
         </style>
         <script type="text/javascript">
-            
-                
-            
+
+
+
         </script>
     </head>
     <body>
@@ -32,10 +32,13 @@
         <c:if test="${!empty instrumento.musicoList}">
             <h3>Músicos que usan este instrumento:</h3>
             <ul>
-            <c:forEach items="${instrumento.musicoList}" var="musico">
-                <li><a href="ConsultaMusicos?accion=vermusico&idmusico=${musico.idmusico}">${musico.nombre} ${musico.apellido} ${musico.alias}</a></li>
-            </c:forEach>
+                <c:forEach items="${instrumento.musicoList}" var="musico">
+                    <li><a href="ConsultaMusicos?accion=vermusico&idmusico=${musico.idmusico}">${musico.nombre} ${musico.apellido} ${musico.alias}</a></li>
+                    </c:forEach>
             </ul>
-        </c:if>        
+        </c:if>  
+        <form action="ConsultaMusicos">
+            <input type="submit" value="Volver al inicio" name="inicio" />
+        </form>
     </body>
 </html>
