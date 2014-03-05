@@ -244,8 +244,15 @@
                 document.getElementById("buscarmusico").onclick = 
                         function(){cargarAlfabeto(this);};
                 document.getElementById("buscarinstrumento").onclick = 
-                        function(){cargarAlfabeto(this);}
-            }
+                        function(){cargarAlfabeto(this);};
+                document.getElementById("login").onclick=
+                        function (){setTimeout(irLogin(),20000);};
+            }                   
+
+            function irLogin() 
+            {
+                location.href="login.aspx";//PREGUNTAR A MARTA
+            } 
         </script>
 
 
