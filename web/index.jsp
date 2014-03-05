@@ -105,12 +105,12 @@
             }
         </style>
         <script type="text/javascript">
-            var BUSCARMUSICO=1;
-            var BUSCARINSTRUMENTO=0;
+            var BUSCARMUSICO = 1;
+            var BUSCARINSTRUMENTO = 0;
             var buscar;
             //Cargar las letras en las que pulsar para ver la lista de músicos
             //que empiezan por ese nombre
-            function cargarAlfabeto() {                
+            function cargarAlfabeto() {
                 if (document.getElementById("letras") == null)
                 {
                     var letras = document.createElement("DIV");
@@ -151,9 +151,9 @@
                     letras.appendChild(ul);
                     letras.id = "letras";
                     //letras.elementoquellama=evt.currentTarget;
-                    letras.style.visibility="hidden";
+                    letras.style.visibility = "hidden";
                     document.body.appendChild(letras);
-                    
+
                 }
             }
             function cargarXMLInstrumentos(elemento) {
@@ -232,48 +232,49 @@
             }
             function inicializar() {
                 cargarAlfabeto();
-                var lista=document.createElement("DIV");
-                lista.id="lista";
+                var lista = document.createElement("DIV");
+                lista.id = "lista";
                 document.body.appendChild(lista);
-                
+                var mnu=document.getElementById("mnu");
+                var posX=mnu.clientLeft+mnu.clientWidth;
+                lista.style.left=posX+"px";              
+
                 document.getElementById("buscarmusico").onclick =
                         function() {
-                            buscar=BUSCARMUSICO;
+                            buscar = BUSCARMUSICO;
                             limpiarLista();
                             mostrarLetras();
                         };
                 document.getElementById("buscarinstrumento").onclick =
-                        function() {                          
-                            buscar=BUSCARINSTRUMENTO;
+                        function() {
+                            buscar = BUSCARINSTRUMENTO;
                             limpiarLista();
                             mostrarLetras();
                         };
                 document.getElementById("login").onclick =
-                        function() {                            
-                            //mostrarLista();
-                            setTimeout(irLogin(), 20000);
-                            
+                        function() {
+                            //FALTA COMPROBAR SI ESTÁ LOGUEADO   
+                            if (true) {//CAMBIAR LA CONDICIÓN CUANDO LA SEPA
+                                setTimeout(irLogin(), 20000);
+                            }
                         };
             }
-            function mostrarLetras(){                
-                if (document.getElementById("letras")){
-                    var letras=document.getElementById("letras");
-                    letras.style.visibility="visible";
-                    
-                }                
+            function mostrarLetras() {
+                if (document.getElementById("letras")) {
+                    var letras = document.getElementById("letras");
+                    letras.style.visibility = "visible";
+                }
             }
-            
-            function limpiarLista(){
-                var lista=document.getElementById("lista");
-                lista.innerHTML="";
-            } 
+
+            function limpiarLista() {
+                var lista = document.getElementById("lista");
+                lista.innerHTML = "";
+            }
             function irLogin()
             {
                 location.href = "login.aspx";//PREGUNTAR A MARTA
             }
         </script>
-
-
     </head>
 
     <body onload="inicializar()">
