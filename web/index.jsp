@@ -3,7 +3,7 @@
     Created on : 03-mar-2014, 23:59:19
     Author     : User
 --%>
-
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
@@ -16,11 +16,43 @@
                 float: left;
                 width: 16%;
             }
-
             #letras{
                 float: left;
+                border-style: ridge;
+                border-width: 10px;
             }
-
+            #letras ul{
+                list-style-type: none;
+                margin: 0px;
+                padding:0px;
+                border-left-width: 1px;
+                border-left-style: solid;
+                border-left-color: #CCC;
+            }
+            #letras li{
+                display: inline;
+                font-family: Arial,Helvetica,sans-serif;
+                color:#000;
+                text-decoration: underline;
+                font-size: 0.9em;
+                display: block;
+                padding: 6px;
+                float: left;
+                border-bottom-width: 1px;
+                border-bottom-style: solid;
+                border-bottom-color: #CCC;
+                background-color: #EAEAEA;
+                border-top-width: 1px;
+                border-top-style: solid;
+                border-top-color: #CCC;
+                border-right-width: 1px;
+                border-right-style: solid;
+                border-right-color: #CCC;
+            }
+            #letras li:hover{
+                color: #FFF;
+                background-color: #666;
+            }
             #mnu ul{
                 list-style-type: none;
                 margin: 0px;
@@ -54,11 +86,7 @@
                 border-right-style: solid;
                 border-right-color: #36F;
                 cursor: url(images/Little_music_note.jpg),crosshair;
-            }
-            #letras{
-                border-style: ridge;
-                border-width: 10px;
-            }
+            }            
             .letraalfabeto{
                 font-family: fantasy;
                 margin: 5px;
@@ -68,44 +96,13 @@
                 font-size: larger;                
                 cursor: url(images/Little_music_note.jpg),crosshair;
             }
-            #letras ul{
-                list-style-type: none;
-                margin: 0px;
-                padding:0px;
-                border-left-width: 1px;
-                border-left-style: solid;
-                border-left-color: #CCC;
-            }
-            #letras li{
-                display: inline;
-
-                font-family: Arial,Helvetica,sans-serif;
-                color:#000;
-                text-decoration: underline;
-                font-size: 0.9em;
-                display: block;
-                padding: 6px;
-                float: left;
-                border-bottom-width: 1px;
-                border-bottom-style: solid;
-                border-bottom-color: #CCC;
-                background-color: #EAEAEA;
-                border-top-width: 1px;
-                border-top-style: solid;
-                border-top-color: #CCC;
-                border-right-width: 1px;
-                border-right-style: solid;
-                border-right-color: #CCC;
-            }
-
-            #letras li:hover{
-                color: #FFF;
-                background-color: #666;
+            #lista{
+                margin-left: 10px;
+                clear: both;
             }
             #lista ul{
                 list-style-type: square;
             }
-
         </style>
         <script type="text/javascript">
             var BUSCARMUSICO=1;
@@ -113,8 +110,7 @@
             var buscar;
             //Cargar las letras en las que pulsar para ver la lista de músicos
             //que empiezan por ese nombre
-            function cargarAlfabeto(evt) {
-
+            function cargarAlfabeto() {                
                 if (document.getElementById("letras") == null)
                 {
                     var letras = document.createElement("DIV");
@@ -133,7 +129,6 @@
                             } else {
                                 cargarXMLInstrumentos(this);
                             }
-
                         };
                         letra.textContent = letraactual;
                         letra.id = "enlace" + letraactual;
@@ -156,10 +151,11 @@
                     letras.appendChild(ul);
                     letras.id = "letras";
                     //letras.elementoquellama=evt.currentTarget;
+                    letras.style.visibility="hidden";
                     document.body.appendChild(letras);
+                    
                 }
             }
-
             function cargarXMLInstrumentos(elemento) {
                 var xmlreq = new XMLHttpRequest();
                 xmlreq.onreadystatechange = function() {
@@ -197,7 +193,6 @@
                     lista.appendChild(h3);
                 }
             }
-
             function cargarXMLMusicos(elemento) {
                 var xmlreq = new XMLHttpRequest();
                 xmlreq.onreadystatechange = function() {
@@ -225,7 +220,6 @@
                         var idmusico = musicos[i].getAttribute("id");
                         a.href = "ConsultaMusicos?accion=vermusico&idmusico=" + idmusico;
                         a.textContent = musicos[i].getElementsByTagName("nombre")[0].textContent;
-
                         li.appendChild(a);
                         ul.appendChild(li);
                     }
@@ -237,34 +231,42 @@
                 }
             }
             function inicializar() {
-
+                cargarAlfabeto();
+                var lista=document.createElement("DIV");
+                lista.id="lista";
+                document.body.appendChild(lista);
+                
                 document.getElementById("buscarmusico").onclick =
                         function() {
-                            ocultarLista();
                             buscar=BUSCARMUSICO;
-                            cargarAlfabeto();
-                            
+                            limpiarLista();
+                            mostrarLetras();
                         };
                 document.getElementById("buscarinstrumento").onclick =
-                        function() {
-                            ocultarLista();
+                        function() {                          
                             buscar=BUSCARINSTRUMENTO;
-                            cargarAlfabeto();
-                            
+                            limpiarLista();
+                            mostrarLetras();
                         };
                 document.getElementById("login").onclick =
-                        function() {
+                        function() {                            
+                            //mostrarLista();
                             setTimeout(irLogin(), 20000);
+                            
                         };
             }
-            function ocultarLista(){
-                
-                if (document.getElementById("lista")){
-                    var lista=document.getElementById("lista");
-                    lista.innerHTML="";
+            function mostrarLetras(){                
+                if (document.getElementById("letras")){
+                    var letras=document.getElementById("letras");
+                    letras.style.visibility="visible";
+                    
                 }                
             }
-
+            
+            function limpiarLista(){
+                var lista=document.getElementById("lista");
+                lista.innerHTML="";
+            } 
             function irLogin()
             {
                 location.href = "login.aspx";//PREGUNTAR A MARTA
@@ -276,14 +278,11 @@
 
     <body onload="inicializar()">
         <div id="mnu">
-            <ul id="cosilla">
+            <ul>
                 <li id="buscarmusico">Buscar por músico</li>
                 <li id="buscarinstrumento">Buscar por instrumento</li>
                 <li id="login">Hacer login</li>
             </ul>
         </div>
-
-        <div id="lista"></div>
-
     </body>
 </html>
