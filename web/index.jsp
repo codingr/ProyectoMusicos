@@ -168,17 +168,17 @@
             }
             function procesarXMLInstrumentos(xmlr) {
                 var xml = xmlr.responseXML;
-                var marcas = xml.getElementsByTagName("marca");
+                var instrumentos = xml.getElementsByTagName("instrumento");
                 var lista = document.getElementById("lista");
                 lista.innerHTML = "";
-                if (marcas.length > 0) {
+                if (instrumentos.length > 0) {
                     var ul = document.createElement("UL");
-                    for (var i = 0; i < marcas.length; i++) {
+                    for (var i = 0; i < instrumentos.length; i++) {
                         var li = document.createElement("LI");
                         var a = document.createElement("A");
-                        var idinstrumento = marcas[i].getAttribute("id");//CREO QUE MAL, CORREGIR
+                        var idinstrumento = instrumentos[i].getAttribute("id");//CREO QUE MAL, CORREGIR
                         a.href = "ConsultaMusicos?accion=verinstrumento&idinstrumento=" + idinstrumento;
-                        a.textContent = marcas[i].textContent;
+                        a.textContent = instrumentos[i].textContent;
                         li.appendChild(a);
                         ul.appendChild(li);
                     }

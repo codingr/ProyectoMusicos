@@ -143,13 +143,11 @@ public class ConsultaMusicos extends HttpServlet {
             out.println("<instrumento id='" + instrumentos.get(i).getIdE()
                     + "'>");
             out.println("<marca>" + instrumentos.get(i).getMarca()+ "</marca>");
-            
-            
+            out.println("<modelo>"+instrumentos.get(i).getModelo()+"</modelo>");
+            out.println("<urlfoto>"+instrumentos.get(i).getUrlfoto()+"</urlfoto>");
+            out.println("<aniofabricacion>"+instrumentos.get(i).getAniofabricacion()+"</aniofabricacion>");
             out.println("</instrumento>");
         }
-
-       
-       
        out.println("</instrumentos>");
     }
 
