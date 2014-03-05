@@ -47,7 +47,6 @@
                 border-bottom-color: #CCC;
                 background-color: #EAEAEA;
             }
-
             #mnu li:hover{
                 color: #FFF;
                 background-color: #666;
@@ -60,21 +59,15 @@
                 border-style: ridge;
                 border-width: 10px;
             }
-
             .letraalfabeto{
                 font-family: fantasy;
                 margin: 5px;
             }
             .letraalfabeto:hover{
                 font-weight: 900;
-                font-size: larger;
-                //text-decoration: underline;
+                font-size: larger;                
                 cursor: url(images/Little_music_note.jpg),crosshair;
             }
-
-
-
-
             #letras ul{
                 list-style-type: none;
                 margin: 0px;
@@ -83,7 +76,6 @@
                 border-left-style: solid;
                 border-left-color: #CCC;
             }
-
             #letras li{
                 display: inline;
 
@@ -130,34 +122,82 @@
                         var letra = document.createElement("LI");
                         var letraactual = abecedario.substr(i, 1);
                         //problema a la hora de 
-                        /*letra.onclick = function()
+                        letra.onclick = function()
                          {
-                         cargarXMLMusicosOInstrumentos(this);
-                         };*/
+                             if (elementoquellama.id=="buscarmusico"){
+                            cargarXMLMusicos(this);
+                             }else{
+                                 cargarXMLInstrumentos(this);
+                             }
+                            
+                         };
                         letra.textContent = letraactual;
                         letra.id = "enlace" + letraactual;
                         letra.className = "letraalfabeto";
                         ul.appendChild(letra);
                     }
-
-
-
                     var todos = document.createElement("LI");
                     todos.textContent = "TODOS";
                     todos.id = "enlaceTodos";
                     //.style.textDecoration = "underline";
-                    todos.className = "letramusico";
+                    todos.className = "letraalfabeto";
                     todos.onclick = function()
                     {
-                        cargarXMLMusicosOInstrumentos(this);
+                        cargarXMLMusicos(this);
                     };
                     ul.appendChild(todos);
                     letras.appendChild(ul);
                     letras.id = "letras";
-
                     document.body.appendChild(letras);
                 }
             }
+
+            function cargarXMLInstrumentos(elemento) {
+                var xmlreq = new XMLHttpRequest();
+                xmlreq.onreadystatechange = function() {
+                    if (xmlreq.readyState == 4 && xmlreq.status == 200) {
+                        procesarXMLInstrumentos(xmlreq);
+                    }
+                };
+                if (elemento.textContent != "TODOS") {
+                    xmlreq.open("GET", "ConsultaMusicos?accion=listarinstrumentos&instrumentos=" + elemento.textContent, true);
+                } else {
+                    xmlreq.open("GET", "ConsultaMusicos?accion=listarinstrumentos", true);
+                }
+                xmlreq.send();
+            }
+            function procesarXMLInstrumentos(xmlr) {
+                var xml = xmlr.responseXML;
+                var marcas = xml.getElementsByTagName("marca");
+                var lista = document.getElementById("lista");
+                lista.innerHTML = "";
+                if (marcas.length > 0) {
+                    var ul = document.createElement("UL");
+                    for (var i = 0; i < marcas.length; i++) {
+                        var li = document.createElement("LI");
+                        var a = document.createElement("A");
+                        var idinstrumento = marcas[i].getAttribute("id");//CREO QUE MAL, CORREGIR
+                        a.href = "ConsultaMusicos?accion=verinstrumento&idinstrumento=" + idinstrumento;
+                        a.textContent = marcas[i].textContent;
+                        li.appendChild(a);
+                        ul.appendChild(li);
+                    }
+                    lista.appendChild(ul);
+                } else {
+                    var h3 = document.createElement("H3");
+                    h3.textContent = "No se han encontrado instrumentos cuya marca empiece por esa letra";
+                    lista.appendChild(h3);
+                }
+
+            }
+
+
+
+
+
+
+
+
 
 
             function cargarXMLMusicos(elemento) {
@@ -201,8 +241,10 @@
             }
             function inicializar() {
 
-                document.getElementById("buscarmusico").onclick = cargarAlfabeto(this);
-                document.getElementById("buscarinstrumento").onclick = cargarAlfabeto(this);
+                document.getElementById("buscarmusico").onclick = 
+                        function(){cargarAlfabeto(this);};
+                document.getElementById("buscarinstrumento").onclick = 
+                        function(){cargarAlfabeto(this);}
             }
         </script>
 

@@ -6,12 +6,14 @@
 
 package servlets;
 
+import beans.Instrumento;
 import beans.Musico;
 import ejb.InstrumentosFachada;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -45,6 +47,7 @@ public class ConsultaMusicos extends HttpServlet {
         String accion=request.getParameter("accion");
         
         String destino;
+        
         if (accion==null){
             destino="index.jsp";
             request.getRequestDispatcher(destino).forward(request, response);
@@ -60,7 +63,20 @@ public class ConsultaMusicos extends HttpServlet {
             request.setAttribute("musico", instrumentosFachada.buscarMusico(id));
             request.setAttribute("urlfotosmusicos", Globales.URLFOTOMUSICO); 
             request.getRequestDispatcher(destino).forward(request, response);
-        }                
+        }else if (accion.equalsIgnoreCase("listarinstrumentos")){
+            String letra=request.getParameter("instrumentos");
+            cargarXMLInstrumentos(letra,out);
+        }        
+        else if (accion.equalsIgnoreCase("verinstrumento")){
+            String strid=request.getParameter("idinstrumento");
+            int id=Integer.parseInt(strid);
+            destino="verinstrumento.jsp";
+            request.setAttribute("instrumento", instrumentosFachada.buscarInstrumento(id));
+            request.setAttribute("urlfotosinstrumentos", Globales.URLFOTOINSTRUMENTO);
+            request.getRequestDispatcher(destino).forward(request, response);
+        }
+        
+        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
@@ -116,6 +132,25 @@ public class ConsultaMusicos extends HttpServlet {
         }
 
         out.println("</musicos>");
+    }
+
+    private void cargarXMLInstrumentos(String letra, PrintWriter out) {
+        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+       out.print("<?xml version=\"1.0\" ?>");
+       out.println("<instrumentos>");
+        List<Instrumento> instrumentos = instrumentosFachada.getInstrumentos(letra);
+        for (int i = 0; i < instrumentos.size(); i++) {
+            out.println("<instrumento id='" + instrumentos.get(i).getIdE()
+                    + "'>");
+            out.println("<marca>" + instrumentos.get(i).getMarca()+ "</marca>");
+            
+            
+            out.println("</instrumento>");
+        }
+
+       
+       
+       out.println("</instrumentos>");
     }
 
 }

@@ -51,6 +51,22 @@ public class InstrumentosFachada {
         return musicos;
     }
 
+    public List<Instrumento> getInstrumentos(String letra) {
+        List<Instrumento> instrumentos;
+        Query q = em.createQuery("select m from Instrumento m where "
+                + "substring(m.marca,1,1)=:letra order by m.marca");
+        q.setParameter("letra", letra);
+        try {
+            instrumentos = q.getResultList();            
+        } catch (NoResultException ex) {
+            instrumentos = null;
+        }
+        return instrumentos;
+    }
+    
+    
+    
+    
     /**
      *
      * @param id
@@ -64,6 +80,15 @@ public class InstrumentosFachada {
         return musico;
     }
 
+    public Instrumento buscarInstrumento(int id){
+        Instrumento instrumento;
+        Query q=em.createNamedQuery("Instrumento.findByIdE");
+        q.setParameter("idE", id);
+        instrumento=(Instrumento) q.getSingleResult();
+        return instrumento;
+    }
+    
+    
     /**
      *
      * @param musico
