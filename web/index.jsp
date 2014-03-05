@@ -254,9 +254,11 @@
                 document.getElementById("login").onclick =
                         function() {
                             //FALTA COMPROBAR SI ESTÁ LOGUEADO   
-                            if (true) {//CAMBIAR LA CONDICIÓN CUANDO LA SEPA
-                                setTimeout(irLogin(), 20000);
-                            }
+                            //
+ location.href = "d:/ProyectoMusicosASP/principal.aspx";//PREGUNTAR A MARTA
+                            //{//CAMBIAR LA CONDICIÓN CUANDO LA SEPA
+                                //setTimeout(irLogin(), 20000);
+                            
                         };
             }
             function mostrarLetras() {
@@ -272,7 +274,7 @@
             }
             function irLogin()
             {
-                location.href = "login.aspx";//PREGUNTAR A MARTA
+                location.href = "d:\ProyectoMusicosASP\principal.aspx";//PREGUNTAR A MARTA
             }
         </script>
     </head>
