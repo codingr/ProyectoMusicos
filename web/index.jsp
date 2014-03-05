@@ -13,14 +13,14 @@
         <style type="text/css">
             #mnu
             {
-               float: left;
-               width: 16%;
+                float: left;
+                width: 16%;
             }
-            
+
             #letras{
                 float: left;
             }
-            
+
             #mnu ul{
                 list-style-type: none;
                 margin: 0px;
@@ -47,7 +47,7 @@
                 border-bottom-color: #CCC;
                 background-color: #EAEAEA;
             }
-            
+
             #mnu li:hover{
                 color: #FFF;
                 background-color: #666;
@@ -60,21 +60,21 @@
                 border-style: ridge;
                 border-width: 10px;
             }
-            
-            .letramusico{
+
+            .letraalfabeto{
                 font-family: fantasy;
                 margin: 5px;
             }
-            .letramusico:hover{
+            .letraalfabeto:hover{
                 font-weight: 900;
                 font-size: larger;
                 //text-decoration: underline;
                 cursor: url(images/Little_music_note.jpg),crosshair;
             }
-            
-            
-            
-            
+
+
+
+
             #letras ul{
                 list-style-type: none;
                 margin: 0px;
@@ -83,10 +83,10 @@
                 border-left-style: solid;
                 border-left-color: #CCC;
             }
-            
+
             #letras li{
                 display: inline;
-                
+
                 font-family: Arial,Helvetica,sans-serif;
                 color:#000;
                 text-decoration: underline;
@@ -105,7 +105,7 @@
                 border-right-style: solid;
                 border-right-color: #CCC;
             }
-            
+
             #letras li:hover{
                 color: #FFF;
                 background-color: #666;
@@ -113,56 +113,63 @@
             #lista ul{
                 list-style-type: square;
             }
-            
+
         </style>
-        <script type="text/javascript">            
+        <script type="text/javascript">
             //Cargar las letras en las que pulsar para ver la lista de músicos
             //que empiezan por ese nombre
-            function cargarAlfabeto() {
-                var letras = document.createElement("DIV");                
-                var abecedario = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
-                var ul=document.createElement("UL");                
-                for (var i = 0; i < 27; i++) {
-                    var letra = document.createElement("LI");
-                    var letraactual = abecedario.substr(i, 1);
-                    letra.onclick = function()
-                    {
-                        cargarXMLMusicos(this);
-                    };
-                    letra.textContent = letraactual;
-                    letra.id = "enlace" + letraactual;
-                    letra.className = "letramusico";
-                    //MIRAR SI EL ONCLICK SE PUEDE ASIGNAR A LETRAS
-                    //letra.onclick=function(){cargarXMLMusicos(letra.value);};
-                    ul.appendChild(letra);
+            function cargarAlfabeto(elementoquellama) {
 
-                }
-                //var todos = document.createElement("LI");
-                var todos = document.createElement("LI");
-                todos.textContent = "TODOS";
-                todos.id = "enlaceTodos";
-                //.style.textDecoration = "underline";
-                todos.className = "letramusico";
-                todos.onclick = function()
+                if (document.getElementById("letras") == null)
+                {
+                    var letras = document.createElement("DIV");
+                    var abecedario = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+                    var ul = document.createElement("UL");
+
+                    for (var i = 0; i < 27; i++) {
+                        var letra = document.createElement("LI");
+                        var letraactual = abecedario.substr(i, 1);
+                        //problema a la hora de 
+                        /*letra.onclick = function()
+                         {
+                         cargarXMLMusicosOInstrumentos(this);
+                         };*/
+                        letra.textContent = letraactual;
+                        letra.id = "enlace" + letraactual;
+                        letra.className = "letraalfabeto";
+                        ul.appendChild(letra);
+                    }
+
+
+
+                    var todos = document.createElement("LI");
+                    todos.textContent = "TODOS";
+                    todos.id = "enlaceTodos";
+                    //.style.textDecoration = "underline";
+                    todos.className = "letramusico";
+                    todos.onclick = function()
                     {
-                        cargarXMLMusicos(this);
+                        cargarXMLMusicosOInstrumentos(this);
                     };
-                ul.appendChild(todos);
-                letras.appendChild(ul);
-                letras.id="letras";
-                
-                document.body.appendChild(letras);
+                    ul.appendChild(todos);
+                    letras.appendChild(ul);
+                    letras.id = "letras";
+
+                    document.body.appendChild(letras);
+                }
             }
-            function cargarXMLMusicos(elemento) {               
-                var xmlreq=new XMLHttpRequest();
+
+
+            function cargarXMLMusicos(elemento) {
+                var xmlreq = new XMLHttpRequest();
                 xmlreq.onreadystatechange = function() {
                     if (xmlreq.readyState == 4 && xmlreq.status == 200) {
                         procesarXMLMusicos(xmlreq);
                     }
                 };
-                if (elemento.textContent!="TODOS"){
+                if (elemento.textContent != "TODOS") {
                     xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos&musicos=" + elemento.textContent, true);
-                }else{
+                } else {
                     xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos", true);
                 }
                 xmlreq.send();
@@ -171,45 +178,47 @@
                 var xml = xmlr.responseXML;
                 var musicos = xml.getElementsByTagName("musico");
                 var lista = document.getElementById("lista");
-                lista.innerHTML="";
+                lista.innerHTML = "";
                 if (musicos.length > 0) {
                     var ul = document.createElement("UL");
                     for (var i = 0; i < musicos.length; i++) {
                         var li = document.createElement("LI");
-                        var a=document.createElement("A");
-                        var idmusico=musicos[i].getAttribute("id");
-                        a.href="ConsultaMusicos?accion=vermusico&idmusico="+idmusico;
-                        a.textContent=musicos[i].getElementsByTagName("nombre")[0].textContent;                        
-                        
+                        var a = document.createElement("A");
+                        var idmusico = musicos[i].getAttribute("id");
+                        a.href = "ConsultaMusicos?accion=vermusico&idmusico=" + idmusico;
+                        a.textContent = musicos[i].getElementsByTagName("nombre")[0].textContent;
+
                         li.appendChild(a);
                         ul.appendChild(li);
                     }
                     lista.appendChild(ul);
-                }else{
-                    var h3=document.createElement("H3");
-                    h3.textContent="No se han encontrado músicos cuyo nombre empiece por esa letra";
+                } else {
+                    var h3 = document.createElement("H3");
+                    h3.textContent = "No se han encontrado músicos cuyo nombre empiece por esa letra";
                     lista.appendChild(h3);
                 }
 
             }
             function inicializar() {
-                cargarAlfabeto();
+
+                document.getElementById("buscarmusico").onclick = cargarAlfabeto(this);
+                document.getElementById("buscarinstrumento").onclick = cargarAlfabeto(this);
             }
         </script>
-        
-        
+
+
     </head>
-     
-     <body onload="inicializar()">
+
+    <body onload="inicializar()">
         <div id="mnu">
             <ul id="cosilla">
-                <li>Buscar por músico</li>
-                <li>Buscar por instrumento</li>
+                <li id="buscarmusico">Buscar por músico</li>
+                <li id="buscarinstrumento">Buscar por instrumento</li>
                 <li id="login">Hacer login</li>
             </ul>
         </div>
-        
+
         <div id="lista"></div>
-        
+
     </body>
 </html>

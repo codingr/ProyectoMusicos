@@ -48,6 +48,9 @@ public class Comentario implements Serializable {
     private Integer gusta;
     @Column(name = "nogusta")
     private Integer nogusta;
+    @JoinColumn(name = "idUsuario", referencedColumnName = "idusuario")
+    @ManyToOne(optional = false)
+    private Usuario idUsuario;
     @JoinColumn(name = "idE", referencedColumnName = "idE")
     @ManyToOne(optional = false)
     private Elemento idE;
@@ -89,6 +92,14 @@ public class Comentario implements Serializable {
 
     public void setNogusta(Integer nogusta) {
         this.nogusta = nogusta;
+    }
+
+    public Usuario getIdUsuario() {
+        return idUsuario;
+    }
+
+    public void setIdUsuario(Usuario idUsuario) {
+        this.idUsuario = idUsuario;
     }
 
     public Elemento getIdE() {

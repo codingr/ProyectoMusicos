@@ -5,8 +5,8 @@
         <property name="serverName" value="172.16.24.88"/>
         <property name="portNumber" value="3306"/>
         <property name="databaseName" value="mysql"/>
-        <property name="User" value="raul"/>
-        <property name="Password" value=""/>
+        <property name="User" value="RHERNANDEZ"/>
+        <property name="Password" value="rhernandez"/>
         <property name="URL" value="jdbc:mysql://172.16.24.88:3306/proyectomusicos?zeroDateTimeBehavior=convertToNull"/>
         <property name="driverClass" value="com.mysql.jdbc.Driver"/>
     </jdbc-connection-pool>

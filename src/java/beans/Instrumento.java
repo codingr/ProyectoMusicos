@@ -36,7 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Instrumento.findByIdE", query = "SELECT i FROM Instrumento i WHERE i.idE = :idE"),
     @NamedQuery(name = "Instrumento.findByMarca", query = "SELECT i FROM Instrumento i WHERE i.marca = :marca"),
     @NamedQuery(name = "Instrumento.findByModelo", query = "SELECT i FROM Instrumento i WHERE i.modelo = :modelo"),
-    @NamedQuery(name = "Instrumento.findByUrlfoto", query = "SELECT i FROM Instrumento i WHERE i.urlfoto = :urlfoto")})
+    @NamedQuery(name = "Instrumento.findByUrlfoto", query = "SELECT i FROM Instrumento i WHERE i.urlfoto = :urlfoto"),
+    @NamedQuery(name = "Instrumento.findByAniofabricacion", query = "SELECT i FROM Instrumento i WHERE i.aniofabricacion = :aniofabricacion")})
 public class Instrumento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -53,6 +54,9 @@ public class Instrumento implements Serializable {
     @Size(max = 30)
     @Column(name = "urlfoto")
     private String urlfoto;
+    @Size(max = 4)
+    @Column(name = "aniofabricacion")
+    private String aniofabricacion;
     @ManyToMany(mappedBy = "instrumentoList")
     private List<Musico> musicoList;
     @JoinTable(name = "detalles", joinColumns = {
@@ -98,6 +102,14 @@ public class Instrumento implements Serializable {
 
     public void setUrlfoto(String urlfoto) {
         this.urlfoto = urlfoto;
+    }
+
+    public String getAniofabricacion() {
+        return aniofabricacion;
+    }
+
+    public void setAniofabricacion(String aniofabricacion) {
+        this.aniofabricacion = aniofabricacion;
     }
 
     @XmlTransient

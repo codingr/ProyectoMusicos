@@ -23,59 +23,75 @@ import javax.persistence.Query;
  */
 @Stateless
 public class InstrumentosFachada {
+
     @PersistenceContext(unitName = "ProyectoFinalPU")
     private EntityManager em;
-
+    
     public void persist(Object object) {
         em.persist(object);
     }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
-    public List<Musico> getMusicos(String letra){
+    /**
+     *
+     * @param letra
+     * @return
+     */
+    public List<Musico> getMusicos(String letra) {
         List<Musico> musicos;
-        Query q=em.createQuery("select m from Musico m where "
+        Query q = em.createQuery("select m from Musico m where "
                 + "substring(m.nombre,1,1)=:letra order by m.nombre");
         q.setParameter("letra", letra);
-        try{
-        musicos=q.getResultList();        
-        }catch (NoResultException ex){
-            musicos=null;
+        try {
+            musicos = q.getResultList();            
+        } catch (NoResultException ex) {
+            musicos = null;
         }
         return musicos;
     }
-    
-    public Musico buscarMusico(int id){
+
+    /**
+     *
+     * @param id
+     * @return
+     */
+    public Musico buscarMusico(int id) {
         Musico musico;
-        Query q=em.createNamedQuery("Musico.findByIdE");
-        q.setParameter("idE",id);
-        musico=(Musico) q.getSingleResult();
+        Query q = em.createNamedQuery("Musico.findByIdE");
+        q.setParameter("idE", id);
+        musico = (Musico) q.getSingleResult();
         return musico;
     }
-    
-    public void añadirMusico(Musico musico){
-        em.persist(musico);      
+
+    /**
+     *
+     * @param musico
+     */
+    public void añadirMusico(Musico musico) {
+        em.persist(musico);        
     }
     
-    public void añadirInstrumento(Instrumento instrumento){
-        
+    public void añadirInstrumento(Instrumento instrumento) {
+        em.persist(instrumento);
     }
-    public void añadirGrupo(Grupo grupo){
-        
-    }
-    
-    public void añadirComentario(Comentario comentario){
-        
+
+    public void añadirGrupo(Grupo grupo) {
+        em.persist(grupo);
     }
     
-    public void actualizarMusico (Musico musico){
-        Query q=em.createQuery(
-"UPDATE Musico m set m.nombre=:nombre, m.apellido=:apellido, m.alias=:alias, m.fechadefuncion=:fechadefuncion,"
-        + "m.fechanacimiento=:fechanacimiento "
-        + "where idE=:idE");
-        q.setParameter("nombre",musico.getNombre() );
-        q.setParameter("apellido",musico.getApellido() );
-        q.setParameter("alias",musico.getAlias());        
+    public void añadirComentario(Comentario comentario) {
+        em.persist(comentario);
+    }
+    
+    public void actualizarMusico(Musico musico) {
+        Query q = em.createQuery(
+                "UPDATE Musico m set m.nombre=:nombre, m.apellido=:apellido, m.alias=:alias, m.fechadefuncion=:fechadefuncion,"
+                + "m.fechanacimiento=:fechanacimiento "
+                + "where idE=:idE");
+        q.setParameter("nombre", musico.getNombre());
+        q.setParameter("apellido", musico.getApellido());
+        q.setParameter("alias", musico.getAlias());        
         q.setParameter("fechadefuncion", musico.getFechadefuncion());
         q.setParameter("fechanacimiento", musico.getFechanacimiento());
         q.setParameter("urlfoto", musico.getUrlfoto());
