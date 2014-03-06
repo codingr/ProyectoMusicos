@@ -23,13 +23,10 @@ import javax.persistence.Query;
  */
 @Stateless
 public class InstrumentosFachada {
-
     @PersistenceContext(unitName = "ProyectoFinalPU")
     private EntityManager em;
+   
 
-    public void persist(Object object) {
-        em.persist(object);
-    }
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -158,4 +155,11 @@ public class InstrumentosFachada {
         return usuario;
         
     }
+
+    public void persist(Object object) {
+        em.persist(object);
+    }
+
+
+    
 }

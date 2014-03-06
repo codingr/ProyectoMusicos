@@ -251,15 +251,15 @@
                             limpiarLista();
                             mostrarLetras();
                         };
-                document.getElementById("login").onclick =
-                        function() {
-                            //FALTA COMPROBAR SI ESTÁ LOGUEADO   
-                            //
-                            location.href = "d:/ProyectoMusicosASP/principal.aspx";//PREGUNTAR A MARTA
-                            //{//CAMBIAR LA CONDICIÓN CUANDO LA SEPA
-                            //setTimeout(irLogin(), 20000);
-
-                        };
+                /*document.getElementById("login").onclick =
+                 function() {
+                 //FALTA COMPROBAR SI ESTÁ LOGUEADO   
+                 //
+                 location.href = "d:/ProyectoMusicosASP/principal.aspx";//PREGUNTAR A MARTA
+                 //{//CAMBIAR LA CONDICIÓN CUANDO LA SEPA
+                 //setTimeout(irLogin(), 20000);
+                 
+                 };*/
             }
             function mostrarLetras() {
                 if (document.getElementById("letras")) {
@@ -274,46 +274,62 @@
             }
             function irLogin()
             {
-            
+
                 /*if (comprobarLogin()) {
-                    location.href = "d:\ProyectoMusicosASP\principal.aspx";//PREGUNTAR A MARTA
-                }*/
+                 location.href = "d:\ProyectoMusicosASP\principal.aspx";//PREGUNTAR A MARTA
+                 }*/
 
             }
             function hacerLogin() {
-                /*var login=document.getElementById("login");
-                login
-                var xmlreq = new XMLHttpRequest();
-                xmlreq.onreadystatechange = function() {
-                    if (xmlreq.readyState == 4 && xmlreq.status == 200) {
-                        procesarXMLMusicos(xmlreq);
-                    }
-                };
-
-                xmlreq.open("GET", "ConsultaMusicos?accion=login&musicos=" + elemento.textContent, true);
-                xmlreq.send();*/
+                /*if (document.getElementById("administracion")){
+                 document.getElementById("administracion").onclick=
+                 function (){
+                 location.href="ProyectoMusicosASP/Principal.aspx?idusuario=1";
+                 };
+                 }*/
+                location.href = "ProyectoMusicosASP/Principal.aspx";
             }
+
         </script>
     </head>
 
     <body onload="inicializar()">
         <div id="mnu">
             <form action="ConsultaMusicos">
-            <ul>
-                <li id="buscarmusico">Buscar por músico</li>
-                <li id="buscarinstrumento">Buscar por instrumento</li>
-                <c:if test="${empty usuario}">
-                    <li id="login">
-                        Nombre:<input type="text" name="nombre" value="" />
-                        Password:<input type="password" name="password" value="" />
-                        <input type="submit" value="Login" name="accion" />
-                    </li>
-                </c:if>
-            </ul>
+                <ul>
+                    <li id="buscarmusico">Buscar por músico</li>
+                    <li id="buscarinstrumento">Buscar por instrumento</li>
+                        <c:if test="${empty usuario}">
+                        <li id="login">
+                            Nombre:<input type="text" name="nombre" value="" />
+                            Password:<input type="password" name="password" value="" />
+                            <input type="submit" value="Login" name="accion" />
+                        </li>
+                    </c:if>
+                </ul>
+
+                <c:if test="${!empty usuario}">
+                    ${usuario.nombre}
+                    <a href="ConsultaMusicos?accion=desconectar">Desconectar</a>
+                    <c:if test="${usuario.administrador}">
+                        <div id="algo" onclick="hacerLogin()">
+                            a href="ProyectoMusicosASP/Principal.aspx"  id="administracion">?idusuario=${usuario.idusuario} Administrar /a
+                        </div>
+                    </c:if>
+
+                </c:if>  
             </form>
-            <c:if test="${!empty usuario}">
-                    ${usuario.nombre}                        
-            </c:if>                    
         </div>
+        <c:if test="${!empty errores}">
+            <div>
+                <ul>
+                    <c:forEach items="${errores}" var="error">
+                        <li>${error}</li>
+                    </c:forEach>
+                </ul>
+            </div>
+        </c:if>
+
+
     </body>
 </html>

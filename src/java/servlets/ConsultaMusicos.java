@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlets;
 
 import beans.Instrumento;
@@ -28,9 +27,9 @@ import utils.Globales;
  */
 @WebServlet(name = "ConsultaMusicos", urlPatterns = {"/ConsultaMusicos"})
 public class ConsultaMusicos extends HttpServlet {
+
     @EJB
     private InstrumentosFachada instrumentosFachada;
-
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -44,59 +43,74 @@ public class ConsultaMusicos extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         //response.setContentType("text/html;charset=UTF-8");
-        PrintWriter out=response.getWriter();
-        String accion=request.getParameter("accion");
-        
+        PrintWriter out = response.getWriter();
+        String accion = request.getParameter("accion");
+
         String destino;
-        
-        if (accion==null){
-            destino="index.jsp";
+
+        if (accion == null) {
+            destino = "index.jsp";
             request.getRequestDispatcher(destino).forward(request, response);
-        }
-        else if (accion.equalsIgnoreCase("listarmusicos")){
-            String letra=request.getParameter("musicos");
-            cargarXMLMusicos(letra,out);
-            
-        }else if (accion.equalsIgnoreCase("vermusico")){
-            String strid=request.getParameter("idmusico");
-            int id=Integer.parseInt(strid);
-            destino="vermusico.jsp";
+        } else if (accion.equalsIgnoreCase("listarmusicos")) {
+            String letra = request.getParameter("musicos");
+            cargarXMLMusicos(letra, out);
+
+        } else if (accion.equalsIgnoreCase("vermusico")) {
+            String strid = request.getParameter("idmusico");
+            int id = Integer.parseInt(strid);
+            destino = "vermusico.jsp";
             request.setAttribute("musico", instrumentosFachada.buscarMusico(id));
-            request.setAttribute("urlfotosmusicos", Globales.URLFOTOMUSICO); 
+            request.setAttribute("urlfotosmusicos", Globales.URLFOTOMUSICO);
             request.getRequestDispatcher(destino).forward(request, response);
-        }else if (accion.equalsIgnoreCase("listarinstrumentos")){
-            String letra=request.getParameter("instrumentos");
-            cargarXMLInstrumentos(letra,out);
-        }        
-        else if (accion.equalsIgnoreCase("verinstrumento")){
-            String strid=request.getParameter("idinstrumento");
-            int id=Integer.parseInt(strid);
-            destino="verinstrumento.jsp";
+        } else if (accion.equalsIgnoreCase("listarinstrumentos")) {
+            String letra = request.getParameter("instrumentos");
+            cargarXMLInstrumentos(letra, out);
+        } else if (accion.equalsIgnoreCase("verinstrumento")) {
+            String strid = request.getParameter("idinstrumento");
+            int id = Integer.parseInt(strid);
+            destino = "verinstrumento.jsp";
             request.setAttribute("instrumento", instrumentosFachada.buscarInstrumento(id));
             request.setAttribute("urlfotosinstrumentos", Globales.URLFOTOINSTRUMENTO);
             request.getRequestDispatcher(destino).forward(request, response);
-        }else if (accion.equalsIgnoreCase("login")){
-            ArrayList<String> errores=new ArrayList<>();
-            String nombre=request.getParameter("nombre");            
-            Usuario usuario=instrumentosFachada.buscarUsuario(nombre);
-            if (usuario==null){
-                errores.add("El usuario no se encuentra en la base de datos");
-            }else{
-                String password=request.getParameter("password");
-                if (password==null){
-                    errores.add("El password es incorrecto");
-                }
-                else if (usuario.getPassword().equals(password)){
-                    request.getSession().setAttribute("usuario", usuario);
-                }
-            }            
-            request.setAttribute("errores", errores);
-            destino="index.jsp";
+        } else if (accion.equalsIgnoreCase("login")) {
+            validarUsuario(request);           
+            destino = "index.jsp";
             request.getRequestDispatcher(destino).forward(request, response);
-            
+
+        }else if (accion.equalsIgnoreCase("desconectar")){
+            request.getSession().invalidate();
+            destino = "index.jsp";
+            request.getRequestDispatcher(destino).forward(request, response);
+        }else if (accion.equalsIgnoreCase("administrar")){
+            destino="ProyectoMusicosASP/Principal.aspx";
+            request.getRequestDispatcher(destino).forward(request, response);
         }
     }
-
+    private void validarUsuario(HttpServletRequest request){
+         ArrayList<String> errores = new ArrayList<>();
+            String nombre = request.getParameter("nombre");
+            if (nombre == null||nombre.equals("")) {
+                errores.add("Debes introducir un nombre");
+            } else {
+                Usuario usuario = instrumentosFachada.buscarUsuario(nombre);
+                if (usuario == null) {
+                    errores.add("El usuario no se encuentra en la base de datos");
+                } else {
+                    String password = request.getParameter("password");
+                    if (password == null||password.equals("")) {
+                        errores.add("Debes introducir el password");
+                    } else if (usuario.getPassword().equals(password)) {
+                        request.getSession().setAttribute("usuario", usuario);
+                    }else{
+                        errores.add("Password incorrecto");
+                    }
+                }
+            }
+            request.setAttribute("errores", errores);
+            
+    }
+    
+    
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -136,9 +150,9 @@ public class ConsultaMusicos extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
-    private void cargarXMLMusicos(String letra,PrintWriter out) {
+    private void cargarXMLMusicos(String letra, PrintWriter out) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        
+
         out.print("<?xml version=\"1.0\" ?>");
         out.println("<musicos>");
         List<Musico> musicos = instrumentosFachada.getMusicos(letra);
@@ -154,19 +168,19 @@ public class ConsultaMusicos extends HttpServlet {
 
     private void cargarXMLInstrumentos(String letra, PrintWriter out) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-       out.print("<?xml version=\"1.0\" ?>");
-       out.println("<instrumentos>");
+        out.print("<?xml version=\"1.0\" ?>");
+        out.println("<instrumentos>");
         List<Instrumento> instrumentos = instrumentosFachada.getInstrumentos(letra);
         for (int i = 0; i < instrumentos.size(); i++) {
             out.println("<instrumento id='" + instrumentos.get(i).getIdE()
                     + "'>");
-            out.println("<marca>" + instrumentos.get(i).getMarca()+ "</marca>");
-            out.println("<modelo>"+instrumentos.get(i).getModelo()+"</modelo>");
-            out.println("<urlfoto>"+instrumentos.get(i).getUrlfoto()+"</urlfoto>");
-            out.println("<aniofabricacion>"+instrumentos.get(i).getAniofabricacion()+"</aniofabricacion>");
+            out.println("<marca>" + instrumentos.get(i).getMarca() + "</marca>");
+            out.println("<modelo>" + instrumentos.get(i).getModelo() + "</modelo>");
+            out.println("<urlfoto>" + instrumentos.get(i).getUrlfoto() + "</urlfoto>");
+            out.println("<aniofabricacion>" + instrumentos.get(i).getAniofabricacion() + "</aniofabricacion>");
             out.println("</instrumento>");
         }
-       out.println("</instrumentos>");
+        out.println("</instrumentos>");
     }
-
+      
 }
