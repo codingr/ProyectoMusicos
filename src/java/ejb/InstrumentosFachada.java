@@ -9,6 +9,7 @@ import beans.Comentario;
 import beans.Grupo;
 import beans.Instrumento;
 import beans.Musico;
+import beans.Usuario;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -92,7 +93,11 @@ public class InstrumentosFachada {
         musico = (Musico) q.getSingleResult();
         return musico;
     }
-
+/**
+ * 
+ * @param id
+ * @return 
+ */
     public Instrumento buscarInstrumento(int id) {
         Instrumento instrumento;
         Query q = em.createNamedQuery("Instrumento.findByIdE");
@@ -120,7 +125,10 @@ public class InstrumentosFachada {
     public void añadirComentario(Comentario comentario) {
         em.persist(comentario);
     }
-
+/**
+ * 
+ * @param musico 
+ */
     public void actualizarMusico(Musico musico) {
         Query q = em.createQuery(
                 "UPDATE Musico m set m.nombre=:nombre, m.apellido=:apellido, m.alias=:alias, m.fechadefuncion=:fechadefuncion,"
@@ -132,5 +140,22 @@ public class InstrumentosFachada {
         q.setParameter("fechadefuncion", musico.getFechadefuncion());
         q.setParameter("fechanacimiento", musico.getFechanacimiento());
         q.setParameter("urlfoto", musico.getUrlfoto());
+    }
+    /**
+     * 
+     * @param nombre
+     * @return 
+     */
+    public Usuario buscarUsuario(String nombre){
+        Usuario usuario;
+        Query q=em.createNamedQuery("Usuario.findByNombre");
+        q.setParameter("nombre", nombre);
+        try{
+            usuario=(Usuario) q.getSingleResult();
+        }catch(NoResultException ex){
+            usuario=null;
+        }
+        return usuario;
+        
     }
 }

@@ -235,9 +235,9 @@
                 var lista = document.createElement("DIV");
                 lista.id = "lista";
                 document.body.appendChild(lista);
-                var mnu=document.getElementById("mnu");
-                var posX=mnu.clientLeft+mnu.clientWidth;
-                lista.style.left=posX+"px";              
+                var mnu = document.getElementById("mnu");
+                var posX = mnu.clientLeft + mnu.clientWidth;
+                lista.style.left = posX + "px";
 
                 document.getElementById("buscarmusico").onclick =
                         function() {
@@ -255,10 +255,10 @@
                         function() {
                             //FALTA COMPROBAR SI ESTÁ LOGUEADO   
                             //
- location.href = "d:/ProyectoMusicosASP/principal.aspx";//PREGUNTAR A MARTA
+                            location.href = "d:/ProyectoMusicosASP/principal.aspx";//PREGUNTAR A MARTA
                             //{//CAMBIAR LA CONDICIÓN CUANDO LA SEPA
-                                //setTimeout(irLogin(), 20000);
-                            
+                            //setTimeout(irLogin(), 20000);
+
                         };
             }
             function mostrarLetras() {
@@ -274,18 +274,46 @@
             }
             function irLogin()
             {
-                location.href = "d:\ProyectoMusicosASP\principal.aspx";//PREGUNTAR A MARTA
+            
+                /*if (comprobarLogin()) {
+                    location.href = "d:\ProyectoMusicosASP\principal.aspx";//PREGUNTAR A MARTA
+                }*/
+
+            }
+            function hacerLogin() {
+                /*var login=document.getElementById("login");
+                login
+                var xmlreq = new XMLHttpRequest();
+                xmlreq.onreadystatechange = function() {
+                    if (xmlreq.readyState == 4 && xmlreq.status == 200) {
+                        procesarXMLMusicos(xmlreq);
+                    }
+                };
+
+                xmlreq.open("GET", "ConsultaMusicos?accion=login&musicos=" + elemento.textContent, true);
+                xmlreq.send();*/
             }
         </script>
     </head>
 
     <body onload="inicializar()">
         <div id="mnu">
+            <form action="ConsultaMusicos">
             <ul>
                 <li id="buscarmusico">Buscar por músico</li>
                 <li id="buscarinstrumento">Buscar por instrumento</li>
-                <li id="login">Hacer login</li>
+                <c:if test="${empty usuario}">
+                    <li id="login">
+                        Nombre:<input type="text" name="nombre" value="" />
+                        Password:<input type="password" name="password" value="" />
+                        <input type="submit" value="Login" name="accion" />
+                    </li>
+                </c:if>
             </ul>
+            </form>
+            <c:if test="${!empty usuario}">
+                    ${usuario.nombre}                        
+            </c:if>                    
         </div>
     </body>
 </html>

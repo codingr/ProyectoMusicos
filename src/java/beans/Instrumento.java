@@ -57,12 +57,12 @@ public class Instrumento implements Serializable {
     @Size(max = 4)
     @Column(name = "aniofabricacion")
     private String aniofabricacion;
-    @ManyToMany(mappedBy = "instrumentoList")
-    private List<Musico> musicoList;
-    @JoinTable(name = "detalles", joinColumns = {
-        @JoinColumn(name = "idE", referencedColumnName = "idE")}, inverseJoinColumns = {
-        @JoinColumn(name = "idCaracteristica", referencedColumnName = "idcaracteristica")})
+    @JoinTable(name = "equipamiento", joinColumns = {
+        @JoinColumn(name = "idInstrumento", referencedColumnName = "idE")}, inverseJoinColumns = {
+        @JoinColumn(name = "idMusico", referencedColumnName = "idE")})
     @ManyToMany
+    private List<Musico> musicoList;
+    @ManyToMany(mappedBy = "instrumentoList")
     private List<Caracteristica> caracteristicaList;
 
     public Instrumento() {

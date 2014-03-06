@@ -8,9 +8,11 @@ package servlets;
 
 import beans.Instrumento;
 import beans.Musico;
+import beans.Usuario;
 import ejb.InstrumentosFachada;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -73,9 +75,26 @@ public class ConsultaMusicos extends HttpServlet {
             request.setAttribute("instrumento", instrumentosFachada.buscarInstrumento(id));
             request.setAttribute("urlfotosinstrumentos", Globales.URLFOTOINSTRUMENTO);
             request.getRequestDispatcher(destino).forward(request, response);
+        }else if (accion.equalsIgnoreCase("login")){
+            ArrayList<String> errores=new ArrayList<>();
+            String nombre=request.getParameter("nombre");            
+            Usuario usuario=instrumentosFachada.buscarUsuario(nombre);
+            if (usuario==null){
+                errores.add("El usuario no se encuentra en la base de datos");
+            }else{
+                String password=request.getParameter("password");
+                if (password==null){
+                    errores.add("El password es incorrecto");
+                }
+                else if (usuario.getPassword().equals(password)){
+                    request.getSession().setAttribute("usuario", usuario);
+                }
+            }            
+            request.setAttribute("errores", errores);
+            destino="index.jsp";
+            request.getRequestDispatcher(destino).forward(request, response);
+            
         }
-        
-        
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

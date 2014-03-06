@@ -14,6 +14,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -43,7 +45,10 @@ public class Caracteristica implements Serializable {
     @Size(max = 30)
     @Column(name = "texto")
     private String texto;
-    @ManyToMany(mappedBy = "caracteristicaList")
+    @JoinTable(name = "detalles", joinColumns = {
+        @JoinColumn(name = "idCaracteristica", referencedColumnName = "idcaracteristica")}, inverseJoinColumns = {
+        @JoinColumn(name = "idE", referencedColumnName = "idE")})
+    @ManyToMany
     private List<Instrumento> instrumentoList;
 
     public Caracteristica() {

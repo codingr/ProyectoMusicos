@@ -15,8 +15,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -68,15 +66,9 @@ public class Musico implements Serializable {
     @Column(name = "fechadefuncion")
     @Temporal(TemporalType.DATE)
     private Date fechadefuncion;
-    @JoinTable(name = "equipamiento", joinColumns = {
-        @JoinColumn(name = "idMusico", referencedColumnName = "idE")}, inverseJoinColumns = {
-        @JoinColumn(name = "idInstrumento", referencedColumnName = "idE")})
-    @ManyToMany
+    @ManyToMany(mappedBy = "musicoList")
     private List<Instrumento> instrumentoList;
-    @JoinTable(name = "miembros", joinColumns = {
-        @JoinColumn(name = "idE", referencedColumnName = "idE")}, inverseJoinColumns = {
-        @JoinColumn(name = "idGrupo", referencedColumnName = "idgrupo")})
-    @ManyToMany
+    @ManyToMany(mappedBy = "musicoList")
     private List<Grupo> grupoList;
 
     public Musico() {
