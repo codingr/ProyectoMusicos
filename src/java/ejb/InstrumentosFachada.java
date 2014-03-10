@@ -152,8 +152,7 @@ public class InstrumentosFachada {
         }catch(NoResultException ex){
             usuario=null;
         }
-        return usuario;
-        
+        return usuario;        
     }
 
     public void persist(Object object) {

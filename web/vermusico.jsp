@@ -34,10 +34,10 @@
             </tr>
             </c:if>
             <c:forEach items="${musico.instrumentoList}" var="instrumento">
-                <c:set var="contador" value="contador+1"/>
+                <c:set var="contador" value="${contador+1}"/>
             <tr>
                 <td>Instrumento ${contador}</td>
-                <td>${instrumento}</td>
+                <td>${instrumento.marca} ${instrumento.modelo}</td>
             </tr>
             </c:forEach>
             

@@ -108,6 +108,9 @@
             var BUSCARMUSICO = 1;
             var BUSCARINSTRUMENTO = 0;
             var buscar;
+            var paginaactual=0;
+            var totalpaginas=0;
+            var ELEMENTOSPORPAGINA=5;
             //Cargar las letras en las que pulsar para ver la lista de músicos
             //que empiezan por ese nombre
             function cargarAlfabeto() {
@@ -169,6 +172,117 @@
                 xmlreq.send();
             }
             function procesarXMLInstrumentos(xmlr) {
+                //FUNCIÓN DE PRUEBA, LA DE ABAJO ES LA BUENA
+                var xml = xmlr.responseXML;
+                var instrumentos = xml.getElementsByTagName("instrumento");
+                var lista = document.getElementById("lista");
+                lista.innerHTML = "";
+                if (instrumentos.length > 0) {
+                    var ul = document.createElement("UL");
+                    
+                    paginaactual=1;
+                    totalpaginas=instrumentos.length/ELEMENTOSPORPAGINA+
+                            (instrumentos.length%ELEMENTOSPORPAGINA==0)?1:0;
+                    
+                    
+                    
+                    
+                    for (var i = paginaactual/ELEMENTOSPORPAGINA;
+                                i<ELEMENTOSPORPAGINA &&i < instrumentos.length; 
+                                    i++) {
+                        
+                        
+                        var li = document.createElement("LI");
+                        var a = document.createElement("A");
+                        var idinstrumento = instrumentos[i].getAttribute("id");
+                        a.href = "ConsultaMusicos?accion=verinstrumento&idinstrumento=" + idinstrumento;
+                        a.textContent = 
+       instrumentos[i].getElementsByTagName("marca")[0].textContent
+                                +" "+instrumentos[i].getElementsByTagName("modelo")[0].textContent;
+                        li.appendChild(a);
+                        ul.appendChild(li);
+                    }
+                    var btnAnterior=document.createElement("BUTTON");
+                    btnAnterior.id="btnAnterior";
+                    btnAnterior.text="Anterior";
+                    btnAnterior.onclick=function (){anterior();};
+                    
+                    var btnSiguiente=document.createElement("BUTTON");
+                    btnSiguiente.id="btnSiguiente";
+                    btnSiguiente.text="Siguiente";
+                    btnSiguiente.onclick=function (){siguiente();};
+                    
+                    var btnPrimero=document.createElement("BUTTON");
+                    btnPrimero.id="btnPrimero";
+                    btnPrimero.text="Primero";
+                    btnPrimero.onclick=function (){primero();};
+                    
+                    var btnUltimo=document.createElement("BUTTON");
+                    btnUltimo.id="btnUltimo";
+                    btnUltimo.text="Último";
+                    btnUltimo.onclick=function (){ultimo();};
+                    
+                    lista.appendChild(ul);
+                } else {
+                    var h3 = document.createElement("H3");
+                    h3.textContent = "No se han encontrado instrumentos cuya marca empiece por esa letra";
+                    lista.appendChild(h3);
+                }
+            }
+            
+            function anterior(){
+                    
+                    paginaactual--;
+                    document.getElementById("btnSiguiente").disabled="false";
+                    document.getElementById("btnUltimo").disabled="false";
+                    if (paginaactual==1){
+                    document.getElementById("btnPrimero").disabled="true";
+                    document.getElementById("btnAnterior").disabled="true";
+                    }else{                        
+                        document.getElementById("btnPrimero").disabled="false";
+                        document.getElementById("btnAnterior").disabled="false";
+                    }
+                    
+            }
+            function primero(){
+                    paginaactual=1;
+                    document.getElementById("btnSiguiente").disabled="false";
+                    document.getElementById("btnUltimo").disabled="false";
+                    if (paginaactual==1){
+                    document.getElementById("btnPrimero").disabled="true";
+                    document.getElementById("btnAnterior").disabled="true";
+                    }else{                        
+                        document.getElementById("btnPrimero").disabled="false";
+                        document.getElementById("btnAnterior").disabled="false";
+                    }
+            }
+            function siguiente(){
+                    paginaactual++;
+                    document.getElementById("btnAnterior").disabled="false";
+                    document.getElementById("btnPrimero").disabled="false";
+                    if (paginaactual==totalpaginas){
+                        document.getElementById("btnSiguiente").disabled="true";
+                        document.getElementById("btnUltimo").disabled="true";
+                    }else{                        
+                        document.getElementById("btnSiguiente").disabled="false";
+                        document.getElementById("btnUltimo").disabled="false";
+                    }
+                }
+            function ultimo(){
+                    paginaactual=totalpaginas;
+                    document.getElementById("btnAnterior").disabled="false";
+                    document.getElementById("btnPrimero").disabled="false";
+                    if (paginaactual==totalpaginas){
+                        document.getElementById("btnSiguiente").disabled="true";
+                        document.getElementById("btnUltimo").disabled="true";
+                    }else{                        
+                        document.getElementById("btnSiguiente").disabled="false";
+                        document.getElementById("btnUltimo").disabled="false";
+                    }
+            }
+            
+            /*ESTA VERSIÓN FUNCIONA, SÓLO FALTA LA LIMITACIÓN POR PÁGINA
+            function procesarXMLInstrumentos(xmlr) {
                 var xml = xmlr.responseXML;
                 var instrumentos = xml.getElementsByTagName("instrumento");
                 var lista = document.getElementById("lista");
@@ -180,7 +294,9 @@
                         var a = document.createElement("A");
                         var idinstrumento = instrumentos[i].getAttribute("id");//CREO QUE MAL, CORREGIR
                         a.href = "ConsultaMusicos?accion=verinstrumento&idinstrumento=" + idinstrumento;
-                        a.textContent = instrumentos[i].textContent;
+                        a.textContent = 
+       instrumentos[i].getElementsByTagName("marca")[0].textContent
+                                +" "+instrumentos[i].getElementsByTagName("modelo")[0].textContent;
                         li.appendChild(a);
                         ul.appendChild(li);
                     }
@@ -190,7 +306,7 @@
                     h3.textContent = "No se han encontrado instrumentos cuya marca empiece por esa letra";
                     lista.appendChild(h3);
                 }
-            }
+            }*/
             function cargarXMLMusicos(elemento) {
                 var xmlreq = new XMLHttpRequest();
                 xmlreq.onreadystatechange = function() {
@@ -217,7 +333,9 @@
                         var a = document.createElement("A");
                         var idmusico = musicos[i].getAttribute("id");
                         a.href = "ConsultaMusicos?accion=vermusico&idmusico=" + idmusico;
-                        a.textContent = musicos[i].getElementsByTagName("nombre")[0].textContent;
+                        a.textContent = musicos[i].getElementsByTagName("nombre")[0].textContent+
+                                " "+musicos[i].getElementsByTagName("apellido")[0].textContent+
+                                " \""+musicos[i].getElementsByTagName("alias")[0].textContent+"\"";
                         li.appendChild(a);
                         ul.appendChild(li);
                     }
@@ -316,6 +434,12 @@
 
                 </c:if>  
             </form>
+        </div>
+        <div id="para_pruebas_se_puede_borrar">
+            <ul>
+                <li></li>
+            </ul>
+            <input type="button" onclick=""
         </div>
         <c:if test="${!empty errores}">
             <div>

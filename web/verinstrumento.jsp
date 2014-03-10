@@ -34,7 +34,7 @@
             <h3>Músicos que usan este instrumento:</h3>
             <ul>
                 <c:forEach items="${instrumento.musicoList}" var="musico">
-                    <li><a href="ConsultaMusicos?accion=vermusico&idmusico=${musico.idmusico}">${musico.nombre} ${musico.apellido} ${musico.alias}</a></li>
+                    <li><a href="ConsultaMusicos?accion=vermusico&idmusico=${musico.idE}">${musico.nombre} ${musico.apellido} ${musico.alias}</a></li>
                     </c:forEach>
             </ul>
         </c:if>  

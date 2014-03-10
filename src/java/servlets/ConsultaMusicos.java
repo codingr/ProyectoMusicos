@@ -160,6 +160,8 @@ public class ConsultaMusicos extends HttpServlet {
             out.println("<musico id='" + musicos.get(i).getIdE()
                     + "'>");
             out.println("<nombre>" + musicos.get(i).getNombre() + "</nombre>");
+            out.println("<apellido>" + musicos.get(i).getApellido()+ "</apellido>");
+            out.println("<alias>" + musicos.get(i).getAlias()+ "</alias>");
             out.println("</musico>");
         }
 
