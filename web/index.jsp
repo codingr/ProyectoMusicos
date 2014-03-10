@@ -108,9 +108,9 @@
             var BUSCARMUSICO = 1;
             var BUSCARINSTRUMENTO = 0;
             var buscar;
-            var paginaactual=0;
-            var totalpaginas=0;
-            var ELEMENTOSPORPAGINA=5;
+            var paginaactual = 1;
+            var totalpaginas;
+            var ELEMENTOSPORPAGINA = 5;
             //Cargar las letras en las que pulsar para ver la lista de músicos
             //que empiezan por ese nombre
             function cargarAlfabeto() {
@@ -177,51 +177,52 @@
                 var instrumentos = xml.getElementsByTagName("instrumento");
                 var lista = document.getElementById("lista");
                 lista.innerHTML = "";
+
                 if (instrumentos.length > 0) {
                     var ul = document.createElement("UL");
-                    
-                    paginaactual=1;
-                    totalpaginas=instrumentos.length/ELEMENTOSPORPAGINA+
-                            (instrumentos.length%ELEMENTOSPORPAGINA==0)?1:0;
-                    
-                    
-                    
-                    
-                    for (var i = paginaactual/ELEMENTOSPORPAGINA;
-                                i<ELEMENTOSPORPAGINA &&i < instrumentos.length; 
-                                    i++) {
-                        
-                        
+
+
+                    totalpaginas = instrumentos.length / ELEMENTOSPORPAGINA +
+                            (instrumentos.length % ELEMENTOSPORPAGINA == 0) ? 1 : 0;
+
+
+
+
+                    for (var i = (paginaactual - 1) * ELEMENTOSPORPAGINA;
+                            i < paginaactual * ELEMENTOSPORPAGINA
+                            && i < instrumentos.length;
+                            i++) {
+
+
                         var li = document.createElement("LI");
                         var a = document.createElement("A");
                         var idinstrumento = instrumentos[i].getAttribute("id");
                         a.href = "ConsultaMusicos?accion=verinstrumento&idinstrumento=" + idinstrumento;
-                        a.textContent = 
-       instrumentos[i].getElementsByTagName("marca")[0].textContent
-                                +" "+instrumentos[i].getElementsByTagName("modelo")[0].textContent;
+                        a.textContent =
+                                instrumentos[i].getElementsByTagName("marca")[0].textContent
+                                + " " + instrumentos[i].getElementsByTagName("modelo")[0].textContent;
                         li.appendChild(a);
                         ul.appendChild(li);
                     }
-                    var btnAnterior=document.createElement("BUTTON");
-                    btnAnterior.id="btnAnterior";
-                    btnAnterior.text="Anterior";
-                    btnAnterior.onclick=function (){anterior();};
-                    
-                    var btnSiguiente=document.createElement("BUTTON");
-                    btnSiguiente.id="btnSiguiente";
-                    btnSiguiente.text="Siguiente";
-                    btnSiguiente.onclick=function (){siguiente();};
-                    
-                    var btnPrimero=document.createElement("BUTTON");
-                    btnPrimero.id="btnPrimero";
-                    btnPrimero.text="Primero";
-                    btnPrimero.onclick=function (){primero();};
-                    
-                    var btnUltimo=document.createElement("BUTTON");
-                    btnUltimo.id="btnUltimo";
-                    btnUltimo.text="Último";
-                    btnUltimo.onclick=function (){ultimo();};
-                    
+
+                    crearBotonesDesplazamiento(lista);
+                    if (paginaactual==totalpaginas){
+                        document.getElementById("btnSiguiente").disabled="true";
+                        document.getElementById("btnUltimo").disabled="true";
+                    }else{
+                        document.getElementById("btnSiguiente").removeAttribute("DISABLED");
+                        document.getElementById("btnUltimo").removeAttribute("DISABLED");
+                    }
+                    if (paginaactual == 1) {
+                        document.getElementById("btnPrimero").disabled = "true";
+                        document.getElementById("btnAnterior").disabled = "true";
+                    } else {
+                        document.getElementById("btnPrimero").removeAttribute("DISABLED");
+                        document.getElementById("btnAnterior").removeAttribute("DISABLED");
+                    }
+
+
+
                     lista.appendChild(ul);
                 } else {
                     var h3 = document.createElement("H3");
@@ -229,84 +230,132 @@
                     lista.appendChild(h3);
                 }
             }
-            
-            function anterior(){
-                    
-                    paginaactual--;
-                    document.getElementById("btnSiguiente").disabled="false";
-                    document.getElementById("btnUltimo").disabled="false";
-                    if (paginaactual==1){
-                    document.getElementById("btnPrimero").disabled="true";
-                    document.getElementById("btnAnterior").disabled="true";
-                    }else{                        
-                        document.getElementById("btnPrimero").disabled="false";
-                        document.getElementById("btnAnterior").disabled="false";
-                    }
-                    
+            function crearBotonesDesplazamiento(lista) {
+                var btnAnterior = document.createElement("BUTTON");
+                btnAnterior.id = "btnAnterior";
+                btnAnterior.appendChild(document.createTextNode("Anterior"));
+                btnAnterior.onclick = function() {
+                    anterior();
+                };
+
+                var btnSiguiente = document.createElement("BUTTON");
+                btnSiguiente.id = "btnSiguiente";
+                btnSiguiente.appendChild(document.createTextNode("Siguiente"));
+                btnSiguiente.onclick = function() {
+                    siguiente();
+                };
+
+                var btnPrimero = document.createElement("BUTTON");
+                btnPrimero.id = "btnPrimero";
+                btnPrimero.appendChild(document.createTextNode("Primero"));
+                btnPrimero.onclick = function() {
+                    primero();
+                };
+
+                var btnUltimo = document.createElement("BUTTON");
+                btnUltimo.id = "btnUltimo";
+                btnUltimo.appendChild(document.createTextNode("Ultimo"));
+                btnUltimo.onclick = function() {
+                    ultimo();
+                };
+
+                lista.appendChild(btnPrimero);
+                lista.appendChild(btnAnterior);
+                lista.appendChild(btnSiguiente);
+                lista.appendChild(btnUltimo);
+
             }
-            function primero(){
-                    paginaactual=1;
-                    document.getElementById("btnSiguiente").disabled="false";
-                    document.getElementById("btnUltimo").disabled="false";
-                    if (paginaactual==1){
-                    document.getElementById("btnPrimero").disabled="true";
-                    document.getElementById("btnAnterior").disabled="true";
-                    }else{                        
-                        document.getElementById("btnPrimero").disabled="false";
-                        document.getElementById("btnAnterior").disabled="false";
-                    }
-            }
-            function siguiente(){
-                    paginaactual++;
-                    document.getElementById("btnAnterior").disabled="false";
-                    document.getElementById("btnPrimero").disabled="false";
-                    if (paginaactual==totalpaginas){
-                        document.getElementById("btnSiguiente").disabled="true";
-                        document.getElementById("btnUltimo").disabled="true";
-                    }else{                        
-                        document.getElementById("btnSiguiente").disabled="false";
-                        document.getElementById("btnUltimo").disabled="false";
-                    }
+            function anterior() {
+
+                paginaactual--;
+                document.getElementById("btnSiguiente").removeAttribute("DISABLED")
+                document.getElementById("btnUltimo").removeAttribute("DISABLED")
+                if (paginaactual == 1) {
+                    document.getElementById("btnPrimero").disabled = "true";
+                    document.getElementById("btnAnterior").disabled = "true";
+                } else {
+                    document.getElementById("btnPrimero").removeAttribute("DISABLED");
+                    document.getElementById("btnAnterior").removeAttribute("DISABLED");
                 }
-            function ultimo(){
-                    paginaactual=totalpaginas;
-                    document.getElementById("btnAnterior").disabled="false";
-                    document.getElementById("btnPrimero").disabled="false";
-                    if (paginaactual==totalpaginas){
-                        document.getElementById("btnSiguiente").disabled="true";
-                        document.getElementById("btnUltimo").disabled="true";
-                    }else{                        
-                        document.getElementById("btnSiguiente").disabled="false";
-                        document.getElementById("btnUltimo").disabled="false";
-                    }
+
+            }
+            function primero() {
+                paginaactual = 1;
+                document.getElementById("btnPrimero").disabled = "true";
+                document.getElementById("btnAnterior").disabled = "true";
+                if (totalpaginas == 1) {
+                    document.getElementById("btnSiguiente").disabled = "true";
+                    document.getElementById("btnUltimo").disabled = "true";
+                } else {
+                    document.getElementById("btnSiguiente").removeAttribute("DISABLED");
+                    document.getElementById("btnUltimo").removeAttribute("DISABLED");
+                }
             }
             
+            function siguiente() {
+                paginaactual++;
+                document.getElementById("btnAnterior").removeAttribute("DISABLED");
+                document.getElementById("btnPrimero").removeAttribute("DISABLED");
+                if (paginaactual == totalpaginas) {
+                    document.getElementById("btnSiguiente").disabled = "true";
+                    document.getElementById("btnUltimo").disabled = "true";
+                } else {
+                    document.getElementById("btnSiguiente").removeAttribute("DISABLED");
+                    document.getElementById("btnUltimo").removeAttribute("DISABLED");
+                }
+            }
+            function ultimo() {
+                paginaactual = totalpaginas;
+                document.getElementById("btnAnterior").removeAttribute("DISABLED");
+                document.getElementById("btnPrimero").removeAttribute("DISABLED");
+                if (paginaactual == totalpaginas) {
+                    document.getElementById("btnSiguiente").disabled = "true";
+                    document.getElementById("btnUltimo").disabled = "true";
+                } else {
+                    document.getElementById("btnSiguiente").removeAttribute("DISABLED");
+                    document.getElementById("btnUltimo").removeAttribute("DISABLED");
+                }
+            }
+            function ocultarBotonesDesplazamiento() {
+                document.getElementById("btnPrimero").style.visibility = "hidden";
+                document.getElementById("btnSiguiente").style.visibility = "hidden";
+                document.getElementById("btnUltimo").style.visibility = "hidden";
+                document.getElementById("btnAnterior").style.visibility = "hidden";
+            }
+
+            function mostrarBotonesDesplazamiento() {
+                document.getElementById("btnPrimero").style.visibility = "visible";
+                document.getElementById("btnSiguiente").style.visibility = "visible";
+                document.getElementById("btnUltimo").style.visibility = "visible";
+                document.getElementById("btnAnterior").style.visibility = "visible";
+
+            }
             /*ESTA VERSIÓN FUNCIONA, SÓLO FALTA LA LIMITACIÓN POR PÁGINA
-            function procesarXMLInstrumentos(xmlr) {
-                var xml = xmlr.responseXML;
-                var instrumentos = xml.getElementsByTagName("instrumento");
-                var lista = document.getElementById("lista");
-                lista.innerHTML = "";
-                if (instrumentos.length > 0) {
-                    var ul = document.createElement("UL");
-                    for (var i = 0; i < instrumentos.length; i++) {
-                        var li = document.createElement("LI");
-                        var a = document.createElement("A");
-                        var idinstrumento = instrumentos[i].getAttribute("id");//CREO QUE MAL, CORREGIR
-                        a.href = "ConsultaMusicos?accion=verinstrumento&idinstrumento=" + idinstrumento;
-                        a.textContent = 
-       instrumentos[i].getElementsByTagName("marca")[0].textContent
-                                +" "+instrumentos[i].getElementsByTagName("modelo")[0].textContent;
-                        li.appendChild(a);
-                        ul.appendChild(li);
-                    }
-                    lista.appendChild(ul);
-                } else {
-                    var h3 = document.createElement("H3");
-                    h3.textContent = "No se han encontrado instrumentos cuya marca empiece por esa letra";
-                    lista.appendChild(h3);
-                }
-            }*/
+             function procesarXMLInstrumentos(xmlr) {
+             var xml = xmlr.responseXML;
+             var instrumentos = xml.getElementsByTagName("instrumento");
+             var lista = document.getElementById("lista");
+             lista.innerHTML = "";
+             if (instrumentos.length > 0) {
+             var ul = document.createElement("UL");
+             for (var i = 0; i < instrumentos.length; i++) {
+             var li = document.createElement("LI");
+             var a = document.createElement("A");
+             var idinstrumento = instrumentos[i].getAttribute("id");//CREO QUE MAL, CORREGIR
+             a.href = "ConsultaMusicos?accion=verinstrumento&idinstrumento=" + idinstrumento;
+             a.textContent = 
+             instrumentos[i].getElementsByTagName("marca")[0].textContent
+             +" "+instrumentos[i].getElementsByTagName("modelo")[0].textContent;
+             li.appendChild(a);
+             ul.appendChild(li);
+             }
+             lista.appendChild(ul);
+             } else {
+             var h3 = document.createElement("H3");
+             h3.textContent = "No se han encontrado instrumentos cuya marca empiece por esa letra";
+             lista.appendChild(h3);
+             }
+             }*/
             function cargarXMLMusicos(elemento) {
                 var xmlreq = new XMLHttpRequest();
                 xmlreq.onreadystatechange = function() {
@@ -333,9 +382,9 @@
                         var a = document.createElement("A");
                         var idmusico = musicos[i].getAttribute("id");
                         a.href = "ConsultaMusicos?accion=vermusico&idmusico=" + idmusico;
-                        a.textContent = musicos[i].getElementsByTagName("nombre")[0].textContent+
-                                " "+musicos[i].getElementsByTagName("apellido")[0].textContent+
-                                " \""+musicos[i].getElementsByTagName("alias")[0].textContent+"\"";
+                        a.textContent = musicos[i].getElementsByTagName("nombre")[0].textContent +
+                                " " + musicos[i].getElementsByTagName("apellido")[0].textContent +
+                                " \"" + musicos[i].getElementsByTagName("alias")[0].textContent + "\"";
                         li.appendChild(a);
                         ul.appendChild(li);
                     }
@@ -435,18 +484,13 @@
                 </c:if>  
             </form>
         </div>
-        <div id="para_pruebas_se_puede_borrar">
-            <ul>
-                <li></li>
-            </ul>
-            <input type="button" onclick=""
-        </div>
+
         <c:if test="${!empty errores}">
             <div>
                 <ul>
                     <c:forEach items="${errores}" var="error">
                         <li>${error}</li>
-                    </c:forEach>
+                        </c:forEach>
                 </ul>
             </div>
         </c:if>
