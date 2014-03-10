@@ -22,7 +22,7 @@
     </head>
     <body>
         <h1>${musico.nombre} ${musico.apellido} <c:if test="${!empty musico.alias}">alias ${musico.alias}</c:if></h1>
-        <table>
+        <table border="1">
             <tr>
                 <td><strong>Fecha de nacimiento</strong></td>
                 <td><fmt:formatDate value="${musico.fechanacimiento}" dateStyle="LONG"/></td>

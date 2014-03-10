@@ -111,7 +111,7 @@
             //Cargar las letras en las que pulsar para ver la lista de músicos
             //que empiezan por ese nombre
             function cargarAlfabeto() {
-                if (document.getElementById("letras") == null)
+                if (document.getElementById("letras") === null)
                 {
                     var letras = document.createElement("DIV");
                     var abecedario = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
@@ -120,8 +120,6 @@
                     for (var i = 0; i < 27; i++) {
                         var letra = document.createElement("LI");
                         var letraactual = abecedario.substr(i, 1);
-                        //TRAS PULSAR EN UNA OPCIÓN DISTINTA
-                        //DEL MENÚ SE MANTIENE EL VALOR DE ELEMENTOQUELLAMA
                         letra.onclick = function()
                         {
                             if (buscar == BUSCARMUSICO) {
@@ -274,7 +272,6 @@
             }
             function irLogin()
             {
-
                 /*if (comprobarLogin()) {
                  location.href = "d:\ProyectoMusicosASP\principal.aspx";//PREGUNTAR A MARTA
                  }*/

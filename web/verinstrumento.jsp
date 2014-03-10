@@ -27,6 +27,7 @@
     </head>
     <body>
         <h1>${instrumento.marca} ${instrumento.modelo}</h1>
+        
         <h3>Año de fabricación:${instrumento.aniofabricacion}</h3>
         <img src="${urlfotosinstrumentos}/${instrumento.urlfoto}" alt="foto instrumento"/>
         <c:if test="${!empty instrumento.musicoList}">
