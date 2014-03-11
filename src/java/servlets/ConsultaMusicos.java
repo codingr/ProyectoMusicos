@@ -12,6 +12,7 @@ import ejb.InstrumentosFachada;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.servlet.ServletException;
@@ -19,6 +20,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import utils.Globales;
 
 /**
@@ -78,7 +80,11 @@ public class ConsultaMusicos extends HttpServlet {
             request.getRequestDispatcher(destino).forward(request, response);
 
         }else if (accion.equalsIgnoreCase("desconectar")){
-            request.getSession().invalidate();
+            HttpSession sesion=request.getSession();
+            Usuario usuario=(Usuario) sesion.getAttribute("usuario");
+            usuario.setFechaultimaconexion(new Date());            
+            instrumentosFachada.actualizarFechaUltimaConexionUsuario(usuario);
+            sesion.invalidate();
             destino = "index.jsp";
             request.getRequestDispatcher(destino).forward(request, response);
         }else if (accion.equalsIgnoreCase("administrar")){

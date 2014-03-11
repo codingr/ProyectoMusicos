@@ -7,6 +7,7 @@
 package beans;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -19,7 +20,8 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -36,7 +38,9 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findByIdusuario", query = "SELECT u FROM Usuario u WHERE u.idusuario = :idusuario"),
     @NamedQuery(name = "Usuario.findByNombre", query = "SELECT u FROM Usuario u WHERE u.nombre = :nombre"),
     @NamedQuery(name = "Usuario.findByPassword", query = "SELECT u FROM Usuario u WHERE u.password = :password"),
-    @NamedQuery(name = "Usuario.findByAdministrador", query = "SELECT u FROM Usuario u WHERE u.administrador = :administrador")})
+    @NamedQuery(name = "Usuario.findByAdministrador", query = "SELECT u FROM Usuario u WHERE u.administrador = :administrador"),
+    @NamedQuery(name = "Usuario.findByFecharegistro", query = "SELECT u FROM Usuario u WHERE u.fecharegistro = :fecharegistro"),
+    @NamedQuery(name = "Usuario.findByFechaultimaconexion", query = "SELECT u FROM Usuario u WHERE u.fechaultimaconexion = :fechaultimaconexion")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -50,10 +54,14 @@ public class Usuario implements Serializable {
     @Size(max = 20)
     @Column(name = "password")
     private String password;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "administrador")
-    private boolean administrador;
+    private Boolean administrador;
+    @Column(name = "fecharegistro")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecharegistro;
+    @Column(name = "fechaultimaconexion")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fechaultimaconexion;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idUsuario")
     private List<Comentario> comentarioList;
 
@@ -62,11 +70,6 @@ public class Usuario implements Serializable {
 
     public Usuario(Integer idusuario) {
         this.idusuario = idusuario;
-    }
-
-    public Usuario(Integer idusuario, boolean administrador) {
-        this.idusuario = idusuario;
-        this.administrador = administrador;
     }
 
     public Integer getIdusuario() {
@@ -93,12 +96,28 @@ public class Usuario implements Serializable {
         this.password = password;
     }
 
-    public boolean getAdministrador() {
+    public Boolean getAdministrador() {
         return administrador;
     }
 
-    public void setAdministrador(boolean administrador) {
+    public void setAdministrador(Boolean administrador) {
         this.administrador = administrador;
+    }
+
+    public Date getFecharegistro() {
+        return fecharegistro;
+    }
+
+    public void setFecharegistro(Date fecharegistro) {
+        this.fecharegistro = fecharegistro;
+    }
+
+    public Date getFechaultimaconexion() {
+        return fechaultimaconexion;
+    }
+
+    public void setFechaultimaconexion(Date fechaultimaconexion) {
+        this.fechaultimaconexion = fechaultimaconexion;
     }
 
     @XmlTransient

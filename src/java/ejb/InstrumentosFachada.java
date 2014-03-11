@@ -155,6 +155,14 @@ public class InstrumentosFachada {
         return usuario;        
     }
 
+    public void actualizarFechaUltimaConexionUsuario(Usuario usuario){
+        Query q=em.createQuery(
+"update Usuario u set u.fechaultimaconexion=:fechaultimaconexion where u.idusuario=:idusuario");
+        q.setParameter("fechaultimaconexion", usuario.getFechaultimaconexion());
+        q.setParameter("idusuario",usuario.getIdusuario());
+        q.executeUpdate();
+    }
+    
     public void persist(Object object) {
         em.persist(object);
     }
