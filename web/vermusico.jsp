@@ -37,7 +37,9 @@
                 <c:set var="contador" value="${contador+1}"/>
             <tr>
                 <td>Instrumento ${contador}</td>
-                <td>${instrumento.marca} ${instrumento.modelo}</td>
+                <td>
+                    <a href="ConsultaMusicos?accion=verinstrumento&idinstrumento=${instrumento.idE}">${instrumento.marca} ${instrumento.modelo}</a>                    
+                </td>
             </tr>
             </c:forEach>
             

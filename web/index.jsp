@@ -62,6 +62,7 @@
                 float: left;
                 border-style: ridge;
                 border-width: 10px;
+                //display: block; //de prueba
             }
             #letras ul{
                 list-style-type: none;
@@ -109,6 +110,21 @@
             #botonesdesplazamiento{
                 visibility: hidden;
             }
+            
+            
+            //PRUEBAS, BORRABLE
+            #datoslistados{
+                //float: left;
+               //display: inline;//de prueba
+            }
+            #datoslistados ul{
+               
+                
+            }
+            #datoslistados li{
+                
+            }
+            
         </style>
         <script type="text/javascript">
             var BUSCARMUSICO = 1;
@@ -153,7 +169,9 @@
                         }
                     };
                     ul.appendChild(todos);
-                    letras.appendChild(ul); 
+                    letras.appendChild(ul);
+                    
+                    //letras.style.visibility="visible";
             }
             function cargarXMLInstrumentos(elemento) {
                 var xmlreq = new XMLHttpRequest();
@@ -173,10 +191,16 @@
                 var xml = xmlr.responseXML;
                 var instrumentos = xml.getElementsByTagName("instrumento");
                 var datoslistados = document.getElementById("datoslistados");
-                datoslistados.innerHTML = "";
+                //datoslistados.innerHTML = "";
+                //PARA QUE FUNCIONE EN TODOS LOS NAVEGADORES
+                while (datoslistados.hasChildNodes()){
+                    datoslistados.removeChild(datoslistados.firstChild);
+                }
+                
                 if (instrumentos.length > 0) {
                     rellenarLista(instrumentos);
                 } else {
+                    ocultarBotones();
                     var h3 = document.createElement("H3");
                     h3.textContent = "No se han encontrado instrumentos cuya marca empiece por esa letra";
                     datoslistados.appendChild(h3);
@@ -204,7 +228,7 @@
                         a.textContent =
                                 instrumentosomusicoslista[i].getElementsByTagName("nombre")[0].textContent
                                 + " " + instrumentosomusicoslista[i].getElementsByTagName("apellido")[0].textContent;
-
+                        
                         li.appendChild(a);
                         ul.appendChild(li);
                     }
@@ -226,9 +250,12 @@
                     }
                 }
                 habilitarBotones();
-                var datoslistados=document.getElementById("datoslistados");                  
+                var datoslistados=document.getElementById("datoslistados"); 
+                //datoslistados.appendChild(document.createTextNode("q"));
+                
                 datoslistados.appendChild(ul);
                 datoslistados.style.visibility="visible";
+                mostrarBotones();
                 document.getElementById("botonesdesplazamiento").style.visibility="visible";
             }
             /*Habilita o deshabilita botones en función de la página actual 
@@ -325,7 +352,10 @@
                 var xml = xmlr.responseXML;
                 var musicos = xml.getElementsByTagName("musico");
                 var datoslistados = document.getElementById("datoslistados");
-                datoslistados.innerHTML = "";
+                //datoslistados.innerHTML = "";
+                while (datoslistados.hasChildNodes()){
+                    datoslistados.removeChild(datoslistados.firstChild);
+                }
                 if (musicos.length > 0) {
                     var ul = document.createElement("UL");
                     for (var i = 0; i < musicos.length; i++) {
@@ -341,6 +371,7 @@
                     }
                     datoslistados.appendChild(ul);
                 } else {
+                    ocultarBotones();
                     var h3 = document.createElement("H3");
                     h3.textContent = "No se han encontrado músicos cuyo nombre empiece por esa letra";
                     datoslistados.appendChild(h3);
@@ -373,9 +404,19 @@
 
             function limpiarLista() {
                 var datoslistados = document.getElementById("datoslistados");
-                datoslistados.innerHTML = "";                
+                //datoslistados.innerHTML = "";                
+                while (datoslistados.hasChildNodes()){
+                    datoslistados.removeChild(datoslistados.firstChild);
+                }
             }
-           
+            function ocultarBotones(){
+                var botonesDesplazamiento=document.getElementById("botonesdesplazamiento");
+                botonesDesplazamiento.style.visibility="hidden";
+            }
+            function mostrarBotones(){
+                var botonesDesplazamiento=document.getElementById("botonesdesplazamiento");
+                botonesDesplazamiento.style.visibility="visible";
+            }
             function hacerLogin() {
                 /*if (document.getElementById("administracion")){
                  document.getElementById("administracion").onclick=
@@ -416,9 +457,7 @@
         </div>
         <div id="lista">
             <div id="letras"></div>
-            <div id="datoslistados">
-                
-            </div>
+            <div id="datoslistados"></div>
             <div id="botonesdesplazamiento">
                 <input type="button" id="btnPrimero" value="Primero" onclick="primero()" />
                 <input type="button" id="btnAnterior" value="Anterior" onclick="anterior()" />
@@ -435,7 +474,5 @@
                 </ul>
             </div>
         </c:if>
-
-
     </body>
 </html>

@@ -12,15 +12,16 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -44,8 +45,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Musico implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @NotNull
     @Column(name = "idE")
     private Integer idE;
     @Size(max = 30)
@@ -66,9 +67,15 @@ public class Musico implements Serializable {
     @Column(name = "fechadefuncion")
     @Temporal(TemporalType.DATE)
     private Date fechadefuncion;
-    @ManyToMany(mappedBy = "musicoList")
+    @JoinTable(name = "equipamiento", joinColumns = {
+        @JoinColumn(name = "idMusico", referencedColumnName = "idE")}, inverseJoinColumns = {
+        @JoinColumn(name = "idInstrumento", referencedColumnName = "idE")})
+    @ManyToMany
     private List<Instrumento> instrumentoList;
-    @ManyToMany(mappedBy = "musicoList")
+    @JoinTable(name = "miembros", joinColumns = {
+        @JoinColumn(name = "idE", referencedColumnName = "idE")}, inverseJoinColumns = {
+        @JoinColumn(name = "idGrupo", referencedColumnName = "idgrupo")})
+    @ManyToMany
     private List<Grupo> grupoList;
 
     public Musico() {
