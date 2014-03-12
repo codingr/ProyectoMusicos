@@ -96,7 +96,7 @@
                 color: #FFF;
                 background-color: #666;
             }
-                        
+
             .letraalfabeto{
                 font-family: fantasy;
                 margin: 5px;
@@ -106,61 +106,53 @@
                 font-size: larger;                
                 cursor: url(images/Little_music_note.jpg),crosshair;
             }
-            
+
             #botonesdesplazamiento{
                 visibility: hidden;
             }
-            
-            
             //PRUEBAS, BORRABLE
-            #datoslistados{
+            .datoslistados{
+               border-style: dotted;
+               //border: #36F;
+               border-width: 5px;
                 //float: left;
-               //display: inline;//de prueba
+               display: block;//de prueba
+                //height: 50%;
             }
-            #datoslistados ul{
-               
+            .datoslistados ul{
+                //float: left;
+                display: block;//de prueba
+                border: #36F;
                 
             }
-            #datoslistados li{
-                
+            .datoslistados li{
+                //float: left;
+                list-style-type: circle;
+                display: block;//de prueba
             }
-            
+
         </style>
         <script type="text/javascript">
+            var ELEMENTOSPORPAGINA = 5;
             var BUSCARMUSICO = 1;
             var BUSCARINSTRUMENTO = 0;
+            //var INSTRUMENTOS=1;
+            //var MUSICOS=0;
+            var instrumentosomusicos;
             var buscar;
             var paginaactual = 1;
-            var totalpaginas;
-            var ELEMENTOSPORPAGINA = 5;
-            //Cargar las letras en las que pulsar para ver la lista de músicos
-            //que empiezan por ese nombre
-            function cargarAlfabeto() { 
-                    var letras = document.getElementById("letras");
-                    var abecedario = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
-                    var ul = document.createElement("UL");
-
-                    for (var i = 0; i < 27; i++) {
-                        var letra = document.createElement("LI");
-                        var letraactual = abecedario.substr(i, 1);
-                        letra.onclick = function()
-                        {
-                            if (buscar == BUSCARMUSICO) {
-                                cargarXMLMusicos(this);
-                            } else {
-                                cargarXMLInstrumentos(this);
-                            }
-                        };
-                        letra.textContent = letraactual;
-                        letra.id = "enlace" + letraactual;
-                        letra.className = "letraalfabeto";
-                        ul.appendChild(letra);
-                    }
-                    var todos = document.createElement("LI");
-                    todos.textContent = "TODOS";
-                    todos.id = "enlaceTodos";
-                    todos.className = "letraalfabeto";
-                    todos.onclick = function()
+            var totalpaginas;            
+            var instrumentosomusicoslista;
+            /*Cargar las letras en las que pulsar para ver la lista de músicos
+            que empiezan por ese nombre*/
+            function cargarAlfabeto() {
+                var letras = document.getElementById("letras");
+                var abecedario = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
+                var ul = document.createElement("UL");
+                for (var i = 0; i < 27; i++) {
+                    var letra = document.createElement("LI");
+                    var letraactual = abecedario.substr(i, 1);
+                    letra.onclick = function()
                     {
                         if (buscar == BUSCARMUSICO) {
                             cargarXMLMusicos(this);
@@ -168,10 +160,26 @@
                             cargarXMLInstrumentos(this);
                         }
                     };
-                    ul.appendChild(todos);
-                    letras.appendChild(ul);
+                    letra.textContent = letraactual;
+                    //letra.id = "enlace" + letraactual;
+                    letra.className = "letraalfabeto";
+                    ul.appendChild(letra);
+                }
+                var todos = document.createElement("LI");
+                todos.textContent = "TODOS";
+                //todos.id = "enlaceTodos";
+                todos.className = "letraalfabeto";
+                todos.onclick = function()
+                {
                     
-                    //letras.style.visibility="visible";
+                    if (buscar == BUSCARMUSICO) {
+                        cargarXMLMusicos(this);
+                    } else {
+                        cargarXMLInstrumentos(this);
+                    }
+                };
+                ul.appendChild(todos);
+                letras.appendChild(ul);
             }
             function cargarXMLInstrumentos(elemento) {
                 var xmlreq = new XMLHttpRequest();
@@ -191,14 +199,10 @@
                 var xml = xmlr.responseXML;
                 var instrumentos = xml.getElementsByTagName("instrumento");
                 var datoslistados = document.getElementById("datoslistados");
-                //datoslistados.innerHTML = "";
-                //PARA QUE FUNCIONE EN TODOS LOS NAVEGADORES
-                while (datoslistados.hasChildNodes()){
-                    datoslistados.removeChild(datoslistados.firstChild);
-                }
-                
+                limpiarLista();
                 if (instrumentos.length > 0) {
-                    rellenarLista(instrumentos);
+                    instrumentosomusicoslista=instrumentos;
+                    rellenarLista();
                 } else {
                     ocultarBotones();
                     var h3 = document.createElement("H3");
@@ -207,17 +211,16 @@
                 }
             }
 
-            function rellenarLista(instrumentosomusicoslista) {
+            function rellenarLista() {
+                var i;                
+                limpiarLista();        
                 var ul = document.createElement("UL");
-                var sobrantes=(instrumentosomusicoslista.length % ELEMENTOSPORPAGINA==0)?0:1;
-                var entero=Math.floor(instrumentosomusicoslista.length / ELEMENTOSPORPAGINA);
-                totalpaginas =entero+ sobrantes;
-                        
-                
-                
+                var sobrantes = (instrumentosomusicoslista.length % ELEMENTOSPORPAGINA == 0) ? 0 : 1;
+                var entero = Math.floor(instrumentosomusicoslista.length / ELEMENTOSPORPAGINA);
+                totalpaginas = entero + sobrantes;                             
                 
                 if (buscar == BUSCARMUSICO) {
-                    for (var i = (paginaactual - 1) * ELEMENTOSPORPAGINA;
+                    for (i = (paginaactual - 1) * ELEMENTOSPORPAGINA;
                             i < paginaactual * ELEMENTOSPORPAGINA
                             && i < instrumentosomusicoslista.length;
                             i++) {
@@ -228,18 +231,16 @@
                         a.textContent =
                                 instrumentosomusicoslista[i].getElementsByTagName("nombre")[0].textContent
                                 + " " + instrumentosomusicoslista[i].getElementsByTagName("apellido")[0].textContent;
-                        
                         li.appendChild(a);
                         ul.appendChild(li);
                     }
-                } else if (buscar == BUSCARINSTRUMENTO) {                    
-                    for (var i = (paginaactual - 1) * ELEMENTOSPORPAGINA;
+                } else if (buscar == BUSCARINSTRUMENTO) {
+                    for (i = (paginaactual - 1) * ELEMENTOSPORPAGINA;
                             i < paginaactual * ELEMENTOSPORPAGINA
                             && i < instrumentosomusicoslista.length;
                             i++) {
                         var li = document.createElement("LI");
                         var a = document.createElement("A");
-
                         var idinstrumento = instrumentosomusicoslista[i].getAttribute("id");
                         a.href = "ConsultaMusicos?accion=verinstrumento&idinstrumento=" + idinstrumento;
                         a.textContent =
@@ -250,34 +251,38 @@
                     }
                 }
                 habilitarBotones();
-                var datoslistados=document.getElementById("datoslistados"); 
-                //datoslistados.appendChild(document.createTextNode("q"));
-                
+                var datoslistados = document.getElementById("datoslistados");
                 datoslistados.appendChild(ul);
-                datoslistados.style.visibility="visible";
+                datoslistados.style.visibility = "visible";
                 mostrarBotones();
-                document.getElementById("botonesdesplazamiento").style.visibility="visible";
             }
             /*Habilita o deshabilita botones en función de la página actual 
              * de la lista de instrumentos o músicos*/
-            function habilitarBotones(){
-                if (paginaactual==1&&totalpaginas==1){
+            function habilitarBotones() {
+                if (totalpaginas == 1) {
                     document.getElementById("btnPrimero").disabled = "true";
                     document.getElementById("btnAnterior").disabled = "true";
                     document.getElementById("btnSiguiente").disabled = "true";
                     document.getElementById("btnUltimo").disabled = "true";
-                }else if (paginaactual==totalpaginas){
+                    //}
+                } else if (paginaactual == 1) {
+                    document.getElementById("btnPrimero").disabled = "true";
+                    document.getElementById("btnAnterior").disabled = "true";
+                    document.getElementById("btnSiguiente").removeAttribute("DISABLED");
+                    document.getElementById("btnUltimo").removeAttribute("DISABLED");
+                }
+                else if (paginaactual == totalpaginas) {
                     document.getElementById("btnPrimero").removeAttribute("DISABLED");
                     document.getElementById("btnAnterior").removeAttribute("DISABLED");
                     document.getElementById("btnSiguiente").disabled = "true";
                     document.getElementById("btnUltimo").disabled = "true";
-                }else{
+                } else {
                     document.getElementById("btnPrimero").removeAttribute("DISABLED");
                     document.getElementById("btnAnterior").removeAttribute("DISABLED");
                     document.getElementById("btnSiguiente").removeAttribute("DISABLED");
                     document.getElementById("btnUltimo").removeAttribute("DISABLED");
-                }               
-                
+                }
+
             }
             function anterior() {
                 paginaactual--;
@@ -332,7 +337,7 @@
                 }
                 rellenarLista();
             }
-            
+
             function cargarXMLMusicos(elemento) {
                 var xmlreq = new XMLHttpRequest();
                 xmlreq.onreadystatechange = function() {
@@ -348,35 +353,19 @@
                 xmlreq.send();
             }
             function procesarXMLMusicos(xmlr) {
-                document.getElementById("lista").style.visibility="visible";
                 var xml = xmlr.responseXML;
                 var musicos = xml.getElementsByTagName("musico");
                 var datoslistados = document.getElementById("datoslistados");
-                //datoslistados.innerHTML = "";
-                while (datoslistados.hasChildNodes()){
-                    datoslistados.removeChild(datoslistados.firstChild);
-                }
+                limpiarLista();
                 if (musicos.length > 0) {
-                    var ul = document.createElement("UL");
-                    for (var i = 0; i < musicos.length; i++) {
-                        var li = document.createElement("LI");
-                        var a = document.createElement("A");
-                        var idmusico = musicos[i].getAttribute("id");
-                        a.href = "ConsultaMusicos?accion=vermusico&idmusico=" + idmusico;
-                        a.textContent = musicos[i].getElementsByTagName("nombre")[0].textContent +
-                                " " + musicos[i].getElementsByTagName("apellido")[0].textContent +
-                                " \"" + musicos[i].getElementsByTagName("alias")[0].textContent + "\"";
-                        li.appendChild(a);
-                        ul.appendChild(li);
-                    }
-                    datoslistados.appendChild(ul);
+                    instrumentosomusicoslista=musicos;
+                    rellenarLista();
                 } else {
                     ocultarBotones();
                     var h3 = document.createElement("H3");
-                    h3.textContent = "No se han encontrado músicos cuyo nombre empiece por esa letra";
+                    h3.textContent = "No se han encontrado músicos cuya nombre empiece por esa letra";
                     datoslistados.appendChild(h3);
                 }
-                
             }
             function inicializar() {
                 cargarAlfabeto();
@@ -389,33 +378,34 @@
                             buscar = BUSCARMUSICO;
                             limpiarLista();
                             mostrarDivLista();
+                            ocultarBotones();
                         };
                 document.getElementById("buscarinstrumento").onclick =
                         function() {
                             buscar = BUSCARINSTRUMENTO;
                             limpiarLista();
                             mostrarDivLista();
-                        };               
+                            ocultarBotones();
+                        };
             }
-            function mostrarDivLista() {                
-                    var lista = document.getElementById("lista");
-                    lista.style.visibility = "visible";                
+            function mostrarDivLista() {
+                var lista = document.getElementById("lista");
+                lista.style.visibility = "visible";
             }
 
             function limpiarLista() {
                 var datoslistados = document.getElementById("datoslistados");
-                //datoslistados.innerHTML = "";                
-                while (datoslistados.hasChildNodes()){
+               while (datoslistados.hasChildNodes()) {
                     datoslistados.removeChild(datoslistados.firstChild);
                 }
             }
-            function ocultarBotones(){
-                var botonesDesplazamiento=document.getElementById("botonesdesplazamiento");
-                botonesDesplazamiento.style.visibility="hidden";
+            function ocultarBotones() {
+                var botonesDesplazamiento = document.getElementById("botonesdesplazamiento");
+                botonesDesplazamiento.style.visibility = "hidden";
             }
-            function mostrarBotones(){
-                var botonesDesplazamiento=document.getElementById("botonesdesplazamiento");
-                botonesDesplazamiento.style.visibility="visible";
+            function mostrarBotones() {
+                var botonesDesplazamiento = document.getElementById("botonesdesplazamiento");
+                botonesDesplazamiento.style.visibility = "visible";
             }
             function hacerLogin() {
                 /*if (document.getElementById("administracion")){
@@ -457,7 +447,7 @@
         </div>
         <div id="lista">
             <div id="letras"></div>
-            <div id="datoslistados"></div>
+            <div id="datoslistados" class="datoslistados">&nbsp;</div>
             <div id="botonesdesplazamiento">
                 <input type="button" id="btnPrimero" value="Primero" onclick="primero()" />
                 <input type="button" id="btnAnterior" value="Anterior" onclick="anterior()" />
