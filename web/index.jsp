@@ -111,24 +111,25 @@
                 visibility: hidden;
             }
             //PRUEBAS, BORRABLE
-            .datoslistados{
-               border-style: dotted;
-               //border: #36F;
+            .clasedatoslistados{
+               top:160px;
+               border-style: solid;
                border-width: 5px;
+               //border: #36F;               
                 //float: left;
-               display: block;//de prueba
+               display: inline;//de prueba
                 //height: 50%;
             }
-            .datoslistados ul{
+            .clasedatoslistados ul{
                 //float: left;
-                display: block;//de prueba
-                border: #36F;
-                
+                //display: block;//de prueba
+                //border: #36F;
+                display: block;
             }
-            .datoslistados li{
+            .clasedatoslistados li{
                 //float: left;
                 list-style-type: circle;
-                display: block;//de prueba
+                //display: block;//de prueba
             }
 
         </style>
@@ -136,8 +137,6 @@
             var ELEMENTOSPORPAGINA = 5;
             var BUSCARMUSICO = 1;
             var BUSCARINSTRUMENTO = 0;
-            //var INSTRUMENTOS=1;
-            //var MUSICOS=0;
             var instrumentosomusicos;
             var buscar;
             var paginaactual = 1;
@@ -199,7 +198,7 @@
                 var xml = xmlr.responseXML;
                 var instrumentos = xml.getElementsByTagName("instrumento");
                 var datoslistados = document.getElementById("datoslistados");
-                limpiarLista();
+                limpiarDatosListados();
                 if (instrumentos.length > 0) {
                     instrumentosomusicoslista=instrumentos;
                     rellenarLista();
@@ -212,8 +211,10 @@
             }
 
             function rellenarLista() {
+                var datoslistados = document.getElementById("datoslistados");
+                //datoslistados.className="datoslistados";
                 var i;                
-                limpiarLista();        
+                limpiarDatosListados();        
                 var ul = document.createElement("UL");
                 var sobrantes = (instrumentosomusicoslista.length % ELEMENTOSPORPAGINA == 0) ? 0 : 1;
                 var entero = Math.floor(instrumentosomusicoslista.length / ELEMENTOSPORPAGINA);
@@ -251,9 +252,11 @@
                     }
                 }
                 habilitarBotones();
-                var datoslistados = document.getElementById("datoslistados");
+                
                 datoslistados.appendChild(ul);
+                
                 datoslistados.style.visibility = "visible";
+                datoslistados.className="clasedatoslistados";
                 mostrarBotones();
             }
             /*Habilita o deshabilita botones en función de la página actual 
@@ -356,7 +359,7 @@
                 var xml = xmlr.responseXML;
                 var musicos = xml.getElementsByTagName("musico");
                 var datoslistados = document.getElementById("datoslistados");
-                limpiarLista();
+                limpiarDatosListados();
                 if (musicos.length > 0) {
                     instrumentosomusicoslista=musicos;
                     rellenarLista();
@@ -376,14 +379,14 @@
                 document.getElementById("buscarmusico").onclick =
                         function() {
                             buscar = BUSCARMUSICO;
-                            limpiarLista();
+                            limpiarDatosListados();
                             mostrarDivLista();
                             ocultarBotones();
                         };
                 document.getElementById("buscarinstrumento").onclick =
                         function() {
                             buscar = BUSCARINSTRUMENTO;
-                            limpiarLista();
+                            limpiarDatosListados();
                             mostrarDivLista();
                             ocultarBotones();
                         };
@@ -393,7 +396,7 @@
                 lista.style.visibility = "visible";
             }
 
-            function limpiarLista() {
+            function limpiarDatosListados() {
                 var datoslistados = document.getElementById("datoslistados");
                while (datoslistados.hasChildNodes()) {
                     datoslistados.removeChild(datoslistados.firstChild);
@@ -424,7 +427,7 @@
                 <ul>
                     <li id="buscarmusico">Buscar por músico</li>
                     <li id="buscarinstrumento">Buscar por instrumento</li>
-                        <c:if test="${empty usuario}">
+                    <c:if test="${empty usuario}">
                         <li id="login">
                             Nombre:<input type="text" name="nombre" value="" />
                             Password:<input type="password" name="password" value="" />
@@ -447,7 +450,7 @@
         </div>
         <div id="lista">
             <div id="letras"></div>
-            <div id="datoslistados" class="datoslistados">&nbsp;</div>
+            <div id="datoslistados" class="clasedatoslistados">&nbsp;</div>
             <div id="botonesdesplazamiento">
                 <input type="button" id="btnPrimero" value="Primero" onclick="primero()" />
                 <input type="button" id="btnAnterior" value="Anterior" onclick="anterior()" />
@@ -460,7 +463,7 @@
                 <ul>
                     <c:forEach items="${errores}" var="error">
                         <li>${error}</li>
-                        </c:forEach>
+                    </c:forEach>
                 </ul>
             </div>
         </c:if>
