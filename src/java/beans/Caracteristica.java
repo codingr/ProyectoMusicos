@@ -18,6 +18,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -31,15 +32,20 @@ import javax.xml.bind.annotation.XmlTransient;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Caracteristica.findAll", query = "SELECT c FROM Caracteristica c"),
-    @NamedQuery(name = "Caracteristica.findByIdcaracteristica", query = "SELECT c FROM Caracteristica c WHERE c.idcaracteristica = :idcaracteristica"),
+    @NamedQuery(name = "Caracteristica.findByIdCaracteristica", query = "SELECT c FROM Caracteristica c WHERE c.idCaracteristica = :idCaracteristica"),
+    @NamedQuery(name = "Caracteristica.findByIdE", query = "SELECT c FROM Caracteristica c WHERE c.idE = :idE"),
     @NamedQuery(name = "Caracteristica.findByTexto", query = "SELECT c FROM Caracteristica c WHERE c.texto = :texto")})
 public class Caracteristica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "idcaracteristica")
-    private Integer idcaracteristica;
+    @Column(name = "idCaracteristica")
+    private Integer idCaracteristica;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "idE")
+    private int idE;
     @Size(max = 30)
     @Column(name = "texto")
     private String texto;
@@ -49,16 +55,29 @@ public class Caracteristica implements Serializable {
     public Caracteristica() {
     }
 
-    public Caracteristica(Integer idcaracteristica) {
-        this.idcaracteristica = idcaracteristica;
+    public Caracteristica(Integer idCaracteristica) {
+        this.idCaracteristica = idCaracteristica;
     }
 
-    public Integer getIdcaracteristica() {
-        return idcaracteristica;
+    public Caracteristica(Integer idCaracteristica, int idE) {
+        this.idCaracteristica = idCaracteristica;
+        this.idE = idE;
     }
 
-    public void setIdcaracteristica(Integer idcaracteristica) {
-        this.idcaracteristica = idcaracteristica;
+    public Integer getIdCaracteristica() {
+        return idCaracteristica;
+    }
+
+    public void setIdCaracteristica(Integer idCaracteristica) {
+        this.idCaracteristica = idCaracteristica;
+    }
+
+    public int getIdE() {
+        return idE;
+    }
+
+    public void setIdE(int idE) {
+        this.idE = idE;
     }
 
     public String getTexto() {
@@ -81,7 +100,7 @@ public class Caracteristica implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (idcaracteristica != null ? idcaracteristica.hashCode() : 0);
+        hash += (idCaracteristica != null ? idCaracteristica.hashCode() : 0);
         return hash;
     }
 
@@ -92,7 +111,7 @@ public class Caracteristica implements Serializable {
             return false;
         }
         Caracteristica other = (Caracteristica) object;
-        if ((this.idcaracteristica == null && other.idcaracteristica != null) || (this.idcaracteristica != null && !this.idcaracteristica.equals(other.idcaracteristica))) {
+        if ((this.idCaracteristica == null && other.idCaracteristica != null) || (this.idCaracteristica != null && !this.idCaracteristica.equals(other.idCaracteristica))) {
             return false;
         }
         return true;
@@ -100,7 +119,7 @@ public class Caracteristica implements Serializable {
 
     @Override
     public String toString() {
-        return "beans.Caracteristica[ idcaracteristica=" + idcaracteristica + " ]";
+        return "beans.Caracteristica[ idCaracteristica=" + idCaracteristica + " ]";
     }
     
 }

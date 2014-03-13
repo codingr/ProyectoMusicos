@@ -5,6 +5,7 @@
  */
 package servlets;
 
+import beans.Caracteristica;
 import beans.Instrumento;
 import beans.Musico;
 import beans.Usuario;
@@ -186,6 +187,22 @@ public class ConsultaMusicos extends HttpServlet {
             out.println("<modelo>" + instrumentos.get(i).getModelo() + "</modelo>");
             out.println("<urlfoto>" + instrumentos.get(i).getUrlfoto() + "</urlfoto>");
             out.println("<aniofabricacion>" + instrumentos.get(i).getAniofabricacion() + "</aniofabricacion>");
+            List <Caracteristica> caracteristicas=instrumentos.get(i).getCaracteristicaList();
+            if (!caracteristicas.isEmpty()){
+                    out.println("<caracteristicas>");
+                for (int j=0;j<caracteristicas.size();j++){                
+                out.println("<caracteristica>");
+                String texto=caracteristicas.get(i).getTexto();
+                //int posInicial;
+                int posFinal=texto.indexOf(":");
+                out.println("<nombre>"+texto.substring(0,posFinal)+"</nombre>");                
+                out.println("<valor>"+texto.substring(posFinal)+"</valor>");                
+                out.println("</caracteristica>");
+                }
+                    out.println("</caracteristicas>");
+            }
+            
+            
             out.println("</instrumento>");
         }
         out.println("</instrumentos>");

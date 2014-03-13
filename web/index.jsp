@@ -209,7 +209,7 @@
                     datoslistados.appendChild(h3);
                 }
             }
-
+            /*Para mostrar en pantalla la lista de instrumentos o musicos*/
             function rellenarLista() {
                 var datoslistados = document.getElementById("datoslistados");
                 //datoslistados.className="datoslistados";

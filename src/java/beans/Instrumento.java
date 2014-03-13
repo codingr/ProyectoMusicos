@@ -60,7 +60,7 @@ public class Instrumento implements Serializable {
     private List<Musico> musicoList;
     @JoinTable(name = "detalles", joinColumns = {
         @JoinColumn(name = "idE", referencedColumnName = "idE")}, inverseJoinColumns = {
-        @JoinColumn(name = "idCaracteristica", referencedColumnName = "idcaracteristica")})
+        @JoinColumn(name = "idCaracteristica", referencedColumnName = "idCaracteristica")})
     @ManyToMany
     private List<Caracteristica> caracteristicaList;
 
