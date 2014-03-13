@@ -72,52 +72,54 @@ public class ConsultaMusicos extends HttpServlet {
             String strid = request.getParameter("idinstrumento");
             int id = Integer.parseInt(strid);
             destino = "verinstrumento.jsp";
-            request.setAttribute("instrumento", instrumentosFachada.buscarInstrumento(id));
+            Instrumento instrumento=instrumentosFachada.buscarInstrumento(id);
+            request.setAttribute("instrumento", instrumento);
             request.setAttribute("urlfotosinstrumentos", Globales.URLFOTOINSTRUMENTO);
+            request.setAttribute("caracteristicas", instrumento.getCaracteristicaList());
             request.getRequestDispatcher(destino).forward(request, response);
         } else if (accion.equalsIgnoreCase("login")) {
-            validarUsuario(request);           
+            validarUsuario(request);
             destino = "index.jsp";
             request.getRequestDispatcher(destino).forward(request, response);
 
-        }else if (accion.equalsIgnoreCase("desconectar")){
-            HttpSession sesion=request.getSession();
-            Usuario usuario=(Usuario) sesion.getAttribute("usuario");
-            usuario.setFechaultimaconexion(new Date());            
+        } else if (accion.equalsIgnoreCase("desconectar")) {
+            HttpSession sesion = request.getSession();
+            Usuario usuario = (Usuario) sesion.getAttribute("usuario");
+            usuario.setFechaultimaconexion(new Date());
             instrumentosFachada.actualizarFechaUltimaConexionUsuario(usuario);
             sesion.invalidate();
             destino = "index.jsp";
             request.getRequestDispatcher(destino).forward(request, response);
-        }else if (accion.equalsIgnoreCase("administrar")){
-            destino="ProyectoMusicosASP/Principal.aspx";
+        } else if (accion.equalsIgnoreCase("administrar")) {
+            destino = "ProyectoMusicosASP/Principal.aspx";
             request.getRequestDispatcher(destino).forward(request, response);
         }
     }
-    private void validarUsuario(HttpServletRequest request){
-         ArrayList<String> errores = new ArrayList<>();
-            String nombre = request.getParameter("nombre");
-            if (nombre == null||nombre.equals("")) {
-                errores.add("Debes introducir un nombre");
+
+    private void validarUsuario(HttpServletRequest request) {
+        ArrayList<String> errores = new ArrayList<>();
+        String nombre = request.getParameter("nombre");
+        if (nombre == null || nombre.equals("")) {
+            errores.add("Debes introducir un nombre");
+        } else {
+            Usuario usuario = instrumentosFachada.buscarUsuario(nombre);
+            if (usuario == null) {
+                errores.add("El usuario no se encuentra en la base de datos");
             } else {
-                Usuario usuario = instrumentosFachada.buscarUsuario(nombre);
-                if (usuario == null) {
-                    errores.add("El usuario no se encuentra en la base de datos");
+                String password = request.getParameter("password");
+                if (password == null || password.equals("")) {
+                    errores.add("Debes introducir el password");
+                } else if (usuario.getPassword().equals(password)) {
+                    request.getSession().setAttribute("usuario", usuario);
                 } else {
-                    String password = request.getParameter("password");
-                    if (password == null||password.equals("")) {
-                        errores.add("Debes introducir el password");
-                    } else if (usuario.getPassword().equals(password)) {
-                        request.getSession().setAttribute("usuario", usuario);
-                    }else{
-                        errores.add("Password incorrecto");
-                    }
+                    errores.add("Password incorrecto");
                 }
             }
-            request.setAttribute("errores", errores);
-            
+        }
+        request.setAttribute("errores", errores);
+
     }
-    
-    
+
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
     /**
      * Handles the HTTP <code>GET</code> method.
@@ -167,8 +169,8 @@ public class ConsultaMusicos extends HttpServlet {
             out.println("<musico id='" + musicos.get(i).getIdE()
                     + "'>");
             out.println("<nombre>" + musicos.get(i).getNombre() + "</nombre>");
-            out.println("<apellido>" + musicos.get(i).getApellido()+ "</apellido>");
-            out.println("<alias>" + musicos.get(i).getAlias()+ "</alias>");
+            out.println("<apellido>" + musicos.get(i).getApellido() + "</apellido>");
+            out.println("<alias>" + musicos.get(i).getAlias() + "</alias>");
             out.println("</musico>");
         }
 
@@ -187,25 +189,23 @@ public class ConsultaMusicos extends HttpServlet {
             out.println("<modelo>" + instrumentos.get(i).getModelo() + "</modelo>");
             out.println("<urlfoto>" + instrumentos.get(i).getUrlfoto() + "</urlfoto>");
             out.println("<aniofabricacion>" + instrumentos.get(i).getAniofabricacion() + "</aniofabricacion>");
-            List <Caracteristica> caracteristicas=instrumentos.get(i).getCaracteristicaList();
-            if (!caracteristicas.isEmpty()){
-                    out.println("<caracteristicas>");
-                for (int j=0;j<caracteristicas.size();j++){                
-                out.println("<caracteristica>");
-                String texto=caracteristicas.get(i).getTexto();
-                //int posInicial;
-                int posFinal=texto.indexOf(":");
-                out.println("<nombre>"+texto.substring(0,posFinal)+"</nombre>");                
-                out.println("<valor>"+texto.substring(posFinal)+"</valor>");                
-                out.println("</caracteristica>");
+            List<Caracteristica> caracteristicas = instrumentos.get(i).getCaracteristicaList();
+            if (!caracteristicas.isEmpty()) {
+                out.println("<caracteristicas>");
+                for (int j = 0; j < caracteristicas.size(); j++) {
+                    out.println("<caracteristica>");
+                    String texto = caracteristicas.get(j).getTexto();
+                    int posFinal = texto.indexOf(":");
+                    out.println("<nombre>" + texto.substring(0, posFinal) + "</nombre>");
+                    out.println("<valor>" + texto.substring(posFinal) + "</valor>");
+                    out.println("</caracteristica>");
                 }
-                    out.println("</caracteristicas>");
+                out.println("</caracteristicas>");
             }
-            
-            
+
             out.println("</instrumento>");
         }
         out.println("</instrumentos>");
     }
-      
+
 }

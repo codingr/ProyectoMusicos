@@ -20,7 +20,7 @@
             }
         </style>
         <script type="text/javascript">
-
+            
 
 
         </script>
@@ -35,9 +35,19 @@
             <ul>
                 <c:forEach items="${instrumento.musicoList}" var="musico">
                     <li><a href="ConsultaMusicos?accion=vermusico&idmusico=${musico.idE}">${musico.nombre} ${musico.apellido} ${musico.alias}</a></li>
-                    </c:forEach>
+                </c:forEach>
             </ul>
         </c:if>  
+        <c:if test="${!empty instrumento.caracteristicaList}">
+            <h3>Características:</h3>
+            <ul>
+                <c:forEach items="${instrumento.caracteristicaList}" var="caracteristica">
+                <li>${caracteristica.texto}</li>
+                </c:forEach>
+            </ul>
+        </c:if>      
+            
+            
         <form action="ConsultaMusicos">
             <input type="submit" value="Volver al inicio" name="inicio" />
         </form>
