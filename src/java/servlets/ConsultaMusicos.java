@@ -45,7 +45,7 @@ public class ConsultaMusicos extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        //response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("text/xml;charset=UTF-8");
         PrintWriter out = response.getWriter();
         String accion = request.getParameter("accion");
 
@@ -67,16 +67,23 @@ public class ConsultaMusicos extends HttpServlet {
             request.getRequestDispatcher(destino).forward(request, response);
         } else if (accion.equalsIgnoreCase("listarinstrumentos")) {
             String letra = request.getParameter("instrumentos");
-            cargarXMLInstrumentos(letra, out);
+            List<Instrumento> instrumentos = instrumentosFachada.getInstrumentos(letra);
+            cargarXMLInstrumentos(instrumentos, out);
         } else if (accion.equalsIgnoreCase("verinstrumento")) {
             String strid = request.getParameter("idinstrumento");
             int id = Integer.parseInt(strid);
             destino = "verinstrumento.jsp";
             Instrumento instrumento=instrumentosFachada.buscarInstrumento(id);
-            request.setAttribute("instrumento", instrumento);
+            request.getSession().setAttribute("instrumento", instrumento);
             request.setAttribute("urlfotosinstrumentos", Globales.URLFOTOINSTRUMENTO);
-            request.setAttribute("caracteristicas", instrumento.getCaracteristicaList());
+            //request.setAttribute("caracteristicas", instrumento.getCaracteristicaList());
+            
             request.getRequestDispatcher(destino).forward(request, response);
+        }else if (accion.equalsIgnoreCase("vercaracteristicasinstrumento")){
+            //String strid = request.getParameter("idinstrumento");
+            //int id = Integer.parseInt(strid);            
+            Instrumento instrumento=(Instrumento) request.getSession().getAttribute("instrumento");
+            cargarXMLCaracteristicasInstrumentos(instrumento,out);
         } else if (accion.equalsIgnoreCase("login")) {
             validarUsuario(request);
             destino = "index.jsp";
@@ -94,6 +101,7 @@ public class ConsultaMusicos extends HttpServlet {
             destino = "ProyectoMusicosASP/Principal.aspx";
             request.getRequestDispatcher(destino).forward(request, response);
         }
+        //response.setCharacterEncoding("UTF-8");
     }
 
     private void validarUsuario(HttpServletRequest request) {
@@ -162,7 +170,7 @@ public class ConsultaMusicos extends HttpServlet {
     private void cargarXMLMusicos(String letra, PrintWriter out) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
 
-        out.print("<?xml version=\"1.0\" ?>");
+        out.print("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
         out.println("<musicos>");
         List<Musico> musicos = instrumentosFachada.getMusicos(letra);
         for (int i = 0; i < musicos.size(); i++) {
@@ -176,36 +184,34 @@ public class ConsultaMusicos extends HttpServlet {
 
         out.println("</musicos>");
     }
-
-    private void cargarXMLInstrumentos(String letra, PrintWriter out) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        out.print("<?xml version=\"1.0\" ?>");
-        out.println("<instrumentos>");
-        List<Instrumento> instrumentos = instrumentosFachada.getInstrumentos(letra);
+    
+    private void cargarXMLInstrumentos(List<Instrumento> instrumentos, PrintWriter out) {
+        out.print("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        out.println("<instrumentos>");        
         for (int i = 0; i < instrumentos.size(); i++) {
             out.println("<instrumento id='" + instrumentos.get(i).getIdE()
                     + "'>");
             out.println("<marca>" + instrumentos.get(i).getMarca() + "</marca>");
             out.println("<modelo>" + instrumentos.get(i).getModelo() + "</modelo>");
-            out.println("<urlfoto>" + instrumentos.get(i).getUrlfoto() + "</urlfoto>");
-            out.println("<aniofabricacion>" + instrumentos.get(i).getAniofabricacion() + "</aniofabricacion>");
-            List<Caracteristica> caracteristicas = instrumentos.get(i).getCaracteristicaList();
-            if (!caracteristicas.isEmpty()) {
-                out.println("<caracteristicas>");
-                for (int j = 0; j < caracteristicas.size(); j++) {
-                    out.println("<caracteristica>");
-                    String texto = caracteristicas.get(j).getTexto();
-                    int posFinal = texto.indexOf(":");
-                    out.println("<nombre>" + texto.substring(0, posFinal) + "</nombre>");
-                    out.println("<valor>" + texto.substring(posFinal) + "</valor>");
-                    out.println("</caracteristica>");
-                }
-                out.println("</caracteristicas>");
-            }
-
             out.println("</instrumento>");
         }
         out.println("</instrumentos>");
     }
 
+    private void cargarXMLCaracteristicasInstrumentos(Instrumento instrumento, PrintWriter out){
+        out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
+        List<Caracteristica> caracteristicas = instrumento.getCaracteristicaList();
+            if (!caracteristicas.isEmpty()) {
+                out.println("<caracteristicas>");
+                for (int j = 0; j < caracteristicas.size(); j++) {
+                    out.println("<caracteristica>");
+                    String texto = caracteristicas.get(j).getTexto();
+                    int separador = texto.indexOf(":");
+                    out.println("<nombre>" + texto.substring(0, separador) + "</nombre>");
+                    out.println("<valor>" + texto.substring(separador+1) + "</valor>");
+                    out.println("</caracteristica>");
+                }
+                out.println("</caracteristicas>");
+            }
+    }
 }
