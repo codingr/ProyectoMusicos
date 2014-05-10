@@ -11,9 +11,9 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author alumno
+ * @author User
  */
 @Entity
 @Table(name = "caracteristicas")
@@ -38,8 +38,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Caracteristica implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @NotNull
     @Column(name = "idCaracteristica")
     private Integer idCaracteristica;
     @Basic(optional = false)
@@ -49,7 +49,10 @@ public class Caracteristica implements Serializable {
     @Size(max = 30)
     @Column(name = "texto")
     private String texto;
-    @ManyToMany(mappedBy = "caracteristicaList")
+    @JoinTable(name = "detalles", joinColumns = {
+        @JoinColumn(name = "idCaracteristica", referencedColumnName = "idCaracteristica")}, inverseJoinColumns = {
+        @JoinColumn(name = "idE", referencedColumnName = "idE")})
+    @ManyToMany
     private List<Instrumento> instrumentoList;
 
     public Caracteristica() {

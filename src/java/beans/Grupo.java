@@ -11,9 +11,9 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author alumno
+ * @author User
  */
 @Entity
 @Table(name = "grupos")
@@ -37,8 +37,8 @@ import javax.xml.bind.annotation.XmlTransient;
 public class Grupo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
+    @NotNull
     @Column(name = "idgrupo")
     private Integer idgrupo;
     @Basic(optional = false)
@@ -46,7 +46,10 @@ public class Grupo implements Serializable {
     @Size(min = 1, max = 50)
     @Column(name = "nombre")
     private String nombre;
-    @ManyToMany(mappedBy = "grupoList")
+    @JoinTable(name = "miembros", joinColumns = {
+        @JoinColumn(name = "idGrupo", referencedColumnName = "idgrupo")}, inverseJoinColumns = {
+        @JoinColumn(name = "idE", referencedColumnName = "idE")})
+    @ManyToMany
     private List<Musico> musicoList;
 
     public Grupo() {
