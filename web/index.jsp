@@ -50,7 +50,7 @@
                 border-right-color: #36F;
                 cursor: url(images/Little_music_note.jpg),crosshair;
             }
-            
+
             #letras{
                 float: left;
                 border-style: ridge;
@@ -111,10 +111,10 @@
             }
             //PRUEBAS, BORRABLE
             .clasedatoslistados{
-               top:160px;
-               border-style: solid;
-               border-width: 5px;
-               display: inline;//de prueba
+                top:160px;
+                border-style: solid;
+                border-width: 5px;
+                display: inline;//de prueba
             }
             .clasedatoslistados ul{
                 display: block;
@@ -122,7 +122,9 @@
             .clasedatoslistados li{
                 list-style-type: circle;
             }
-
+            .error{
+                color: red;
+            }
         </style>
         <script type="text/javascript">
             var ELEMENTOSPORPAGINA = 5;
@@ -131,10 +133,9 @@
             var instrumentosomusicos;
             var buscar;
             var paginaactual = 1;
-            var totalpaginas;            
+            var totalpaginas;
             var instrumentosomusicoslista;
-            /*Cargar las letras en las que pulsar para ver la lista de músicos
-            que empiezan por ese nombre*/
+            /*Cargar las letras en las que pulsar para ver la lista de músicos o instrumentos que empiezan por ese nombre*/
             function cargarAlfabeto() {
                 var letras = document.getElementById("letras");
                 var abecedario = "ABCDEFGHIJKLMNÑOPQRSTUVWXYZ";
@@ -151,17 +152,14 @@
                         }
                     };
                     letra.textContent = letraactual;
-                    //letra.id = "enlace" + letraactual;
                     letra.className = "letraalfabeto";
                     ul.appendChild(letra);
                 }
                 var todos = document.createElement("LI");
                 todos.textContent = "TODOS";
-                //todos.id = "enlaceTodos";
                 todos.className = "letraalfabeto";
                 todos.onclick = function()
                 {
-                    
                     if (buscar == BUSCARMUSICO) {
                         cargarXMLMusicos(this);
                     } else {
@@ -191,7 +189,7 @@
                 var datoslistados = document.getElementById("datoslistados");
                 limpiarDatosListados();
                 if (instrumentos.length > 0) {
-                    instrumentosomusicoslista=instrumentos;
+                    instrumentosomusicoslista = instrumentos;
                     rellenarLista();
                 } else {
                     ocultarBotones();
@@ -204,24 +202,21 @@
             function rellenarLista() {
                 var datoslistados = document.getElementById("datoslistados");
                 //datoslistados.className="datoslistados";
-                var i;                
-                limpiarDatosListados();        
+                var i;
+                limpiarDatosListados();
                 var ul = document.createElement("UL");
                 var sobrantes = (instrumentosomusicoslista.length % ELEMENTOSPORPAGINA == 0) ? 0 : 1;
                 var entero = Math.floor(instrumentosomusicoslista.length / ELEMENTOSPORPAGINA);
-                totalpaginas = entero + sobrantes;                             
-                
+                totalpaginas = entero + sobrantes;
+
                 if (buscar == BUSCARMUSICO) {
                     for (i = (paginaactual - 1) * ELEMENTOSPORPAGINA;
-                            i < paginaactual * ELEMENTOSPORPAGINA
-                            && i < instrumentosomusicoslista.length;
-                            i++) {
+                            i < paginaactual * ELEMENTOSPORPAGINA && i < instrumentosomusicoslista.length; i++) {
                         var li = document.createElement("LI");
                         var a = document.createElement("A");
                         var idmusico = instrumentosomusicoslista[i].getAttribute("id");
                         a.href = "ConsultaMusicos?accion=vermusico&idmusico=" + idmusico;
-                        a.textContent =
-                                instrumentosomusicoslista[i].getElementsByTagName("nombre")[0].textContent
+                        a.textContent = instrumentosomusicoslista[i].getElementsByTagName("nombre")[0].textContent
                                 + " " + instrumentosomusicoslista[i].getElementsByTagName("apellido")[0].textContent;
                         li.appendChild(a);
                         ul.appendChild(li);
@@ -235,19 +230,18 @@
                         var a = document.createElement("A");
                         var idinstrumento = instrumentosomusicoslista[i].getAttribute("id");
                         a.href = "ConsultaMusicos?accion=verinstrumento&idinstrumento=" + idinstrumento;
-                        a.textContent =
-                                instrumentosomusicoslista[i].getElementsByTagName("marca")[0].textContent
+                        a.textContent = instrumentosomusicoslista[i].getElementsByTagName("marca")[0].textContent
                                 + " " + instrumentosomusicoslista[i].getElementsByTagName("modelo")[0].textContent;
                         li.appendChild(a);
                         ul.appendChild(li);
                     }
                 }
                 habilitarBotones();
-                
+
                 datoslistados.appendChild(ul);
-                
+
                 datoslistados.style.visibility = "visible";
-                datoslistados.className="clasedatoslistados";
+                datoslistados.className = "clasedatoslistados";
                 mostrarBotones();
             }
             /*Habilita o deshabilita botones en función de la página actual 
@@ -340,12 +334,10 @@
                     }
                 };
                 if (elemento.textContent != "TODOS") {
-                    xmlreq.open("GET", 
-                                "ConsultaMusicos?accion=listarmusicos&musicos=" 
-                                                + elemento.textContent, true);
+                    xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos&musicos=" + elemento.textContent, true);
                 } else {
-                    xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos", 
-                                                                        true);
+                    xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos",
+                            true);
                 }
                 xmlreq.send();
             }
@@ -355,13 +347,12 @@
                 var datoslistados = document.getElementById("datoslistados");
                 limpiarDatosListados();
                 if (musicos.length > 0) {
-                    instrumentosomusicoslista=musicos;
+                    instrumentosomusicoslista = musicos;
                     rellenarLista();
                 } else {
                     ocultarBotones();
                     var h3 = document.createElement("H3");
-                    h3.textContent = 
-               "No se han encontrado músicos cuya nombre empiece por esa letra";
+                    h3.textContent = "No se han encontrado músicos cuya nombre empiece por esa letra";
                     datoslistados.appendChild(h3);
                 }
             }
@@ -393,7 +384,7 @@
 
             function limpiarDatosListados() {
                 var datoslistados = document.getElementById("datoslistados");
-               while (datoslistados.hasChildNodes()) {
+                while (datoslistados.hasChildNodes()) {
                     datoslistados.removeChild(datoslistados.firstChild);
                 }
             }
@@ -405,14 +396,7 @@
                 var botonesDesplazamiento = document.getElementById("botonesdesplazamiento");
                 botonesDesplazamiento.style.visibility = "visible";
             }
-            function hacerLogin() {
-                /*if (document.getElementById("administracion")){
-                 document.getElementById("administracion").onclick=
-                 function (){
-                 location.href="ProyectoMusicosASP/Principal.aspx?idusuario=1";
-                 };
-                 }*/
-            }
+
         </script>
     </head>
 
@@ -422,23 +406,24 @@
                 <ul>
                     <li id="buscarmusico">Buscar por músico</li>
                     <li id="buscarinstrumento">Buscar por instrumento</li>
-                    <c:if test="${empty usuario}">
+                        <c:if test="${empty usuario}">
                         <li id="login">
-                            Nombre:<input type="text" name="nombre" value="" />
+                            Nombre:<input type="text" name="nombre" value="" id="nombre" />
                             Password:<input type="password" name="password" value="" />
                             <input type="submit" value="Login" name="accion" />
+                            <input type="submit" value="Nuevo registro" name="accion" />
                         </li>
+                        <c:if test="${!empty errores}">                            
+                            <c:forEach items="${errores}" var="error">
+                                <li><span class="error">${error}</span></li>
+                            </c:forEach>
+                        </c:if>
                     </c:if>
                 </ul>
 
                 <c:if test="${!empty usuario}">
                     ${usuario.nombre}
-                    <a href="ConsultaMusicos?accion=desconectar">Desconectar</a>
-                    <c:if test="${usuario.administrador}">
-                        <div id="algo" onclick="hacerLogin()">
-                            a href="ProyectoMusicosASP/Principal.aspx"  id="administracion">?idusuario=${usuario.idusuario} Administrar /a
-                        </div>
-                    </c:if>
+                    <a href="ConsultaMusicos?accion=desconectar">Desconectar</a>                 
 
                 </c:if>  
             </form>
@@ -446,23 +431,15 @@
         <div id="lista">
             <div id="letras"></div>
             <div id="datos">
-            <div id="datoslistados" class="clasedatoslistados"></div>
+                <div id="datoslistados" class="clasedatoslistados"></div>
                 <div id="botonesdesplazamiento">
-                  <input type="button" id="btnPrimero" value="Primero" onclick="primero()" />
-                   <input type="button" id="btnAnterior" value="Anterior" onclick="anterior()" />
-                   <input type="button" id="btnSiguiente" value="Siguiente" onclick="siguiente()" />
-                   <input type="button" id="btnUltimo" value="Último" onclick="ultimo()" />
-                 </div>
+                    <input type="button" id="btnPrimero" value="Primero" onclick="primero()" />
+                    <input type="button" id="btnAnterior" value="Anterior" onclick="anterior()" />
+                    <input type="button" id="btnSiguiente" value="Siguiente" onclick="siguiente()" />
+                    <input type="button" id="btnUltimo" value="Último" onclick="ultimo()" />
+                </div>
             </div>
         </div>
-        <c:if test="${!empty errores}">
-            <div>
-                <ul>
-                    <c:forEach items="${errores}" var="error">
-                        <li>${error}</li>
-                    </c:forEach>
-                </ul>
-            </div>
-        </c:if>
+
     </body>
 </html>

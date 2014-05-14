@@ -4,19 +4,127 @@
     Author     : User
 --%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <style type="text/css">
+            .error{
+                color:red;
+                visibility:hidden;
+            } 
+        </style>
+        <script type="text/javascript">
+
+            function validarUsuario() {
+                var nombre = document.getElementsByName("nombre")[0];
+                var error = document.getElementById("errornombre");
+                if (nombre.value == "") {
+                    mostrarError(error);
+                    return false;
+                } else {
+                    ocultarError(error);
+                    return true;
+                }
+            }
+            function validarCorreo() {
+                //var expreg = /^([a-zA-Z0-9])+[@]([azA-Z0-9])+[.]([azA-Z0-9])+$/;
+                var expreg=/\S+@\S+\.\S+/;
+                var correo = document.getElementsByName("correo")[0];
+                var error = document.getElementById("errorcorreo");
+                if (!expreg.test(correo.value)) {
+                    mostrarError(error);
+                    return false;
+                } else {
+                    ocultarError(error);
+                    return true;
+                }
+            }
+            function validarPassword() {
+                var password = document.getElementsByName("password")[0];
+                var password2 = document.getElementsByName("password2")[0];
+                var error = document.getElementById("errorpassword");
+                if (password.value==""){
+                    mostrarError(error);
+                    return false;
+                }else{
+                    ocultarError(error);
+                }
+                error = document.getElementById("errorpassword2");
+                if (password.value != password2.value) {
+                    
+                    mostrarError(error);
+                    return false;
+                } else {
+                    ocultarError(error);
+                    return true;
+                }
+            }
+            function validarDatos() {
+                //Comprobar si se puede hacer en un solo if
+                var validar;
+                validar = validarUsuario();
+                if (validar) {
+                    validar = validarPassword();
+                    if (validar) {
+                        validarCorreo();
+                        if (validar) {
+                            document.forms["frmGestionRegistros"].submit();
+                            //return true;
+                        }
+                    }
+                }
+                return false;
+
+            }
+            function inicializar() {
+
+            }
+            function mostrarError(error) {
+                error.style.visibility = "visible";
+            }
+            function ocultarError(error) {
+                error.style.visibility = "hidden";
+            }
+        </script>
     </head>
-    <body>
+    <body onload="inicializar()">
         <h1>Gestión de registros</h1>
-        <form action="GestionRegistros">
-            
+        <form id="frmGestionRegistros" action="GestionRegistros">
+            <table>
+                <tr>
+                    <td>Nombre de usuario</td>
+                    <td><input type="text" name="nombre"/></td>
+                    <c:if test="${empty error_no_disponible}">
+                    <td><span class="error" id="errornombre">Debes introducir un nombre</span></td>
+                    </c:if>
+                    <c:if test="${!empty error_no_disponible}">
+                        <td><span class="error" id="errornombre">Usuario no disponible. Vuelve a intentarlo.</span></td>
+                    </c:if>
+                </tr>
+                <tr>
+                    <td>Password</td>
+                    <td><input type="password" name="password"/></td>
+                    <td><span class="error" id="errorpassword">Debes introducir una contraseña</span></td>
+                </tr>
+                <tr>
+                    <td>Introduce de nuevo el password</td>
+                    <td><input type="password" name="password2"/></td>
+                    <td><span class="error" id="errorpassword2">Las contraseñas no coinciden. Prueba de nuevo.</span></td>
+                </tr>
+                <tr>
+                    <td>Correo electrónico</td>
+                    <td><input type="text" name="correo"/></td>
+                    <td><span class="error" id="errorcorreo">Debes introducir un correo válido.</span></td>
+                </tr>
+            </table>
+            <input type="button" name="accion" value="Aceptar" onclick="validarDatos()"/>
+            <input type="button" name="accion" value="Cancelar"/>
         </form>
-        
-        
+
+
     </body>
 </html>

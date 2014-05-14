@@ -35,23 +35,13 @@ public class GestionRegistros extends HttpServlet {
         String destino="";
         
         if (accion==null){
-           
-        }else if (accion.equalsIgnoreCase("nuevoregistro")){
-            
+           destino=ConsultaMusicos.RUTA_INICIO;
+        }else if (accion.equalsIgnoreCase("Aceptar")){
+           destino=ConsultaMusicos.RUTA_INICIO; 
+        }else if (accion.equalsIgnoreCase("Cancelar")){
+            destino=ConsultaMusicos.RUTA_INICIO;
         }     
-        /*response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-          
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet GestionRegistros</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet GestionRegistros at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
-            */        
+        request.getRequestDispatcher(destino).forward(request, response);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">

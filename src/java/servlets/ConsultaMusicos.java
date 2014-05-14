@@ -41,8 +41,7 @@ public class ConsultaMusicos extends HttpServlet {
     public static final String NOMBRE = "nombre";
     public static final String MUSICO = "musico";
     /*Páginas a las que nos podemos mover*/
-    public static final String RUTA_PROYECTO_ASP
-            = "ProyectoMusicosASP/Principal.aspx";
+    public static final String RUTA_PROYECTO_ASP= "ProyectoMusicosASP/Principal.aspx";
     public static final String RUTA_VER_MUSICO = "vermusico.jsp";
     public static final String RUTA_INICIO = "index.jsp";
     public static final String RUTA_VER_INSTRUMENTO = "verinstrumento.jsp";
@@ -52,27 +51,20 @@ public class ConsultaMusicos extends HttpServlet {
     public static final String URLFOTOINSTRUMENTO = "images/Instrumentos";
     /*Posibles valores de la acción por la cual hemos llegado al servlet*/
     public static final String ACCION_VER_MUSICO = "vermusico";
-    public static final String ACCION_LOGIN = "login";
+    public static final String ACCION_LOGIN = "Login";
     public static final String ACCION_ADMINISTRAR = "administrar";
     public static final String ACCION_VER_INSTRUMENTO = "verinstrumento";
     public static final String ACCION_LISTAR_MUSICOS = "listarmusicos";
     public static final String ACCION_DESCONECTAR = "desconectar";
-    public static final String ACCION_LISTAR_INSTRUMENTOS
-                                                    = "listarinstrumentos";
-    public static final String ACCION_VER_CARACTERISTICAS_INSTRUMENTO
-                                             = "vercaracteristicasinstrumento";
-    public static final String ACCION_REGISTRO = "registro";
-    /*Parámetros o atributos recibidos por servlets desde otra parte del 
-     programa*/
+    public static final String ACCION_LISTAR_INSTRUMENTOS= "listarinstrumentos";
+    public static final String ACCION_VER_CARACTERISTICAS_INSTRUMENTO= "vercaracteristicasinstrumento";
+    public static final String ACCION_REGISTRO = "Nuevo registro";
+    /*Parámetros o atributos recibidos por servlets desde otra parte del programa*/
     public static final String USUARIO = "usuario";
-    public static final String ERROR_NOMBRE_VACIO
-            = "Debes introducir un nombre";
-    public static final String ERROR_NOMBRE_INVALIDO
-            = "El usuario no se encuentra en la base de datos";
-    public static final String ERROR_PASSWORD_VACIO
-            = "Debes introducir el password";
-    public static final String ERROR_PASSWORD_INCORRECTO
-            = "Password incorrecto";
+    public static final String ERROR_NOMBRE_VACIO= "Debes introducir un nombre";
+    public static final String ERROR_NOMBRE_INVALIDO= "El usuario no se encuentra en la base de datos";
+    public static final String ERROR_PASSWORD_VACIO= "Debes introducir el password";
+    public static final String ERROR_PASSWORD_INCORRECTO= "Password incorrecto";
     public static final String PASSWORD = "password";
     public static final String ERRORES = "errores";
 
@@ -103,11 +95,7 @@ public class ConsultaMusicos extends HttpServlet {
             Instrumento instrumento;
             String strid;
             int id;
-            switch (accion) {
-                case ACCION_ADMINISTRAR:
-                    destino = RUTA_PROYECTO_ASP;
-                    request.getRequestDispatcher(destino).forward(request, response);
-                    break;
+            switch (accion) {                
                 case ACCION_DESCONECTAR:
                     HttpSession sesion = request.getSession();
                     Usuario usuario = (Usuario) sesion.getAttribute(USUARIO);
