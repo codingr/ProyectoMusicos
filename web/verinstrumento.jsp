@@ -34,7 +34,7 @@
             }
             function procesarXMLCaracteristicasInstrumento(xmlr){
                 //alert("asld1");
-                var xml=xmlr.responseXML.documentElement;
+                var xml=xmlr.responseXML;
                 var caracteristicas=xml.getElementsByTagName("caracteristica");
                 var ul=document.getElementById("caracteristicas");
                 //alert("asld2");
@@ -72,14 +72,15 @@
         <h1>${instrumento.marca} ${instrumento.modelo}</h1>
         
         <h3>Año de fabricación:${instrumento.aniofabricacion}</h3>
-        <c:if test="${empty instrumento.urlfoto}">
-        <img src="${urlfotosinstrumentos}/${instrumento.urlfoto}" alt="foto instrumento" title="foto instrumento"/>
+        <c:if test="${!empty instrumento.urlfoto}">
+        <img src="${URLFOTOINSTRUMENTO}/${instrumento.urlfoto}" alt="foto instrumento" title="foto instrumento"/>
         </c:if>
         <c:if test="${!empty instrumento.musicoList}">
             <h3>Músicos que usan este instrumento:</h3>
             <ul>
                 <c:forEach items="${instrumento.musicoList}" var="musico">
-                    <li><a href="ConsultaMusicos?accion=vermusico&idmusico=${musico.idE}">${musico.nombre} ${musico.apellido} ${musico.alias}</a></li>
+                    <li><a href=
+ "ConsultaMusicos?accion=vermusico&idmusico=${musico.idE}">${musico.nombre} ${musico.apellido} ${musico.alias}</a></li>
                 </c:forEach>
             </ul>
         </c:if>  

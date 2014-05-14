@@ -50,19 +50,11 @@
                 border-right-color: #36F;
                 cursor: url(images/Little_music_note.jpg),crosshair;
             }
-            #lista{
-                margin-left: 10px;
-                float: left;
-                visibility: hidden;
-            }
-            #lista ul{
-                list-style-type: square;
-            }
+            
             #letras{
                 float: left;
                 border-style: ridge;
                 border-width: 10px;
-                //display: block; //de prueba
             }
             #letras ul{
                 list-style-type: none;
@@ -106,7 +98,14 @@
                 font-size: larger;                
                 cursor: url(images/Little_music_note.jpg),crosshair;
             }
-
+            #lista{
+                margin-left: 10px;
+                float: left;
+                visibility: hidden;
+            }
+            #lista ul{
+                list-style-type: square;
+            }
             #botonesdesplazamiento{
                 visibility: hidden;
             }
@@ -115,21 +114,13 @@
                top:160px;
                border-style: solid;
                border-width: 5px;
-               //border: #36F;               
-                //float: left;
                display: inline;//de prueba
-                //height: 50%;
             }
             .clasedatoslistados ul{
-                //float: left;
-                //display: block;//de prueba
-                //border: #36F;
                 display: block;
             }
             .clasedatoslistados li{
-                //float: left;
                 list-style-type: circle;
-                //display: block;//de prueba
             }
 
         </style>
@@ -349,9 +340,12 @@
                     }
                 };
                 if (elemento.textContent != "TODOS") {
-                    xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos&musicos=" + elemento.textContent, true);
+                    xmlreq.open("GET", 
+                                "ConsultaMusicos?accion=listarmusicos&musicos=" 
+                                                + elemento.textContent, true);
                 } else {
-                    xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos", true);
+                    xmlreq.open("GET", "ConsultaMusicos?accion=listarmusicos", 
+                                                                        true);
                 }
                 xmlreq.send();
             }
@@ -366,7 +360,8 @@
                 } else {
                     ocultarBotones();
                     var h3 = document.createElement("H3");
-                    h3.textContent = "No se han encontrado músicos cuya nombre empiece por esa letra";
+                    h3.textContent = 
+               "No se han encontrado músicos cuya nombre empiece por esa letra";
                     datoslistados.appendChild(h3);
                 }
             }
@@ -450,12 +445,14 @@
         </div>
         <div id="lista">
             <div id="letras"></div>
-            <div id="datoslistados" class="clasedatoslistados">&nbsp;</div>
-            <div id="botonesdesplazamiento">
-                <input type="button" id="btnPrimero" value="Primero" onclick="primero()" />
-                <input type="button" id="btnAnterior" value="Anterior" onclick="anterior()" />
-                <input type="button" id="btnSiguiente" value="Siguiente" onclick="siguiente()" />
-                <input type="button" id="btnUltimo" value="Último" onclick="ultimo()" />
+            <div id="datos">
+            <div id="datoslistados" class="clasedatoslistados"></div>
+                <div id="botonesdesplazamiento">
+                  <input type="button" id="btnPrimero" value="Primero" onclick="primero()" />
+                   <input type="button" id="btnAnterior" value="Anterior" onclick="anterior()" />
+                   <input type="button" id="btnSiguiente" value="Siguiente" onclick="siguiente()" />
+                   <input type="button" id="btnUltimo" value="Último" onclick="ultimo()" />
+                 </div>
             </div>
         </div>
         <c:if test="${!empty errores}">

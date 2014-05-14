@@ -41,7 +41,8 @@ public class ConsultaMusicos extends HttpServlet {
     public static final String NOMBRE = "nombre";
     public static final String MUSICO = "musico";
     /*Páginas a las que nos podemos mover*/
-    public static final String RUTA_PROYECTO_ASP = "ProyectoMusicosASP/Principal.aspx";
+    public static final String RUTA_PROYECTO_ASP
+            = "ProyectoMusicosASP/Principal.aspx";
     public static final String RUTA_VER_MUSICO = "vermusico.jsp";
     public static final String RUTA_INICIO = "index.jsp";
     public static final String RUTA_VER_INSTRUMENTO = "verinstrumento.jsp";
@@ -56,16 +57,22 @@ public class ConsultaMusicos extends HttpServlet {
     public static final String ACCION_VER_INSTRUMENTO = "verinstrumento";
     public static final String ACCION_LISTAR_MUSICOS = "listarmusicos";
     public static final String ACCION_DESCONECTAR = "desconectar";
-    public static final String ACCION_LISTAR_INSTRUMENTOS = "listarinstrumentos";
-    public static final String ACCION_VER_CARACTERISTICAS_INSTRUMENTO = "vercaracteristicasinstrumento";
-    public static final String ACCION_REGISTRO="registro";
+    public static final String ACCION_LISTAR_INSTRUMENTOS
+                                                    = "listarinstrumentos";
+    public static final String ACCION_VER_CARACTERISTICAS_INSTRUMENTO
+                                             = "vercaracteristicasinstrumento";
+    public static final String ACCION_REGISTRO = "registro";
     /*Parámetros o atributos recibidos por servlets desde otra parte del 
      programa*/
     public static final String USUARIO = "usuario";
-    public static final String ERROR_NOMBRE_VACIO = "Debes introducir un nombre";
-    public static final String ERROR_NOMBRE_INVALIDO = "El usuario no se encuentra en la base de datos";
-    public static final String ERROR_PASSWORD_VACIO = "Debes introducir el password";
-    public static final String ERROR_PASSWORD_INCORRECTO = "Password incorrecto";
+    public static final String ERROR_NOMBRE_VACIO
+            = "Debes introducir un nombre";
+    public static final String ERROR_NOMBRE_INVALIDO
+            = "El usuario no se encuentra en la base de datos";
+    public static final String ERROR_PASSWORD_VACIO
+            = "Debes introducir el password";
+    public static final String ERROR_PASSWORD_INCORRECTO
+            = "Password incorrecto";
     public static final String PASSWORD = "password";
     public static final String ERRORES = "errores";
 
@@ -134,7 +141,7 @@ public class ConsultaMusicos extends HttpServlet {
                     destino = RUTA_VER_INSTRUMENTO;
                     instrumento = instrumentosFachada.buscarInstrumento(id);
                     request.getSession().setAttribute(INSTRUMENTO, instrumento);
-                    request.setAttribute(URLFOTOINSTRUMENTO, URLFOTOINSTRUMENTO);
+                    request.setAttribute("URLFOTOINSTRUMENTO", URLFOTOINSTRUMENTO);
                     request.getRequestDispatcher(destino).forward(request, response);
                     break;
                 case ACCION_VER_MUSICO:
@@ -142,13 +149,13 @@ public class ConsultaMusicos extends HttpServlet {
                     id = Integer.parseInt(strid);
                     destino = RUTA_VER_MUSICO;
                     request.setAttribute(MUSICO, instrumentosFachada.buscarMusico(id));
-                    request.setAttribute(URLFOTOMUSICO, URLFOTOMUSICO);
+                    request.setAttribute("URLFOTOMUSICO", URLFOTOMUSICO);
                     request.getRequestDispatcher(destino).forward(request, response);
                     break;
-                    case ACCION_REGISTRO:                        
-                        destino=RUTA_REGISTRO;
-                        request.getRequestDispatcher(destino).forward(request, response);
-                        break;
+                case ACCION_REGISTRO:
+                    destino = RUTA_REGISTRO;
+                    request.getRequestDispatcher(destino).forward(request, response);
+                    break;
                 default:
                     break;
             }
@@ -160,23 +167,23 @@ public class ConsultaMusicos extends HttpServlet {
         ArrayList<String> errores = new ArrayList<>();
         String nombre = request.getParameter(NOMBRE);
         if (nombre == null || nombre.equals("")) {
-            errores.add("Debes introducir un nombre");
+            errores.add(ERROR_NOMBRE_VACIO);
         } else {
             Usuario usuario = instrumentosFachada.buscarUsuario(nombre);
             if (usuario == null) {
-                errores.add("El usuario no se encuentra en la base de datos");
+                errores.add(ERROR_NOMBRE_INVALIDO);
             } else {
-                String password = request.getParameter("password");
+                String password = request.getParameter(PASSWORD);
                 if (password == null || password.equals("")) {
-                    errores.add("Debes introducir el password");
+                    errores.add(ERROR_PASSWORD_VACIO);
                 } else if (usuario.getPassword().equals(password)) {
-                    request.getSession().setAttribute("usuario", usuario);
+                    request.getSession().setAttribute(USUARIO, usuario);
                 } else {
-                    errores.add("Password incorrecto");
+                    errores.add(ERROR_PASSWORD_INCORRECTO);
                 }
             }
         }
-        request.setAttribute("errores", errores);
+        request.setAttribute(ERRORES, errores);
     }
 
     // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
