@@ -18,7 +18,7 @@
             } 
         </style>
         <script type="text/javascript">
-
+            var botonPulsado=0;
             function validarUsuario() {
                 var nombre = document.getElementsByName("nombre")[0];
                 var error = document.getElementById("errornombre");
@@ -31,8 +31,9 @@
                 }
             }
             function validarCorreo() {
-                //var expreg = /^([a-zA-Z0-9])+[@]([azA-Z0-9])+[.]([azA-Z0-9])+$/;
-                var expreg=/\S+@\S+\.\S+/;
+                //var expreg = /^([a-zA-Z0-9])+\[@]([azA-Z0-9])+\[.]([azA-Z0-9])+$/;
+                //var expreg = /\S+@\S+\.\S+/;
+                var expreg= /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]+$/;
                 var correo = document.getElementsByName("correo")[0];
                 var error = document.getElementById("errorcorreo");
                 if (!expreg.test(correo.value)) {
@@ -47,15 +48,15 @@
                 var password = document.getElementsByName("password")[0];
                 var password2 = document.getElementsByName("password2")[0];
                 var error = document.getElementById("errorpassword");
-                if (password.value==""){
+                if (password.value == "") {
                     mostrarError(error);
                     return false;
-                }else{
+                } else {
                     ocultarError(error);
                 }
                 error = document.getElementById("errorpassword2");
                 if (password.value != password2.value) {
-                    
+
                     mostrarError(error);
                     return false;
                 } else {
@@ -70,16 +71,27 @@
                 if (validar) {
                     validar = validarPassword();
                     if (validar) {
-                        validarCorreo();
+                        validar = validarCorreo();
                         if (validar) {
-                            document.forms["frmGestionRegistros"].submit();
-                            //return true;
+                            
+                            return true;
                         }
                     }
                 }
                 return false;
+            }
+
+            function comprobarBotonPulsado() {
+                if (botonPulsado == 1) {
+                    return validarDatos();
+                } else {
+                    //document.forms["frmGestionRegistros"].action = "ConsultaMusicos";
+                    //document.forms["frmGestionRegistros"].submit();
+                    return true;
+                }
 
             }
+
             function inicializar() {
 
             }
@@ -93,13 +105,13 @@
     </head>
     <body onload="inicializar()">
         <h1>Gestión de registros</h1>
-        <form id="frmGestionRegistros" action="GestionRegistros">
+        <form id="frmGestionRegistros" action="GestionRegistros" onsubmit="return comprobarBotonPulsado()">
             <table>
                 <tr>
                     <td>Nombre de usuario</td>
                     <td><input type="text" name="nombre"/></td>
-                    <c:if test="${empty error_no_disponible}">
-                    <td><span class="error" id="errornombre">Debes introducir un nombre</span></td>
+                        <c:if test="${empty error_no_disponible}">
+                        <td><span class="error" id="errornombre">Debes introducir un nombre</span></td>
                     </c:if>
                     <c:if test="${!empty error_no_disponible}">
                         <td><span class="error" id="errornombre">Usuario no disponible. Vuelve a intentarlo.</span></td>
@@ -121,8 +133,8 @@
                     <td><span class="error" id="errorcorreo">Debes introducir un correo válido.</span></td>
                 </tr>
             </table>
-            <input type="button" name="accion" value="Aceptar" onclick="validarDatos()"/>
-            <input type="button" name="accion" value="Cancelar"/>
+            <input type="submit" name="accion" value="Aceptar" onclick="botonPulsado = 1;"/>
+            <input type="submit" name="accion" value="Cancelar" onclick="botonPulsado = 0;"/>
         </form>
 
 

@@ -29,6 +29,8 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "ConsultaMusicos", urlPatterns = {"/ConsultaMusicos"})
 public class ConsultaMusicos extends HttpServlet {
+    @EJB
+    private InstrumentosFachada instrumentosFachada;
 
     public static final String ID_INSTRUMENTO = "idinstrumento";
     public static final String INSTRUMENTOS = "instrumentos";
@@ -68,9 +70,7 @@ public class ConsultaMusicos extends HttpServlet {
     public static final String PASSWORD = "password";
     public static final String ERRORES = "errores";
 
-    @EJB
-    private InstrumentosFachada instrumentosFachada;
-
+   
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.

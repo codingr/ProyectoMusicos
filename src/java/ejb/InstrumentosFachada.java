@@ -23,10 +23,9 @@ import javax.persistence.Query;
  */
 @Stateless
 public class InstrumentosFachada {
+
     @PersistenceContext(unitName = "ProyectoFinalPU")
     private EntityManager em;
-   
-
 
     // Add business logic below. (Right-click in editor and choose
     // "Insert Code > Add Business Method")
@@ -53,11 +52,12 @@ public class InstrumentosFachada {
         }
         return musicos;
     }
-/**
- * 
- * @param letra
- * @return 
- */
+
+    /**
+     *
+     * @param letra
+     * @return
+     */
     public List<Instrumento> getInstrumentos(String letra) {
         List<Instrumento> instrumentos;
         Query q;
@@ -90,11 +90,12 @@ public class InstrumentosFachada {
         musico = (Musico) q.getSingleResult();
         return musico;
     }
-/**
- * 
- * @param id
- * @return 
- */
+
+    /**
+     *
+     * @param id
+     * @return
+     */
     public Instrumento buscarInstrumento(int id) {
         Instrumento instrumento;
         Query q = em.createNamedQuery("Instrumento.findByIdE");
@@ -102,30 +103,27 @@ public class InstrumentosFachada {
         instrumento = (Instrumento) q.getSingleResult();
         return instrumento;
     }
+    /**
+     * 
+     * @param comentario 
+     */
+    public void añadirComentario(Comentario comentario) {
+        em.persist(comentario);
+    }
+    /**
+     * 
+     * @param usuario 
+     */
+    public void añadirUsuario(Usuario usuario) {
+        //em.getTransaction().begin();
+        em.persist(usuario);
+        //em.getTransaction().commit();
+    }
 
     /**
      *
      * @param musico
      */
-    public void añadirMusico(Musico musico) {
-        em.persist(musico);
-    }
-
-    public void añadirInstrumento(Instrumento instrumento) {
-        em.persist(instrumento);
-    }
-
-    public void añadirGrupo(Grupo grupo) {
-        em.persist(grupo);
-    }
-
-    public void añadirComentario(Comentario comentario) {
-        em.persist(comentario);
-    }
-/**
- * 
- * @param musico 
- */
     public void actualizarMusico(Musico musico) {
         Query q = em.createQuery(
                 "UPDATE Musico m set m.nombre=:nombre, m.apellido=:apellido, m.alias=:alias, m.fechadefuncion=:fechadefuncion,"
@@ -138,35 +136,34 @@ public class InstrumentosFachada {
         q.setParameter("fechanacimiento", musico.getFechanacimiento());
         q.setParameter("urlfoto", musico.getUrlfoto());
     }
+
     /**
-     * 
+     *
      * @param nombre
-     * @return 
+     * @return
      */
-    public Usuario buscarUsuario(String nombre){
+    public Usuario buscarUsuario(String nombre) {
         Usuario usuario;
-        Query q=em.createNamedQuery("Usuario.findByNombre");
+        Query q = em.createNamedQuery("Usuario.findByNombre");
         q.setParameter("nombre", nombre);
-        try{
-            usuario=(Usuario) q.getSingleResult();
-        }catch(NoResultException ex){
-            usuario=null;
+        try {
+            usuario = (Usuario) q.getSingleResult();
+        } catch (NoResultException ex) {
+            usuario = null;
         }
-        return usuario;        
+        return usuario;
     }
 
-    public void actualizarFechaUltimaConexionUsuario(Usuario usuario){
-        Query q=em.createQuery(
-"update Usuario u set u.fechaultimaconexion=:fechaultimaconexion where u.idusuario=:idusuario");
+    public void actualizarFechaUltimaConexionUsuario(Usuario usuario) {
+        Query q = em.createQuery(
+                "update Usuario u set u.fechaultimaconexion=:fechaultimaconexion where u.idusuario=:idusuario");
         q.setParameter("fechaultimaconexion", usuario.getFechaultimaconexion());
-        q.setParameter("idusuario",usuario.getIdusuario());
+        q.setParameter("idusuario", usuario.getIdusuario());
         q.executeUpdate();
     }
-    
+
     public void persist(Object object) {
         em.persist(object);
     }
 
-
-    
 }

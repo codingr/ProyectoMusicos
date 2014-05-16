@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package servlets;
 
+import beans.Usuario;
+import ejb.InstrumentosFachada;
 import java.io.IOException;
+import javax.ejb.EJB;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -19,10 +21,15 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "GestionRegistros", urlPatterns = {"/GestionRegistros"})
 public class GestionRegistros extends HttpServlet {
+    @EJB
+    private InstrumentosFachada instrumentosFachada;
+   
+    public static final String ACCION_ACEPTAR = "Aceptar";
+    public static final String ACCION_CANCELAR = "Cancelar";
+    public static final String CORREO="correo";
 
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -31,16 +38,28 @@ public class GestionRegistros extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String accion=request.getParameter("accion");
-        String destino="";
-        
-        if (accion==null){
-           destino=ConsultaMusicos.RUTA_INICIO;
-        }else if (accion.equalsIgnoreCase("Aceptar")){
-           destino=ConsultaMusicos.RUTA_INICIO; 
-        }else if (accion.equalsIgnoreCase("Cancelar")){
-            destino=ConsultaMusicos.RUTA_INICIO;
-        }     
+        String accion = request.getParameter(ConsultaMusicos.ACCION);
+        String destino = "";
+
+        if (accion == null) {
+            destino = ConsultaMusicos.RUTA_INICIO;
+        } else if (accion.equalsIgnoreCase(GestionRegistros.ACCION_ACEPTAR)) {
+            String nombre=request.getParameter(ConsultaMusicos.NOMBRE);
+            String password=request.getParameter(ConsultaMusicos.PASSWORD);
+            String correo=request.getParameter(GestionRegistros.CORREO);
+            Usuario usuario=new Usuario();
+           
+            usuario.setAdministrador(false);
+            usuario.setNombre(nombre);
+            usuario.setPassword(password);
+            usuario.setCorreo(correo);
+            usuario.setFecharegistro(new java.util.Date());            
+            instrumentosFachada.añadirUsuario(usuario);
+            request.getSession().setAttribute(ConsultaMusicos.USUARIO, usuario);
+            destino = ConsultaMusicos.RUTA_INICIO;
+        } else if (accion.equalsIgnoreCase(GestionRegistros.ACCION_CANCELAR)) {
+            destino = ConsultaMusicos.RUTA_INICIO;
+        }
         request.getRequestDispatcher(destino).forward(request, response);
     }
 
