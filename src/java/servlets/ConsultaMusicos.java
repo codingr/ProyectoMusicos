@@ -6,6 +6,8 @@
 package servlets;
 
 import beans.Caracteristica;
+import beans.Comentario;
+import beans.Elemento;
 import beans.Instrumento;
 import beans.Musico;
 import beans.Usuario;
@@ -29,51 +31,58 @@ import javax.servlet.http.HttpSession;
  */
 @WebServlet(name = "ConsultaMusicos", urlPatterns = {"/ConsultaMusicos"})
 public class ConsultaMusicos extends HttpServlet {
+
     @EJB
     private InstrumentosFachada instrumentosFachada;
 
-    public static final String ID_INSTRUMENTO = "idinstrumento";
-    public static final String INSTRUMENTOS = "instrumentos";
-
-    public static final String MUSICOS = "musicos";
+    /*Literales*/
+    public static final String COMENTARIOS = "comentarios";
+    public static final String ID_COMENTARIO = "idComentario";
+    public static final String ID_E = "idE";
+    //public static final String ID_INSTRUMENTO = "idinstrumento";
+    //public static final String ID_MUSICO = "idmusico";
     public static final String INSTRUMENTO = "instrumento";
-    public static final String ID_MUSICO = "idmusico";
-    /**/
-    public static final String ACCION = "accion";
-    public static final String NOMBRE = "nombre";
-    public static final String MUSICO = "musico";
-    /*Páginas a las que nos podemos mover*/
-    public static final String RUTA_PROYECTO_ASP= "ProyectoMusicosASP/Principal.aspx";
-    public static final String RUTA_VER_MUSICO = "vermusico.jsp";
-    public static final String RUTA_INICIO = "index.jsp";
-    public static final String RUTA_VER_INSTRUMENTO = "verinstrumento.jsp";
-    public static final String RUTA_REGISTRO = "registro.jsp";
-    /*Las rutas deben ser relativas*/
-    public static final String URLFOTOMUSICO = "images/Musicos";
-    public static final String URLFOTOINSTRUMENTO = "images/Instrumentos";
-    /*Posibles valores de la acción por la cual hemos llegado al servlet*/
-    public static final String ACCION_VER_MUSICO = "vermusico";
-    public static final String ACCION_LOGIN = "Login";
-    public static final String ACCION_ADMINISTRAR = "administrar";
-    public static final String ACCION_VER_INSTRUMENTO = "verinstrumento";
-    public static final String ACCION_LISTAR_MUSICOS = "listarmusicos";
-    public static final String ACCION_DESCONECTAR = "desconectar";
-    public static final String ACCION_LISTAR_INSTRUMENTOS= "listarinstrumentos";
-    public static final String ACCION_VER_CARACTERISTICAS_INSTRUMENTO= "vercaracteristicasinstrumento";
-    public static final String ACCION_REGISTRO = "Nuevo registro";
-    /*Parámetros o atributos recibidos por servlets desde otra parte del programa*/
-    public static final String USUARIO = "usuario";
-    public static final String ERROR_NOMBRE_VACIO= "Debes introducir un nombre";
-    public static final String ERROR_NOMBRE_INVALIDO= "El usuario no se encuentra en la base de datos";
-    public static final String ERROR_PASSWORD_VACIO= "Debes introducir el password";
-    public static final String ERROR_PASSWORD_INCORRECTO= "Password incorrecto";
-    public static final String PASSWORD = "password";
-    public static final String ERRORES = "errores";
+    public static final String INSTRUMENTOS = "instrumentos";
+    public static final String MUSICOS = "musicos";    /**/
 
-   
+    /*Páginas a las que nos podemos mover*/
+    //public static final String RUTA_PROYECTO_ASP= "ProyectoMusicosASP/Principal.aspx";    
+    public static final String RUTA_INICIO = "index.jsp";
+    public static final String RUTA_REGISTRO = "registro.jsp";
+    public static final String RUTA_VER_INSTRUMENTO = "verinstrumento.jsp";
+    public static final String RUTA_VER_MUSICO = "vermusico.jsp";
+    /*Carpetas de imágenes, las rutas deben ser relativas*/
+    public static final String URLFOTOINSTRUMENTO = "images/Instrumentos";
+    public static final String URLFOTOMUSICO = "images/Musicos";
+    /*Posibles valores de la acción por la cual hemos llegado al servlet*/
+    //public static final String ACCION_ADMINISTRAR = "administrar";
+    public static final String ACCION_DESCONECTAR = "desconectar";
+    public static final String ACCION_GUARDAR_COMENTARIO = "Guardar comentario";
+    public static final String ACCION_GUSTA = "gusta";
+    public static final String ACCION_LISTAR_INSTRUMENTOS = "listarinstrumentos";
+    public static final String ACCION_LISTAR_MUSICOS = "listarmusicos";
+    public static final String ACCION_LOGIN = "Login";
+    public static final String ACCION_NOGUSTA = "nogusta";
+    public static final String ACCION_REGISTRO = "Nuevo registro";
+    public static final String ACCION_VER_CARACTERISTICAS_INSTRUMENTO = "vercaracteristicasinstrumento";
+    public static final String ACCION_VER_INSTRUMENTO = "verinstrumento";
+    public static final String ACCION_VER_MUSICO = "vermusico";
+    /*Errores*/
+    public static final String ERROR_NOMBRE_INVALIDO = "El usuario no se encuentra en la base de datos";
+    public static final String ERROR_NOMBRE_VACIO = "Debes introducir un nombre";
+    public static final String ERROR_PASSWORD_VACIO = "Debes introducir el password";
+    public static final String ERROR_PASSWORD_INCORRECTO = "Password incorrecto";
+    /*Parámetros o atributos recibidos por servlets desde otra parte del programa*/
+    public static final String ACCION = "accion";
+    public static final String ERRORES = "errores";
+    public static final String MENSAJE = "mensaje";
+    public static final String MUSICO = "musico";
+    public static final String NOMBRE = "nombre";
+    public static final String PASSWORD = "password";
+    public static final String USUARIO = "usuario";
+
     /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
+     * Processes requests for both HTTP <code>GET</code> and <code>POST</code> methods.
      *
      * @param request servlet request
      * @param response servlet response
@@ -95,14 +104,68 @@ public class ConsultaMusicos extends HttpServlet {
             Instrumento instrumento;
             String strid;
             int id;
-            switch (accion) {                
+            Usuario usuario;
+            HttpSession sesion;
+            switch (accion) {
                 case ACCION_DESCONECTAR:
-                    HttpSession sesion = request.getSession();
-                    Usuario usuario = (Usuario) sesion.getAttribute(USUARIO);
+                    sesion = request.getSession();
+                    usuario = (Usuario) sesion.getAttribute(USUARIO);
                     usuario.setFechaultimaconexion(new Date());
                     instrumentosFachada.actualizarFechaUltimaConexionUsuario(usuario);
                     sesion.invalidate();
                     destino = RUTA_INICIO;
+                    request.getRequestDispatcher(destino).forward(request, response);
+                    break;
+                case ACCION_GUARDAR_COMENTARIO:
+                    sesion = request.getSession();
+                    usuario = (Usuario) sesion.getAttribute(USUARIO);
+                    String mensaje = request.getParameter(MENSAJE);
+                    Comentario comentario = new Comentario();
+                    Elemento elemento = new Elemento();
+                    if (sesion.getAttribute(INSTRUMENTO) == null) {
+                        //Llegamos desde un músico
+                        Musico musico = (Musico) sesion.getAttribute(MUSICO);
+                        elemento.setIdE(musico.getIdE());
+                        request.setAttribute("URLFOTOMUSICO", URLFOTOMUSICO);
+                        destino = RUTA_VER_MUSICO;
+                    } else {
+                        //Llegamos desde un instrumento
+                        instrumento = (Instrumento) sesion.getAttribute(INSTRUMENTO);
+                        elemento.setIdE(instrumento.getIdE());
+                        request.setAttribute("URLFOTOINSTRUMENTO", URLFOTOINSTRUMENTO);
+                        destino = RUTA_VER_INSTRUMENTO;
+                    }
+                    comentario.setIdE(elemento);
+                    comentario.setIdUsuario(usuario);
+                    comentario.setMensaje(mensaje);
+                    instrumentosFachada.añadirComentario(comentario);
+                    List<Comentario> comentarios = instrumentosFachada.getComentarios(elemento);
+                    request.setAttribute("comentarios", comentarios);
+                    request.getRequestDispatcher(destino).forward(request, response);
+                    break;
+                case ACCION_GUSTA:
+                    sesion = request.getSession();
+                    usuario = (Usuario) sesion.getAttribute(USUARIO);
+
+                    id = Integer.parseInt(request.getParameter(ID_COMENTARIO));
+                    comentario = instrumentosFachada.buscarComentario(id);
+                    elemento=comentario.getIdE();
+                    if (usuario != null) {
+                        comentario.meGusta();
+                        instrumentosFachada.actualizarComentario(comentario);
+                    }
+                    if (elemento.getTipo()) {
+                        destino = RUTA_VER_MUSICO;
+                        request.setAttribute("URLFOTOMUSICO", URLFOTOMUSICO);
+                    } else {
+
+                        destino = RUTA_VER_INSTRUMENTO;
+                        request.setAttribute("URLFOTOINSTRUMENTO", URLFOTOINSTRUMENTO);
+                    }
+                    elemento = new Elemento(comentario.getIdE().getIdE());
+                    comentarios = instrumentosFachada.getComentarios(elemento);
+                    request.setAttribute("comentarios", comentarios);
+
                     request.getRequestDispatcher(destino).forward(request, response);
                     break;
                 case ACCION_LISTAR_INSTRUMENTOS:
@@ -119,34 +182,73 @@ public class ConsultaMusicos extends HttpServlet {
                     destino = RUTA_INICIO;
                     request.getRequestDispatcher(destino).forward(request, response);
                     break;
+
+                case ACCION_NOGUSTA:
+                   sesion = request.getSession();
+                    usuario = (Usuario) sesion.getAttribute(USUARIO);
+
+                    id = Integer.parseInt(request.getParameter(ID_COMENTARIO));
+                    comentario = instrumentosFachada.buscarComentario(id);
+                    if (usuario != null) {
+                        comentario.noMeGusta();
+                        instrumentosFachada.actualizarComentario(comentario);
+                    }
+                    if (comentario.getIdE().getTipo()) {
+                        destino = RUTA_VER_MUSICO;
+                        request.setAttribute("URLFOTOMUSICO", URLFOTOMUSICO);
+                    } else {
+
+                        destino = RUTA_VER_INSTRUMENTO;
+                        request.setAttribute("URLFOTOINSTRUMENTO", URLFOTOINSTRUMENTO);
+                    }
+                    elemento = new Elemento(comentario.getIdE().getIdE());
+                    comentarios = instrumentosFachada.getComentarios(elemento);
+                    request.setAttribute("comentarios", comentarios);
+
+                    request.getRequestDispatcher(destino).forward(request, response);
+                    break;
+
+                case ACCION_REGISTRO:
+                    destino = RUTA_REGISTRO;
+                    request.getRequestDispatcher(destino).forward(request, response);
+                    break;
                 case ACCION_VER_CARACTERISTICAS_INSTRUMENTO:
                     instrumento = (Instrumento) request.getSession().getAttribute(INSTRUMENTO);
                     cargarXMLCaracteristicasInstrumentos(instrumento, out);
                     break;
                 case ACCION_VER_INSTRUMENTO:
-                    strid = request.getParameter(ID_INSTRUMENTO);
+                    sesion=request.getSession();
+                    sesion.removeAttribute(MUSICO);
+                    strid = request.getParameter(ID_E);
                     id = Integer.parseInt(strid);
                     destino = RUTA_VER_INSTRUMENTO;
                     instrumento = instrumentosFachada.buscarInstrumento(id);
-                    request.getSession().setAttribute(INSTRUMENTO, instrumento);
+                    sesion.setAttribute(INSTRUMENTO, instrumento);
                     request.setAttribute("URLFOTOINSTRUMENTO", URLFOTOINSTRUMENTO);
+                    elemento = new Elemento(instrumento.getIdE());
+                    comentarios = instrumentosFachada.getComentarios(elemento);
+                    request.setAttribute("comentarios", comentarios);
                     request.getRequestDispatcher(destino).forward(request, response);
                     break;
                 case ACCION_VER_MUSICO:
-                    strid = request.getParameter(ID_MUSICO);
+                    sesion=request.getSession();
+                    sesion.removeAttribute(INSTRUMENTO);
+                    strid = request.getParameter(ID_E);
                     id = Integer.parseInt(strid);
                     destino = RUTA_VER_MUSICO;
-                    request.setAttribute(MUSICO, instrumentosFachada.buscarMusico(id));
+                    Musico musico=instrumentosFachada.buscarMusico(id);
+                    sesion.setAttribute(MUSICO, musico);
                     request.setAttribute("URLFOTOMUSICO", URLFOTOMUSICO);
+                    elemento = new Elemento(musico.getIdE());
+                    comentarios = instrumentosFachada.getComentarios(elemento);
+                    request.setAttribute("comentarios", comentarios);
                     request.getRequestDispatcher(destino).forward(request, response);
                     break;
-                case ACCION_REGISTRO:
-                    destino = RUTA_REGISTRO;
-                    request.getRequestDispatcher(destino).forward(request, response);
-                    break;
+
                 default:
                     break;
             }
+
         }
 
     }
@@ -246,8 +348,9 @@ public class ConsultaMusicos extends HttpServlet {
     private void cargarXMLCaracteristicasInstrumentos(Instrumento instrumento, PrintWriter out) {
         out.println("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
         List<Caracteristica> caracteristicas = instrumento.getCaracteristicaList();
+
+        out.println("<caracteristicas>");
         if (!caracteristicas.isEmpty()) {
-            out.println("<caracteristicas>");
             for (int j = 0; j < caracteristicas.size(); j++) {
                 out.println("<caracteristica>");
                 String texto = caracteristicas.get(j).getTexto();
@@ -256,7 +359,8 @@ public class ConsultaMusicos extends HttpServlet {
                 out.println("<valor>" + texto.substring(separador + 1) + "</valor>");
                 out.println("</caracteristica>");
             }
-            out.println("</caracteristicas>");
         }
+        out.println("</caracteristicas>");
+
     }
 }

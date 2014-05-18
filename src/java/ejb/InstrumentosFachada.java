@@ -6,6 +6,7 @@
 package ejb;
 
 import beans.Comentario;
+import beans.Elemento;
 import beans.Grupo;
 import beans.Instrumento;
 import beans.Musico;
@@ -23,7 +24,6 @@ import javax.persistence.Query;
  */
 @Stateless
 public class InstrumentosFachada {
-
     @PersistenceContext(unitName = "ProyectoFinalPU")
     private EntityManager em;
 
@@ -41,7 +41,7 @@ public class InstrumentosFachada {
             q = em.createNamedQuery("Musico.findAll");
         } else {
             q = em.createQuery("select m from Musico m where "
-                    + "substring(m.nombre,1,1)=:letra order by m.nombre");
+                    + "substring(m.apellido,1,1)=:letra order by m.nombre");
             q.setParameter("letra", letra);
         }
 
@@ -59,14 +59,15 @@ public class InstrumentosFachada {
      * @return
      */
     public List<Instrumento> getInstrumentos(String letra) {
-        List<Instrumento> instrumentos;
+        List<Instrumento> instrumentos=null;
         Query q;
         if (letra == null) {
             q = em.createNamedQuery("Instrumento.findAll");
 
         } else {
-            q = em.createQuery("select m from Instrumento m where "
-                    + "substring(m.marca,1,1)=:letra order by m.marca");
+            
+            q = em.createQuery("select i from Instrumento i where "
+                    + "substring(i.marca,1,1)=:letra order by i.marca");
             q.setParameter("letra", letra);
         }
 
@@ -74,10 +75,25 @@ public class InstrumentosFachada {
             instrumentos = q.getResultList();
         } catch (NoResultException ex) {
             instrumentos = null;
+        }catch(Exception ex){
+            ex.getMessage();
         }
         return instrumentos;
     }
 
+    public List<Comentario> getComentarios(Elemento elemento){
+        List<Comentario> comentarios;
+        Query q=em.createQuery("SELECT c FROM Comentario c WHERE c.idE = :idE");
+        q.setParameter("idE", elemento);
+        try{
+            comentarios=q.getResultList();
+        }catch (NoResultException ex){
+            comentarios=null;
+        }
+        
+        return comentarios;
+    }
+    
     /**
      *
      * @param id
@@ -103,6 +119,16 @@ public class InstrumentosFachada {
         instrumento = (Instrumento) q.getSingleResult();
         return instrumento;
     }
+    
+    public Comentario buscarComentario (int id){
+        Comentario comentario;
+        Query q=em.createNamedQuery("Comentario.findByIdcomentario");
+        q.setParameter("idcomentario", id);
+        comentario=(Comentario) q.getSingleResult();        
+        return comentario;
+    }
+    
+    
     /**
      * 
      * @param comentario 
@@ -136,7 +162,9 @@ public class InstrumentosFachada {
         q.setParameter("fechanacimiento", musico.getFechanacimiento());
         q.setParameter("urlfoto", musico.getUrlfoto());
     }
-
+    public void actualizarComentario(Comentario comentario){
+        em.merge(comentario);
+    }
     /**
      *
      * @param nombre
@@ -163,6 +191,10 @@ public class InstrumentosFachada {
     }
 
     public void persist(Object object) {
+        em.persist(object);
+    }
+
+    public void persist1(Object object) {
         em.persist(object);
     }
 

@@ -7,7 +7,6 @@
 package beans;
 
 import java.io.Serializable;
-import javax.annotation.Generated;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +18,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -136,5 +134,22 @@ public class Comentario implements Serializable {
     public String toString() {
         return "beans.Comentario[ idcomentario=" + idcomentario + " ]";
     }
+    
+     public void meGusta() {
+        if (this.gusta == null) {
+            this.gusta = 1;
+        } else {
+            this.gusta = this.gusta + 1;
+        }
+    }
+
+    public void noMeGusta() {
+        if (this.nogusta == null) {
+            this.nogusta = 1;
+        } else {
+            this.nogusta = this.nogusta + 1;
+        }
+    }
+    
     
 }

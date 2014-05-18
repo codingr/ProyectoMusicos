@@ -9,7 +9,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>Página de inicio</title>
         <style type="text/css">
             #mnu
             {
@@ -50,9 +50,12 @@
                 border-right-color: #36F;
                 cursor: url(images/Little_music_note.jpg),crosshair;
             }
-
+            #lista{
+                width: 82%;
+            }
             #letras{
                 float: left;
+                width: 100%;
                 border-style: ridge;
                 border-width: 10px;
             }
@@ -109,17 +112,18 @@
             #botonesdesplazamiento{
                 visibility: hidden;
             }
+            #datos{
+                height: 30%;
+            }
             //PRUEBAS, BORRABLE
-            .clasedatoslistados{
+            #datoslistados{
                 top:160px;
                 border-style: solid;
                 border-width: 5px;
-                display: inline;//de prueba
-            }
-            .clasedatoslistados ul{
+                //display: inline;//de prueba
                 display: block;
             }
-            .clasedatoslistados li{
+            .datoslistados {
                 list-style-type: circle;
             }
             .error{
@@ -128,8 +132,8 @@
         </style>
         <script type="text/javascript">
             var ELEMENTOSPORPAGINA = 5;
-            var BUSCARMUSICO = 1;
-            var BUSCARINSTRUMENTO = 0;
+            var BUSCARMUSICO = true;
+            var BUSCARINSTRUMENTO = false;
             var instrumentosomusicos;
             var buscar;
             var paginaactual = 1;
@@ -144,7 +148,8 @@
                     var letra = document.createElement("LI");
                     var letraactual = abecedario.substr(i, 1);
                     letra.onclick = function()
-                    {
+                    {                        
+                        paginaactual=1;
                         if (buscar == BUSCARMUSICO) {
                             cargarXMLMusicos(this);
                         } else {
@@ -204,7 +209,7 @@
                 //datoslistados.className="datoslistados";
                 var i;
                 limpiarDatosListados();
-                var ul = document.createElement("UL");
+                var ul = document.getElementById("datoslistados");
                 var sobrantes = (instrumentosomusicoslista.length % ELEMENTOSPORPAGINA == 0) ? 0 : 1;
                 var entero = Math.floor(instrumentosomusicoslista.length / ELEMENTOSPORPAGINA);
                 totalpaginas = entero + sobrantes;
@@ -215,7 +220,7 @@
                         var li = document.createElement("LI");
                         var a = document.createElement("A");
                         var idmusico = instrumentosomusicoslista[i].getAttribute("id");
-                        a.href = "ConsultaMusicos?accion=vermusico&idmusico=" + idmusico;
+                        a.href = "ConsultaMusicos?accion=vermusico&idE=" + idmusico;
                         a.textContent = instrumentosomusicoslista[i].getElementsByTagName("nombre")[0].textContent
                                 + " " + instrumentosomusicoslista[i].getElementsByTagName("apellido")[0].textContent;
                         li.appendChild(a);
@@ -229,23 +234,22 @@
                         var li = document.createElement("LI");
                         var a = document.createElement("A");
                         var idinstrumento = instrumentosomusicoslista[i].getAttribute("id");
-                        a.href = "ConsultaMusicos?accion=verinstrumento&idinstrumento=" + idinstrumento;
+                        a.href = "ConsultaMusicos?accion=verinstrumento&idE=" + idinstrumento;
                         a.textContent = instrumentosomusicoslista[i].getElementsByTagName("marca")[0].textContent
                                 + " " + instrumentosomusicoslista[i].getElementsByTagName("modelo")[0].textContent;
                         li.appendChild(a);
+                        li.className="datoslistados";
                         ul.appendChild(li);
                     }
                 }
                 habilitarBotones();
-
-                datoslistados.appendChild(ul);
-
+                //datoslistados.appendChild(ul);
                 datoslistados.style.visibility = "visible";
-                datoslistados.className = "clasedatoslistados";
+                //datoslistados.className = "clasedatoslistados";
                 mostrarBotones();
             }
             /*Habilita o deshabilita botones en función de la página actual 
-             * de la lista de instrumentos o músicos*/
+              de la lista de instrumentos o músicos*/
             function habilitarBotones() {
                 if (totalpaginas == 1) {
                     document.getElementById("btnPrimero").disabled = "true";
@@ -274,55 +278,23 @@
             }
             function anterior() {
                 paginaactual--;
-                document.getElementById("btnSiguiente").removeAttribute("DISABLED");
-                document.getElementById("btnUltimo").removeAttribute("DISABLED");
-                if (paginaactual == 1) {
-                    document.getElementById("btnPrimero").disabled = "true";
-                    document.getElementById("btnAnterior").disabled = "true";
-                } else {
-                    document.getElementById("btnPrimero").removeAttribute("DISABLED");
-                    document.getElementById("btnAnterior").removeAttribute("DISABLED");
-                }
+                habilitarBotones();             
                 rellenarLista();
             }
             function primero() {
                 paginaactual = 1;
-                document.getElementById("btnPrimero").disabled = "true";
-                document.getElementById("btnAnterior").disabled = "true";
-                if (totalpaginas == 1) {
-                    document.getElementById("btnSiguiente").disabled = "true";
-                    document.getElementById("btnUltimo").disabled = "true";
-                } else {
-                    document.getElementById("btnSiguiente").removeAttribute("DISABLED");
-                    document.getElementById("btnUltimo").removeAttribute("DISABLED");
-                }
+                habilitarBotones();
                 rellenarLista();
             }
 
             function siguiente() {
                 paginaactual++;
-                document.getElementById("btnAnterior").removeAttribute("DISABLED");
-                document.getElementById("btnPrimero").removeAttribute("DISABLED");
-                if (paginaactual == totalpaginas) {
-                    document.getElementById("btnSiguiente").disabled = "true";
-                    document.getElementById("btnUltimo").disabled = "true";
-                } else {
-                    document.getElementById("btnSiguiente").removeAttribute("DISABLED");
-                    document.getElementById("btnUltimo").removeAttribute("DISABLED");
-                }
+                habilitarBotones();           
                 rellenarLista();
             }
             function ultimo() {
                 paginaactual = totalpaginas;
-                document.getElementById("btnAnterior").removeAttribute("DISABLED");
-                document.getElementById("btnPrimero").removeAttribute("DISABLED");
-                if (paginaactual == totalpaginas) {
-                    document.getElementById("btnSiguiente").disabled = "true";
-                    document.getElementById("btnUltimo").disabled = "true";
-                } else {
-                    document.getElementById("btnSiguiente").removeAttribute("DISABLED");
-                    document.getElementById("btnUltimo").removeAttribute("DISABLED");
-                }
+                habilitarBotones();              
                 rellenarLista();
             }
 
@@ -362,9 +334,12 @@
                 var posX = mnu.clientLeft + mnu.clientWidth;
                 var lista = document.getElementById("lista");
                 lista.style.left = posX + "px";
+                var busquedapulsada=document.getElementById("busquedapulsada");
+                
                 document.getElementById("buscarmusico").onclick =
                         function() {
                             buscar = BUSCARMUSICO;
+                            busquedapulsada.textContent="Buscando músicos";
                             limpiarDatosListados();
                             mostrarDivLista();
                             ocultarBotones();
@@ -372,12 +347,13 @@
                 document.getElementById("buscarinstrumento").onclick =
                         function() {
                             buscar = BUSCARINSTRUMENTO;
+                            busquedapulsada.textContent="Buscando instrumentos";
                             limpiarDatosListados();
                             mostrarDivLista();
                             ocultarBotones();
                         };
             }
-            function mostrarDivLista() {
+            function mostrarDivLista() {                                
                 var lista = document.getElementById("lista");
                 lista.style.visibility = "visible";
             }
@@ -429,9 +405,10 @@
             </form>
         </div>
         <div id="lista">
+            <div id="busquedapulsada"></div>
             <div id="letras"></div>
             <div id="datos">
-                <div id="datoslistados" class="clasedatoslistados"></div>
+                <ul id="datoslistados"></ul>
                 <div id="botonesdesplazamiento">
                     <input type="button" id="btnPrimero" value="Primero" onclick="primero()" />
                     <input type="button" id="btnAnterior" value="Anterior" onclick="anterior()" />
