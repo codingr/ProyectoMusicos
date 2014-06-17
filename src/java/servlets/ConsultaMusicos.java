@@ -138,6 +138,9 @@ public class ConsultaMusicos extends HttpServlet {
                     comentario.setIdE(elemento);
                     comentario.setIdUsuario(usuario);
                     comentario.setMensaje(mensaje);
+                    comentario.setGusta(0);
+                    comentario.setNogusta(0);
+                    
                     instrumentosFachada.añadirComentario(comentario);
                     List<Comentario> comentarios = instrumentosFachada.getComentarios(elemento);
                     request.setAttribute("comentarios", comentarios);

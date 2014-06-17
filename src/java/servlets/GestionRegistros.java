@@ -53,7 +53,8 @@ public class GestionRegistros extends HttpServlet {
             usuario.setNombre(nombre);
             usuario.setPassword(password);
             usuario.setCorreo(correo);
-            usuario.setFecharegistro(new java.util.Date());            
+            usuario.setFecharegistro(new java.util.Date());
+            usuario.setFechaultimaconexion(new java.util.Date());            
             instrumentosFachada.añadirUsuario(usuario);
             request.getSession().setAttribute(ConsultaMusicos.USUARIO, usuario);
             destino = ConsultaMusicos.RUTA_INICIO;

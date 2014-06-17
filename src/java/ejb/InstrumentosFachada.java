@@ -134,16 +134,17 @@ public class InstrumentosFachada {
      * @param comentario 
      */
     public void añadirComentario(Comentario comentario) {
-        em.persist(comentario);
+        //em.persist(comentario);
+        em.merge(comentario);
     }
     /**
      * 
      * @param usuario 
      */
     public void añadirUsuario(Usuario usuario) {
-        //em.getTransaction().begin();
-        em.persist(usuario);
-        //em.getTransaction().commit();
+        
+        em.merge(usuario);
+        
     }
 
     /**
